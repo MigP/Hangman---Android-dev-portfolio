@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="log_in_to_your_account">Connectez-vous</string>
+    <string name="user_name">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="log_in">Connectez-vous</string>
+    <string name="create_a_new_account">Créer un nouveau compte</string>
+    <string name="create_account">Créer compte</string>
+    <string name="already_member">Déjà inscrit ? Connectez-vous</string>
+    <string name="confirm_password">Confirmez mot de passe</string>
+    <string name="remember_me">Se souvenir de moi</string>
+</resources>
