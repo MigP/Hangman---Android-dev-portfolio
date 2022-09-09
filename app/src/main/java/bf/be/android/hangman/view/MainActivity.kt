@@ -1,15 +1,19 @@
 package bf.be.android.hangman.view
 
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.replace
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityMainBinding
 import bf.be.android.hangman.viewModel.MainViewModel
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -32,6 +36,38 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Title blow up
+        val titleBlowUp: ValueAnimator = ValueAnimator.ofFloat(0f, 110f)
+        titleBlowUp.addUpdateListener(AnimatorUpdateListener { valueAnimator ->
+            val animatedValue = valueAnimator.animatedValue as Float
+            binding.introTitle.setTextSize(animatedValue)
+        })
+        titleBlowUp.setDuration(350);
+        titleBlowUp.startDelay = 250
+        titleBlowUp.start();
+        val titleShrink: ValueAnimator = ValueAnimator.ofFloat(110f, 80f)
+        titleShrink.addUpdateListener(AnimatorUpdateListener { valueAnimator ->
+            val animatedValue = valueAnimator.animatedValue as Float
+            binding.introTitle.setTextSize(animatedValue)
+        })
+        titleShrink.setDuration(150);
+        titleShrink.startDelay = 600
+        titleShrink.start();
+
+        // Intro image fade out
+        val introFadeOut: Animation = AnimationUtils.loadAnimation(this, R.anim.fadeout1s)
+        introFadeOut.startOffset = 800
+        introFadeOut.setFillAfter(true);
+        binding.introGallowsTop.startAnimation(introFadeOut)
+        binding.introGallowsBottom.startAnimation(introFadeOut)
+
+        // Fragment fade in
+        val fragmentFadeIn: Animation = AnimationUtils.loadAnimation(this, R.anim.fadein1s)
+        fragmentFadeIn.startOffset = 1500
+        fragmentFadeIn.setFillAfter(true);
+        binding.fragmentContainerView.startAnimation(fragmentFadeIn)
+
 
         // Show log in fragment (default starting place)
         val fm: FragmentManager = supportFragmentManager

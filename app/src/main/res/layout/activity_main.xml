@@ -1,5 +1,58 @@
-<androidx.fragment.app.FragmentContainerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_container_view"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splashScreen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    tools:context=".view.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/intro_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="125dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/intro_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bangers"
+            android:rotationX="35"
+            android:shadowColor="#FF9800"
+            android:shadowDx="3"
+            android:shadowDy="2"
+            android:shadowRadius="45"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:layout_marginBottom="125dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FF5722"
+            android:textSize="0sp"
+            android:typeface="normal" />
+
+        <ImageView
+            android:id="@+id/intro_gallows_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/gallows_top" />
+
+        <ImageView
+            android:id="@+id/intro_gallows_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toBottomOf="@+id/intro_gallows_top"
+            app:srcCompat="@drawable/gallows_bottom" />
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

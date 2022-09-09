@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/aclonica</item>
+        <item>@font/bangers</item>
+        <item>@font/londrina_shadow</item>
+        <item>@font/potta_one</item>
+        <item>@font/sonsie_one</item>
+    </array>
+</resources>
