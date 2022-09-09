@@ -11,6 +11,11 @@
     </string-array>
 
     <!-- Database initial entries -->
+    <string-array name="languages">
+        <item>French</item>
+        <item>English</item>
+    </string-array>
+
     <string-array name="eyebrows">
         <item>eyebrows_angry_dark</item>
         <item>0</item>

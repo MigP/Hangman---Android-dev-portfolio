@@ -14,7 +14,20 @@ import bf.be.android.hangman.model.dal.entities.Avatar;
 import bf.be.android.hangman.model.dal.entities.User;
 
 public class UserDao {
-    public static final String CREATE_QUERY = "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(25) NOT NULL UNIQUE, password VARCHAR(25) NOT NULL, languageId INTEGER NOT NULL DEFAULT 1, avatarId INTEGER NOT NULL DEFAULT 1, highscoreId INTEGER NOT NULL DEFAULT 0, coins INTEGER NOT NULL DEFAULT 0, banknotes INTEGER NOT NULL DEFAULT 0, diamonds INTEGER NOT NULL DEFAULT 0, lives INTEGER NOT NULL DEFAULT 3, CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id), CONSTRAINT fk_highscores FOREIGN KEY (highscoreId) REFERENCES highscores(id))";
+    public static final String CREATE_QUERY = "CREATE TABLE users(" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "username VARCHAR(25) NOT NULL UNIQUE, " +
+            "password VARCHAR(25) NOT NULL, " +
+            "languageId INTEGER NOT NULL DEFAULT 1, " +
+            "avatarId INTEGER NOT NULL DEFAULT 1, " +
+            "highscoreId INTEGER NOT NULL DEFAULT 0, " +
+            "coins INTEGER NOT NULL DEFAULT 0, " +
+            "banknotes INTEGER NOT NULL DEFAULT 0, " +
+            "diamonds INTEGER NOT NULL DEFAULT 0, " +
+            "lives INTEGER NOT NULL DEFAULT 3, " +
+            "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
+            "CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id), " +
+            "CONSTRAINT fk_highscores FOREIGN KEY (highscoreId) REFERENCES highscores(id))";
     public static final String UPGRADE_QUERY = "DROP TABLE users;";
 
     private final DbHelper helper;

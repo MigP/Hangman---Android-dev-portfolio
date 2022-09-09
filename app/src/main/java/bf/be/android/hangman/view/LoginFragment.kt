@@ -76,10 +76,12 @@ class LoginFragment : Fragment() {
 
             if (viewModel.userExists(requireContext(), enteredUsername, enteredPassword)) {
                 //TODO Login failed. Alert error
+
             } else {
                 //TODO Login successful. Go to game. Add active user to VM
                 //TODO This exists for testing only
                 viewModel.getRandomWordEn(view)
+                println("----------- number of users: " + viewModel.findAllUsers(requireContext()).size)
                 // ---
             }
         }

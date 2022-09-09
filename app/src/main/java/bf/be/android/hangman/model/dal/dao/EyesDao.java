@@ -13,7 +13,11 @@ import bf.be.android.hangman.model.dal.DbHelper;
 import bf.be.android.hangman.model.dal.entities.Eyes;
 
 public class EyesDao {
-    public static final String CREATE_QUERY = "CREATE TABLE eyes(id INTEGER PRIMARY KEY AUTOINCREMENT, src VARCHAR(20) NOT NULL UNIQUE, left INTEGER NOT NULL, bottom INTEGER NOT NULL)";
+    public static final String CREATE_QUERY = "CREATE TABLE eyes(" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "src VARCHAR(20) NOT NULL UNIQUE, " +
+            "left INTEGER NOT NULL, " +
+            "bottom INTEGER NOT NULL)";
     public static final String UPGRADE_QUERY = "DROP TABLE eyes;";
 
     private final DbHelper helper;

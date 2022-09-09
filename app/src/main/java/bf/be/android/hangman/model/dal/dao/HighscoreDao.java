@@ -13,7 +13,14 @@ import bf.be.android.hangman.model.dal.DbHelper;
 import bf.be.android.hangman.model.dal.entities.Highscore;
 
 public class HighscoreDao {
-    public static final String CREATE_QUERY = "CREATE TABLE highscores(id INTEGER PRIMARY KEY AUTOINCREMENT, score INTEGER NOT NULL, date VARCHAR(25) NOT NULL, languageId INTEGER NOT NULL, userId INTEGER NOT NULL, CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), CONSTRAINT fk_users FOREIGN KEY (userId) REFERENCES users(id))";
+    public static final String CREATE_QUERY = "CREATE TABLE highscores(" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "score INTEGER NOT NULL, " +
+            "date VARCHAR(25) NOT NULL, " +
+            "languageId INTEGER NOT NULL, " +
+            "userId INTEGER NOT NULL, " +
+            "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
+            "CONSTRAINT fk_users FOREIGN KEY (userId) REFERENCES users(id))";
     public static final String UPGRADE_QUERY = "DROP TABLE highscores;";
 
     private final DbHelper helper;

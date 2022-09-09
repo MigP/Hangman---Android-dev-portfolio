@@ -14,7 +14,11 @@ import bf.be.android.hangman.model.dal.entities.Extra;
 import bf.be.android.hangman.model.dal.entities.Mouth;
 
 public class MouthDao {
-    public static final String CREATE_QUERY = "CREATE TABLE mouths(id INTEGER PRIMARY KEY AUTOINCREMENT, src VARCHAR(20) NOT NULL UNIQUE, left INTEGER NOT NULL, bottom INTEGER NOT NULL)";
+    public static final String CREATE_QUERY = "CREATE TABLE mouths(" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "src VARCHAR(20) NOT NULL UNIQUE, " +
+            "left INTEGER NOT NULL, " +
+            "bottom INTEGER NOT NULL)";
     public static final String UPGRADE_QUERY = "DROP TABLE mouths;";
 
     private final DbHelper helper;

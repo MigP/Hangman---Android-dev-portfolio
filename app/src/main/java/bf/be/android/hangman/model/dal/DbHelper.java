@@ -59,6 +59,13 @@ public class DbHelper extends SQLiteOpenHelper {
     private void prepopulateDb(Context context, SQLiteDatabase sqLiteDatabase) {
         Resources res = DbHelper.context.getResources();
 
+        String[] languagesArray = res.getStringArray(R.array.languages);
+        ContentValues languagesValues = new ContentValues();
+        for (int i = 0; i < languagesArray.length; i ++){
+            languagesValues.put("name", languagesArray[i]);
+            sqLiteDatabase.insert("languages", null, languagesValues);
+        }
+
         String[] eyesArray = res.getStringArray(R.array.eyes);
         ContentValues eyesValues = new ContentValues();
         for (int i = 0; i < eyesArray.length; i += 3){
@@ -71,50 +78,62 @@ public class DbHelper extends SQLiteOpenHelper {
         String[] extrasArray = res.getStringArray(R.array.extras);
         ContentValues extrasValues = new ContentValues();
         for (int i = 0; i < extrasArray.length; i += 3){
-            eyesValues.put("src", extrasArray[i]);
-            eyesValues.put("left", extrasArray[i + 1]);
-            eyesValues.put("bottom", extrasArray[i + 2]);
+            extrasValues.put("src", extrasArray[i]);
+            extrasValues.put("left", extrasArray[i + 1]);
+            extrasValues.put("bottom", extrasArray[i + 2]);
             sqLiteDatabase.insert("extras", null, extrasValues);
         }
 
         String[] mouthsArray = res.getStringArray(R.array.mouths);
         ContentValues mouthsValues = new ContentValues();
         for (int i = 0; i < mouthsArray.length; i += 3){
-            eyesValues.put("src", mouthsArray[i]);
-            eyesValues.put("left", mouthsArray[i + 1]);
-            eyesValues.put("bottom", mouthsArray[i + 2]);
+            mouthsValues.put("src", mouthsArray[i]);
+            mouthsValues.put("left", mouthsArray[i + 1]);
+            mouthsValues.put("bottom", mouthsArray[i + 2]);
             sqLiteDatabase.insert("mouths", null, mouthsValues);
         }
 
         String[] eyebrowsArray = res.getStringArray(R.array.eyebrows);
         ContentValues eyebrowsValues = new ContentValues();
         for (int i = 0; i < eyebrowsArray.length; i += 3){
-            eyesValues.put("src", eyebrowsArray[i]);
-            eyesValues.put("left", eyebrowsArray[i + 1]);
-            eyesValues.put("bottom", eyebrowsArray[i + 2]);
+            eyebrowsValues.put("src", eyebrowsArray[i]);
+            eyebrowsValues.put("left", eyebrowsArray[i + 1]);
+            eyebrowsValues.put("bottom", eyebrowsArray[i + 2]);
             sqLiteDatabase.insert("eyebrows", null, eyebrowsValues);
         }
 
         String[] avatarsArray = res.getStringArray(R.array.avatars);
         ContentValues avatarsValues = new ContentValues();
-        for (int i = 0; i < avatarsArray.length; i += 9){
+        for (int i = 0; i < avatarsArray.length; i += 21){
             avatarsValues.put("head_shot", avatarsArray[i]);
             avatarsValues.put("head_src", avatarsArray[i + 1]);
-            avatarsValues.put("torso_src", avatarsArray[i + 2]);
-            avatarsValues.put("left_arm_src", avatarsArray[i + 3]);
-            avatarsValues.put("right_arm_src", avatarsArray[i + 4]);
-            avatarsValues.put("left_leg_src", avatarsArray[i + 5]);
-            avatarsValues.put("right_leg_src", avatarsArray[i + 6]);
+            avatarsValues.put("head_left", avatarsArray[i + 2]);
+            avatarsValues.put("head_bottom", avatarsArray[i + 3]);
+            avatarsValues.put("torso_src", avatarsArray[i + 4]);
+            avatarsValues.put("torso_left", avatarsArray[i + 5]);
+            avatarsValues.put("torso_bottom", avatarsArray[i + 6]);
+            avatarsValues.put("left_arm_src", avatarsArray[i + 7]);
+            avatarsValues.put("left_arm_left", avatarsArray[i + 8]);
+            avatarsValues.put("left_arm_bottom", avatarsArray[i + 9]);
+            avatarsValues.put("right_arm_src", avatarsArray[i + 10]);
+            avatarsValues.put("right_arm_left", avatarsArray[i + 11]);
+            avatarsValues.put("right_arm_bottom", avatarsArray[i + 12]);
+            avatarsValues.put("left_leg_src", avatarsArray[i + 13]);
+            avatarsValues.put("left_leg_left", avatarsArray[i + 14]);
+            avatarsValues.put("left_leg_bottom", avatarsArray[i + 15]);
+            avatarsValues.put("right_leg_src", avatarsArray[i + 16]);
+            avatarsValues.put("right_leg_left", avatarsArray[i + 17]);
+            avatarsValues.put("right_leg_bottom", avatarsArray[i + 18]);
             avatarsValues.put("eyesId", 9);
-            if (avatarsArray[i + 8].equals("light")) {
+            if (avatarsArray[i + 20].equals("light")) {
                 avatarsValues.put("mouthId", 7);
                 avatarsValues.put("eyebrowsId", 4);
             } else {
                 avatarsValues.put("mouthId", 3);
                 avatarsValues.put("eyebrowsId", 3);
             }
-            avatarsValues.put("extrasId", avatarsArray[i + 7]);
-            avatarsValues.put("complexion", avatarsArray[i + 8]);
+            avatarsValues.put("extrasId", avatarsArray[i + 19]);
+            avatarsValues.put("complexion", avatarsArray[i + 20]);
             sqLiteDatabase.insert("avatars", null, avatarsValues);
         }
     }
