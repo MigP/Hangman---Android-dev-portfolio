@@ -61,29 +61,37 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String[] eyesArray = res.getStringArray(R.array.eyes);
         ContentValues eyesValues = new ContentValues();
-        for (String item : eyesArray){
-            eyesValues.put("src", item);
+        for (int i = 0; i < eyesArray.length; i += 3){
+            eyesValues.put("src", eyesArray[i]);
+            eyesValues.put("left", eyesArray[i + 1]);
+            eyesValues.put("bottom", eyesArray[i + 2]);
             sqLiteDatabase.insert("eyes", null, eyesValues);
         }
 
         String[] extrasArray = res.getStringArray(R.array.extras);
         ContentValues extrasValues = new ContentValues();
-        for (String item : extrasArray){
-            extrasValues.put("src", item);
+        for (int i = 0; i < extrasArray.length; i += 3){
+            eyesValues.put("src", extrasArray[i]);
+            eyesValues.put("left", extrasArray[i + 1]);
+            eyesValues.put("bottom", extrasArray[i + 2]);
             sqLiteDatabase.insert("extras", null, extrasValues);
         }
 
         String[] mouthsArray = res.getStringArray(R.array.mouths);
         ContentValues mouthsValues = new ContentValues();
-        for (String item : mouthsArray){
-            mouthsValues.put("src", item);
+        for (int i = 0; i < mouthsArray.length; i += 3){
+            eyesValues.put("src", mouthsArray[i]);
+            eyesValues.put("left", mouthsArray[i + 1]);
+            eyesValues.put("bottom", mouthsArray[i + 2]);
             sqLiteDatabase.insert("mouths", null, mouthsValues);
         }
 
         String[] eyebrowsArray = res.getStringArray(R.array.eyebrows);
         ContentValues eyebrowsValues = new ContentValues();
-        for (String item : eyebrowsArray){
-            eyebrowsValues.put("src", item);
+        for (int i = 0; i < eyebrowsArray.length; i += 3){
+            eyesValues.put("src", eyebrowsArray[i]);
+            eyesValues.put("left", eyebrowsArray[i + 1]);
+            eyesValues.put("bottom", eyebrowsArray[i + 2]);
             sqLiteDatabase.insert("eyebrows", null, eyebrowsValues);
         }
 

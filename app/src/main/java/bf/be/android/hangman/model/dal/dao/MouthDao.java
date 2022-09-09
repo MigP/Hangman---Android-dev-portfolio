@@ -14,7 +14,7 @@ import bf.be.android.hangman.model.dal.entities.Extra;
 import bf.be.android.hangman.model.dal.entities.Mouth;
 
 public class MouthDao {
-    public static final String CREATE_QUERY = "CREATE TABLE mouths(id INTEGER PRIMARY KEY AUTOINCREMENT, src VARCHAR(20) NOT NULL UNIQUE)";
+    public static final String CREATE_QUERY = "CREATE TABLE mouths(id INTEGER PRIMARY KEY AUTOINCREMENT, src VARCHAR(20) NOT NULL UNIQUE, left INTEGER NOT NULL, bottom INTEGER NOT NULL)";
     public static final String UPGRADE_QUERY = "DROP TABLE mouths;";
 
     private final DbHelper helper;
@@ -37,6 +37,8 @@ public class MouthDao {
         Mouth mouth = new Mouth();
         mouth.setId(cursor.getLong(cursor.getColumnIndex("id")));
         mouth.setSrc(cursor.getString(cursor.getColumnIndex("src")));
+        mouth.setLeft(cursor.getInt(cursor.getColumnIndex("left")));
+        mouth.setBottom(cursor.getInt(cursor.getColumnIndex("bottom")));
         return mouth;
     }
 
@@ -71,6 +73,8 @@ public class MouthDao {
     public long insert(Mouth mouth) {
         ContentValues cv = new ContentValues();
         cv.put("src", mouth.getSrc());
+        cv.put("left", mouth.getLeft());
+        cv.put("bottom", mouth.getBottom());
 
         return this.database.insert("extras", null, cv);
     }
@@ -78,6 +82,8 @@ public class MouthDao {
     public int update(long id, Mouth mouth) {
         ContentValues cv = new ContentValues();
         cv.put("src", mouth.getSrc());
+        cv.put("left", mouth.getLeft());
+        cv.put("bottom", mouth.getBottom());
 
         return this.database.update("mouths", cv, "id = ?", new String[]{String.valueOf(id)});
     }

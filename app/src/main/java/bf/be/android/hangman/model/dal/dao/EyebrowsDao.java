@@ -13,7 +13,7 @@ import bf.be.android.hangman.model.dal.DbHelper;
 import bf.be.android.hangman.model.dal.entities.Eyebrows;
 
 public class EyebrowsDao {
-    public static final String CREATE_QUERY = "CREATE TABLE eyebrows(id INTEGER PRIMARY KEY AUTOINCREMENT, src VARCHAR(20) NOT NULL UNIQUE)";
+    public static final String CREATE_QUERY = "CREATE TABLE eyebrows(id INTEGER PRIMARY KEY AUTOINCREMENT, src VARCHAR(20) NOT NULL UNIQUE, left INTEGER NOT NULL, bottom INTEGER NOT NULL)";
     public static final String UPGRADE_QUERY = "DROP TABLE eyebrows;";
 
     private final DbHelper helper;
@@ -36,6 +36,8 @@ public class EyebrowsDao {
         Eyebrows eyebrows = new Eyebrows();
         eyebrows.setId(cursor.getLong(cursor.getColumnIndex("id")));
         eyebrows.setSrc(cursor.getString(cursor.getColumnIndex("src")));
+        eyebrows.setLeft(cursor.getInt(cursor.getColumnIndex("left")));
+        eyebrows.setBottom(cursor.getInt(cursor.getColumnIndex("bottom")));
         return eyebrows;
     }
 
@@ -70,6 +72,8 @@ public class EyebrowsDao {
     public long insert(Eyebrows eyebrows) {
         ContentValues cv = new ContentValues();
         cv.put("src", eyebrows.getSrc());
+        cv.put("left", eyebrows.getLeft());
+        cv.put("bottom", eyebrows.getBottom());
 
         return this.database.insert("eyebrows", null, cv);
     }
@@ -77,6 +81,8 @@ public class EyebrowsDao {
     public int update(long id, Eyebrows eyebrows) {
         ContentValues cv = new ContentValues();
         cv.put("src", eyebrows.getSrc());
+        cv.put("left", eyebrows.getLeft());
+        cv.put("bottom", eyebrows.getBottom());
 
         return this.database.update("eyebrows", cv, "id = ?", new String[]{String.valueOf(id)});
     }

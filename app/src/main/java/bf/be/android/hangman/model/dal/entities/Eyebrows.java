@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 public class Eyebrows {
     private long id;
     private String src;
+    private int left;
+    private int bottom;
 
     public Eyebrows() {
     }
@@ -19,6 +21,8 @@ public class Eyebrows {
         return "Eyebrows{" +
                 "id='" + id + '\'' +
                 ", src='" + src + '\'' +
+                ", left='" + left + '\'' +
+                ", bottom='" + bottom + '\'' +
                 '}';
     }
 
@@ -37,6 +41,24 @@ public class Eyebrows {
 
     public Eyebrows setSrc(String src) {
         this.src = src;
+        return this;
+    }
+
+    public int getLeft() {
+        return left;
+    }
+
+    public Eyebrows setLeft(int left) {
+        this.left = left;
+        return this;
+    }
+
+    public int getBottom() {
+        return bottom;
+    }
+
+    public Eyebrows setBottom(int bottom) {
+        this.bottom = bottom;
         return this;
     }
 }

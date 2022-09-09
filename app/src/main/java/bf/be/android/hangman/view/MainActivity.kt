@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.replace
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityMainBinding
 import bf.be.android.hangman.viewModel.MainViewModel

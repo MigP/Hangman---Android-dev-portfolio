@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background top -->
+    <item>
+        <bitmap android:src="@drawable/gallows_top"/>
+    </item>
+
+    <!-- Head -->
+    <item
+        android:left="0dp"
+        android:bottom="152dp">
+        <bitmap
+            android:src="@drawable/woman12_head"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Left arm -->
+    <item
+        android:left="-35dp"
+        android:bottom="112dp">
+        <bitmap
+            android:src="@drawable/woman12_arm_left"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Right arm -->
+    <item
+        android:left="35dp"
+        android:bottom="112dp">
+        <bitmap
+            android:src="@drawable/woman12_arm_right"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Left leg -->
+    <item
+        android:left="-18dp"
+        android:bottom="48dp">
+        <bitmap
+            android:src="@drawable/woman12_leg_left"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Right leg -->
+    <item
+        android:left="18dp"
+        android:bottom="48dp">
+        <bitmap
+            android:src="@drawable/woman12_leg_right"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Torso -->
+    <item
+        android:left="0dp"
+        android:bottom="104dp">
+        <bitmap
+            android:src="@drawable/woman12_torso"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Eyes -->
+    <item
+        android:left="0dp"
+        android:bottom="213dp">
+        <bitmap
+            android:src="@drawable/face_eyes_very_narrow"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Eyebrows -->
+    <item
+        android:left="0dp"
+        android:bottom="220dp">
+        <bitmap
+            android:src="@drawable/eyebrows_sad_light"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Mouth -->
+    <item
+        android:left="0dp"
+        android:bottom="197dp">
+        <bitmap
+            android:src="@drawable/mouth_light_straight"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+    <!-- Extra -->
+    <item
+        android:left="0dp"
+        android:bottom="208dp">
+        <bitmap
+            android:src="@drawable/glasses1"
+            android:gravity="bottom"
+            android:alpha="1"/>
+    </item>
+</layer-list>

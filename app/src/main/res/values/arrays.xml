@@ -13,266 +13,624 @@
     <!-- Database initial entries -->
     <string-array name="eyebrows">
         <item>eyebrows_angry_dark</item>
+        <item>0</item>
+        <item>218</item>
         <item>eyebrows_angry_light</item>
+        <item>0</item>
+        <item>218</item>
         <item>eyebrows_neutral_dark</item>
+        <item>0</item>
+        <item>222</item>
         <item>eyebrows_neutral_light</item>
+        <item>0</item>
+        <item>222</item>
         <item>eyebrows_sad_dark</item>
+        <item>0</item>
+        <item>220</item>
         <item>eyebrows_sad_light</item>
+        <item>0</item>
+        <item>220</item>
     </string-array>
 
     <string-array name="extras">
         <item>glasses1</item>
+        <item>0</item>
+        <item>208</item>
         <item>glasses2</item>
+        <item>0</item>
+        <item>206</item>
         <item>glasses3</item>
+        <item>0</item>
+        <item>206</item>
     </string-array>
 
     <string-array name="eyes">
         <item>face_eyes_big_down_left</item>
+        <item>0</item>
+        <item>208</item>
         <item>face_eyes_big_down_right</item>
+        <item>0</item>
+        <item>208</item>
         <item>face_eyes_big_forward</item>
+        <item>0</item>
+        <item>208</item>
         <item>face_eyes_big_up_left</item>
+        <item>0</item>
+        <item>208</item>
         <item>face_eyes_big_up_right</item>
+        <item>0</item>
+        <item>208</item>
         <item>face_eyes_closed</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_happy_down_left</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_happy_down_right</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_happy_forward</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_happy_up_left</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_happy_up_right</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_narrow_down_left</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_narrow_down_right</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_narrow_forward</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_narrow_up_left</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_narrow_up_right</item>
+        <item>0</item>
+        <item>210</item>
         <item>face_eyes_squinty</item>
+        <item>0</item>
+        <item>123</item>
         <item>face_eyes_very_narrow</item>
+        <item>0</item>
+        <item>123</item>
     </string-array>
 
     <string-array name="mouths">
         <item>mouth_dark_sad</item>
+        <item>0</item>
+        <item>194</item>
         <item>mouth_dark_side</item>
+        <item>0</item>
+        <item>194</item>
         <item>mouth_dark_smiling</item>
+        <item>0</item>
+        <item>194</item>
         <item>mouth_dark_straight</item>
+        <item>0</item>
+        <item>197</item>
         <item>mouth_light_sad</item>
+        <item>0</item>
+        <item>194</item>
         <item>mouth_light_side</item>
+        <item>0</item>
+        <item>194</item>
         <item>mouth_light_smiling</item>
+        <item>0</item>
+        <item>194</item>
         <item>mouth_light_straight</item>
+        <item>0</item>
+        <item>197</item>
     </string-array>
 
     <string-array name="avatars">
         <item>man1</item>
         <item>man1_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man1_torso</item>
+        <item>0</item>
+        <item>113</item>
         <item>man1_arm_left</item>
+        <item>-50</item>
+        <item>97</item>
         <item>man1_arm_right</item>
+        <item>50</item>
+        <item>97</item>
         <item>man1_leg_left</item>
+        <item>-18</item>
+        <item>45</item>
         <item>man1_leg_right</item>
+        <item>24</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>man2</item>
         <item>man2_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man2_torso</item>
+        <item>0</item>
+        <item>113</item>
         <item>man2_arm_left</item>
+        <item>-50</item>
+        <item>97</item>
         <item>man2_arm_right</item>
+        <item>50</item>
+        <item>97</item>
         <item>man2_leg_left</item>
+        <item>-31</item>
+        <item>45</item>
         <item>man2_leg_right</item>
+        <item>33</item>
+        <item>45</item>
         <item>1</item>
         <item>dark</item>
         <item>man3</item>
         <item>man3_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man3_torso</item>
+        <item>0</item>
+        <item>110</item>
         <item>man3_arm_left</item>
+        <item>-50</item>
+        <item>94</item>
         <item>man3_arm_right</item>
+        <item>50</item>
+        <item>94</item>
         <item>man3_leg_left</item>
+        <item>-25</item>
+        <item>45</item>
         <item>man3_leg_right</item>
+        <item>24</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>man4</item>
         <item>man4_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man4_torso</item>
+        <item>0</item>
+        <item>112</item>
         <item>man4_arm_left</item>
+        <item>-50</item>
+        <item>94</item>
         <item>man4_arm_right</item>
+        <item>50</item>
+        <item>94</item>
         <item>man4_leg_left</item>
+        <item>-25</item>
+        <item>45</item>
         <item>man4_leg_right</item>
+        <item>27</item>
+        <item>45</item>
         <item>3</item>
         <item>light</item>
         <item>man5</item>
         <item>man5_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man5_torso</item>
+        <item>0</item>
+        <item>97</item>
         <item>man5_arm_left</item>
+        <item>-50</item>
+        <item>97</item>
         <item>man5_arm_right</item>
+        <item>54</item>
+        <item>97</item>
         <item>man5_leg_left</item>
+        <item>-30</item>
+        <item>45</item>
         <item>man5_leg_right</item>
+        <item>24</item>
+        <item>45</item>
         <item>0</item>
         <item>light</item>
         <item>man6</item>
         <item>man6_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man6_torso</item>
+        <item>0</item>
+        <item>110</item>
         <item>man6_arm_left</item>
+        <item>-50</item>
+        <item>95</item>
         <item>man6_arm_right</item>
+        <item>50</item>
+        <item>93</item>
         <item>man6_leg_left</item>
+        <item>-25</item>
+        <item>45</item>
         <item>man6_leg_right</item>
+        <item>28</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>man7</item>
         <item>man7_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man7_torso</item>
+        <item>0</item>
+        <item>110</item>
         <item>man7_arm_left</item>
+        <item>-50</item>
+        <item>95</item>
         <item>man7_arm_right</item>
+        <item>50</item>
+        <item>95</item>
         <item>man7_leg_left</item>
+        <item>-23</item>
+        <item>45</item>
         <item>man7_leg_right</item>
+        <item>23</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>man8</item>
         <item>man8_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man8_torso</item>
+        <item>0</item>
+        <item>111</item>
         <item>man8_arm_left</item>
+        <item>-50</item>
+        <item>95</item>
         <item>man8_arm_right</item>
+        <item>50</item>
+        <item>95</item>
         <item>man8_leg_left</item>
+        <item>-24</item>
+        <item>45</item>
         <item>man8_leg_right</item>
+        <item>24</item>
+        <item>45</item>
         <item>0</item>
         <item>light</item>
         <item>man9</item>
         <item>man9_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man9_torso</item>
+        <item>-2</item>
+        <item>110</item>
         <item>man9_arm_left</item>
+        <item>-50</item>
+        <item>94</item>
         <item>man9_arm_right</item>
+        <item>48</item>
+        <item>94</item>
         <item>man9_leg_left</item>
+        <item>-24</item>
+        <item>45</item>
         <item>man9_leg_right</item>
+        <item>26</item>
+        <item>45</item>
         <item>0</item>
         <item>light</item>
         <item>man10</item>
         <item>man10_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man10_torso</item>
+        <item>0</item>
+        <item>110</item>
         <item>man10_arm_left</item>
+        <item>-50</item>
+        <item>94</item>
         <item>man10_arm_right</item>
+        <item>48</item>
+        <item>94</item>
         <item>man10_leg_left</item>
+        <item>-26</item>
+        <item>45</item>
         <item>man10_leg_right</item>
+        <item>26</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>man11</item>
         <item>man11_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man11_torso</item>
+        <item>0</item>
+        <item>114</item>
         <item>man11_arm_left</item>
+        <item>-50</item>
+        <item>99</item>
         <item>man11_arm_right</item>
+        <item>45</item>
+        <item>99</item>
         <item>man11_leg_left</item>
+        <item>-26</item>
+        <item>45</item>
         <item>man11_leg_right</item>
+        <item>23</item>
+        <item>45</item>
         <item>1</item>
         <item>dark</item>
         <item>man12</item>
         <item>man12_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>man12_torso</item>
+        <item>0</item>
+        <item>115</item>
         <item>man12_arm_left</item>
+        <item>-50</item>
+        <item>99</item>
         <item>man12_arm_right</item>
+        <item>50</item>
+        <item>100</item>
         <item>man12_leg_left</item>
+        <item>-23</item>
+        <item>45</item>
         <item>man12_leg_right</item>
+        <item>26</item>
+        <item>45</item>
         <item>0</item>
         <item>light</item>
         <item>woman1</item>
         <item>woman1_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman1_torso</item>
+        <item>0</item>
+        <item>98</item>
         <item>woman1_arm_left</item>
+        <item>-36</item>
+        <item>110</item>
         <item>woman1_arm_right</item>
+        <item>36</item>
+        <item>110</item>
         <item>woman1_leg_left</item>
+        <item>-23</item>
+        <item>45</item>
         <item>woman1_leg_right</item>
+        <item>20</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>woman2</item>
         <item>woman2_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman2_torso</item>
+        <item>0</item>
+        <item>97</item>
         <item>woman2_arm_left</item>
+        <item>-36</item>
+        <item>105</item>
         <item>woman2_arm_right</item>
+        <item>36</item>
+        <item>105</item>
         <item>woman2_leg_left</item>
+        <item>-20</item>
+        <item>45</item>
         <item>woman2_leg_right</item>
+        <item>11</item>
+        <item>45</item>
         <item>0</item>
         <item>dark</item>
         <item>woman3</item>
         <item>woman3_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman3_torso</item>
+        <item>0</item>
+        <item>121</item>
         <item>woman3_arm_left</item>
+        <item>-36</item>
+        <item>109</item>
         <item>woman3_arm_right</item>
+        <item>36</item>
+        <item>109</item>
         <item>woman3_leg_left</item>
+        <item>-20</item>
+        <item>45</item>
         <item>woman3_leg_right</item>
+        <item>20</item>
+        <item>45</item>
         <item>2</item>
         <item>dark</item>
         <item>woman4</item>
         <item>woman4_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman4_torso</item>
+        <item>0</item>
+        <item>100</item>
         <item>woman4_arm_left</item>
+        <item>-36</item>
+        <item>113</item>
         <item>woman4_arm_right</item>
+        <item>37</item>
+        <item>112</item>
         <item>woman4_leg_left</item>
+        <item>-20</item>
+        <item>45</item>
         <item>woman4_leg_right</item>
+        <item>20</item>
+        <item>45</item>
         <item>0</item>
         <item>light</item>
         <item>woman5</item>
         <item>woman5_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman5_torso</item>
+        <item>0</item>
+        <item>101</item>
         <item>woman5_arm_left</item>
+        <item>-37</item>
+        <item>121</item>
         <item>woman5_arm_right</item>
+        <item>45</item>
+        <item>121</item>
         <item>woman5_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman5_leg_right</item>
+        <item>18</item>
+        <item>47</item>
         <item>0</item>
         <item>light</item>
         <item>woman6</item>
         <item>woman6_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman6_torso</item>
+        <item>0</item>
+        <item>113</item>
         <item>woman6_arm_left</item>
+        <item>-37</item>
+        <item>107</item>
         <item>woman6_arm_right</item>
+        <item>37</item>
+        <item>108</item>
         <item>woman6_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman6_leg_right</item>
+        <item>18</item>
+        <item>46</item>
         <item>0</item>
         <item>dark</item>
         <item>woman7</item>
         <item>woman7_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman7_torso</item>
+        <item>0</item>
+        <item>122</item>
         <item>woman7_arm_left</item>
+        <item>-36</item>
+        <item>110</item>
         <item>woman7_arm_right</item>
+        <item>35</item>
+        <item>110</item>
         <item>woman7_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman7_leg_right</item>
+        <item>18</item>
+        <item>46</item>
         <item>1</item>
         <item>dark</item>
         <item>woman8</item>
         <item>woman8_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman8_torso</item>
+        <item>0</item>
+        <item>99</item>
         <item>woman8_arm_left</item>
+        <item>-35</item>
+        <item>110</item>
         <item>woman8_arm_right</item>
+        <item>35</item>
+        <item>110</item>
         <item>woman8_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman8_leg_right</item>
+        <item>18</item>
+        <item>46</item>
         <item>0</item>
         <item>dark</item>
         <item>woman9</item>
         <item>woman9_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman9_torso</item>
+        <item>0</item>
+        <item>120</item>
         <item>woman9_arm_left</item>
+        <item>-35</item>
+        <item>110</item>
         <item>woman9_arm_right</item>
+        <item>35</item>
+        <item>110</item>
         <item>woman9_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman9_leg_right</item>
+        <item>18</item>
+        <item>46</item>
         <item>0</item>
         <item>light</item>
         <item>woman10</item>
         <item>woman10_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman10_torso</item>
+        <item>0</item>
+        <item>97</item>
         <item>woman10_arm_left</item>
+        <item>-35</item>
+        <item>110</item>
         <item>woman10_arm_right</item>
+        <item>35</item>
+        <item>110</item>
         <item>woman10_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman10_leg_right</item>
+        <item>18</item>
+        <item>46</item>
         <item>0</item>
         <item>dark</item>
         <item>woman11</item>
         <item>woman11_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman11_torso</item>
+        <item>0</item>
+        <item>101</item>
         <item>woman11_arm_left</item>
+        <item>-35</item>
+        <item>110</item>
         <item>woman11_arm_right</item>
+        <item>35</item>
+        <item>110</item>
         <item>woman11_leg_left</item>
+        <item>-18</item>
+        <item>46</item>
         <item>woman11_leg_right</item>
+        <item>18</item>
+        <item>46</item>
         <item>0</item>
         <item>dark</item>
         <item>woman12</item>
         <item>woman12_head</item>
+        <item>0</item>
+        <item>152</item>
         <item>woman12_torso</item>
+        <item>0</item>
+        <item>104</item>
         <item>woman12_arm_left</item>
+        <item>-35</item>
+        <item>112</item>
         <item>woman12_arm_right</item>
+        <item>35</item>
+        <item>112</item>
         <item>woman12_leg_left</item>
+        <item>-18</item>
+        <item>48</item>
         <item>woman12_leg_right</item>
+        <item>18</item>
+        <item>48</item>
         <item>0</item>
         <item>light</item>
     </string-array>

@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 public class Eyes {
     private long id;
     private String src;
+    private int left;
+    private int bottom;
 
     public Eyes() {
     }
@@ -19,6 +21,8 @@ public class Eyes {
         return "Eyes{" +
                 "id='" + id + '\'' +
                 ", src='" + src + '\'' +
+                ", left='" + left + '\'' +
+                ", bottom='" + bottom + '\'' +
                 '}';
     }
 
@@ -38,6 +42,24 @@ public class Eyes {
 
     public Eyes setSrc(String src) {
         this.src = src;
+        return this;
+    }
+
+    public int getLeft() {
+        return left;
+    }
+
+    public Eyes setLeft(int left) {
+        this.left = left;
+        return this;
+    }
+
+    public int getBottom() {
+        return bottom;
+    }
+
+    public Eyes setBottom(int bottom) {
+        this.bottom = bottom;
         return this;
     }
 }

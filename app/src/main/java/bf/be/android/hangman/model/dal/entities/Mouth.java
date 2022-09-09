@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 public class Mouth {
     private long id;
     private String src;
+    private int left;
+    private int bottom;
 
     public Mouth() {
     }
@@ -19,6 +21,8 @@ public class Mouth {
         return "Mouth{" +
                 "id='" + id + '\'' +
                 ", src='" + src + '\'' +
+                ", left='" + left + '\'' +
+                ", bottom='" + bottom + '\'' +
                 '}';
     }
 
@@ -38,6 +42,24 @@ public class Mouth {
 
     public Mouth setSrc(String src) {
         this.src = src;
+        return this;
+    }
+
+    public int getLeft() {
+        return left;
+    }
+
+    public Mouth setLeft(int left) {
+        this.left = left;
+        return this;
+    }
+
+    public int getBottom() {
+        return bottom;
+    }
+
+    public Mouth setBottom(int bottom) {
+        this.bottom = bottom;
         return this;
     }
 }
