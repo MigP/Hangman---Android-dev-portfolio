@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/grp1">
+    <item
+        android:id="@+id/languageItem"
+        android:icon="@drawable/language"
+        android:title="@string/change_language"
+        app:showAsAction="withText"/>
+    <item
+        android:id="@+id/avatarItem"
+        android:icon="@drawable/avatar"
+        android:title="@string/change_avatar"
+        app:showAsAction="withText"/>
+    <item
+        android:id="@+id/usernameItem"
+        android:icon="@drawable/user"
+        android:title="@string/change_username"
+        app:showAsAction="withText"/>
+    <item
+        android:id="@+id/passwordItem"
+        android:icon="@drawable/password"
+        android:title="@string/change_password"
+        app:showAsAction="withText"/>
+    </group>
+    <group android:id="@+id/grp2">
+    <item
+        android:id="@+id/deleteItem"
+        android:icon="@drawable/delete"
+        android:title="@string/delete_account"
+        app:showAsAction="withText"/>
+    <item
+        android:id="@+id/logOutItem"
+        android:icon="@drawable/logout"
+        android:title="@string/logout"
+        app:showAsAction="withText"/>
+    </group>
+</menu>

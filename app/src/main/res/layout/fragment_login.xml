@@ -43,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/user_name"
-                android:inputType="text"
                 android:textAlignment="center"/>
         </LinearLayout>
 
@@ -51,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginHorizontal="60dp"
             android:gravity="center">
 
             <ImageView

@@ -9,4 +9,17 @@
     <string name="already_member">Already registered? Log in here</string>
     <string name="confirm_password">Confirm password</string>
     <string name="remember_me">Remember me</string>
+    <string name="passwords_different">Password confirmation differs from password</string>
+    <string name="username_exists">That user name is already taken</string>
+    <string name="fill_all_fields">All fields are required</string>
+    <string name="options" translatable="false">Options</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="logout">Log out</string>
+    <string name="wrong_credentials">Incorrect user name or password</string>
+    <string name="change_language">Change language</string>
+    <string name="change_avatar">Change avatar</string>
+    <string name="change_username">Change user name</string>
+    <string name="change_password">Change password</string>
+    <string name="delete_account">Delete account</string>
 </resources>

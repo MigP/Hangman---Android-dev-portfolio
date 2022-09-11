@@ -1,10 +1,13 @@
 package bf.be.android.hangman.view
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
@@ -55,32 +58,36 @@ class RegisterFragment : Fragment() {
     }
 
     fun register (view: View) {
+        // Button click sound
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        if (prefs.getString("sound", "").equals("on")) {
+            var buttonClickSound = MediaPlayer.create(requireContext(), R.raw.click_button)
+            buttonClickSound.start()
+            buttonClickSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { buttonClickSound ->
+                buttonClickSound.stop()
+                buttonClickSound?.release()
+            })
+        }
+
         val enteredUsername = binding.registerUsernameInput.text.toString()
         val enteredPassword = binding.registerPasswordInput.text.toString()
         val enteredConfirmation = binding.registerConfirmPasswordInput.text.toString()
 
-        if (enteredPassword.equals(enteredConfirmation)) {
-            //TODO Alert error
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-
-            if (viewModel.usernameExists(requireContext(), enteredUsername)) {
-                //TODO Alert error. Username already exists
+        if (enteredUsername.equals("") || enteredPassword.equals("") || enteredConfirmation.equals("")) { // At least one field is empty
+            Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
+        } else {
+            if (!enteredPassword.equals(enteredConfirmation)) { // Password confirmation entered is different from password entered
+                Toast.makeText(requireContext(), R.string.passwords_different, Toast.LENGTH_LONG).show()
             } else {
-                //TODO Registration successful. Go to Log in
-                viewModel.insertUser(requireContext(), User(enteredUsername, enteredPassword))
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (viewModel.usernameExists(requireContext(), enteredUsername)) { // Chosen user name already exists
+                        Toast.makeText(requireContext(), R.string.username_exists, Toast.LENGTH_LONG).show()
+                    } else { // Registration successful. Go to Log in fragment
+                        viewModel.insertUser(requireContext(), User(enteredUsername, enteredPassword))
+                        setFragmentResult("requestKey", bundleOf("targetFragment" to "LogIn"))
+                    }
+                }
             }
-
-
-
-//            println("$$$$$$$$$$$$$$$ Number of users: " + viewModel.findAllUsers(requireContext()).size)
-//            if (viewModel.findUserById(requireContext(), 1)!!.size > 0) {
-//                println("$$$$$$$$$$$$$$$ First username: " + viewModel.findUserById(requireContext(), 1)!![0].username)
-//            } else {
-//                println("$$$$$$$$$$$$$$$ First username: NONE")
-//            }
-//            println("$$$$$$$$$$$$$$$ Created user: " + viewModel.activeUser?.value!!.username)
         }
     }
 }

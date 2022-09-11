@@ -9,4 +9,16 @@
     <string name="already_member">Déjà inscrit ? Connectez-vous</string>
     <string name="confirm_password">Confirmez mot de passe</string>
     <string name="remember_me">Se souvenir de moi</string>
+    <string name="passwords_different">La confirmation du mot de passe est différente du mot de passe</string>
+    <string name="username_exists">Désolé! Ce nom d\'utilisateur est déjà pris</string>
+    <string name="fill_all_fields">Tous les champs sont requis</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
+    <string name="logout">Déconnectez-vous</string>
+    <string name="wrong_credentials">Nom d\'utilisateur ou mot de passe incorrect</string>
+    <string name="change_language">Changer la langue</string>
+    <string name="change_avatar">Changer avatar</string>
+    <string name="change_username">Changer le nom d\'utilisateur</string>
+    <string name="change_password">Changer le mot de passe</string>
+    <string name="delete_account">Supprimer le compte</string>
 </resources>

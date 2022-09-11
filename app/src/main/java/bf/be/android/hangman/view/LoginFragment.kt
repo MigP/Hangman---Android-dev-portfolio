@@ -1,26 +1,22 @@
 package bf.be.android.hangman.view
 
+import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.FragmentLoginBinding
-import bf.be.android.hangman.model.dal.dao.UserDao
-import bf.be.android.hangman.model.dal.entities.User
 import bf.be.android.hangman.viewModel.MainViewModel
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlin.concurrent.timerTask
 
 class LoginFragment : Fragment() {
 
@@ -45,17 +41,7 @@ class LoginFragment : Fragment() {
             }
         })
 
-        _binding!!.loginPasswordIcon.setOnClickListener(this::temp)
-
-        //TODO This exists for testing only
         _binding!!.loginButton.setOnClickListener(this::login)
-        // ---
-
-        //TODO This is only here for testing
-        viewModel.word.observe(viewLifecycleOwner) {
-//            println("----------------word object: " + it.toString())
-        }
-        // ---
 
         return view
     }
@@ -68,33 +54,41 @@ class LoginFragment : Fragment() {
     }
 
     fun login (view: View) {
+        // Button click sound
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        if (prefs.getString("sound", "").equals("on")) {
+            var buttonClickSound = MediaPlayer.create(requireContext(), R.raw.click_button)
+            buttonClickSound.start()
+            buttonClickSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { buttonClickSound ->
+                buttonClickSound.stop()
+                buttonClickSound?.release()
+            })
+        }
+
         val enteredUsername = binding.loginUsernameInput.text.toString()
         val enteredPassword = binding.loginPasswordInput.text.toString()
-        val rememberMe = binding.registerRememberMe.isChecked
+        val rememberMe = binding.registerRememberMe
 
-        viewLifecycleOwner.lifecycleScope.launch {
-
-            if (viewModel.userExists(requireContext(), enteredUsername, enteredPassword)) {
-                //TODO Login failed. Alert error
-
-            } else {
-                //TODO Login successful. Go to game. Add active user to VM
-                //TODO This exists for testing only
-                viewModel.getRandomWordEn(view)
-                println("----------- number of users: " + viewModel.findAllUsers(requireContext()).size)
-                // ---
+        if (enteredUsername.equals("") || enteredPassword.equals("")) { // At least one field is empty
+            Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
+        } else {
+            viewLifecycleOwner.lifecycleScope.launch {
+                if (viewModel.userExists(requireContext(), enteredUsername, enteredPassword)) { // Log in successful
+                    // Adds remember me option to preferences and start game
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+                    val editor = prefs.edit()
+                    val gameIntent = Intent(requireContext(), GameActivity::class.java)
+                    if (rememberMe.isChecked) {
+                        editor.putString("rememberMe", "true")
+                    } else {
+                        editor.putString("rememberMe", "false")
+                    }
+                    editor.apply()
+                    startActivity(gameIntent)
+                } else { // Failed log in
+                    Toast.makeText(requireContext(), R.string.wrong_credentials, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
-
-    //TODO This exists for testing only
-    fun temp(view: View) {
-        viewModel.updateDisplayedWord("e")
-        println("----------------word object: " + viewModel.word.value.toString())
-        viewModel.updateDisplayedWord("a")
-        println("----------------word object: " + viewModel.word.value.toString())
-        viewModel.updateDisplayedWord("r")
-        println("----------------word object: " + viewModel.word.value.toString())
-    }
-    // ---
 }
