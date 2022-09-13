@@ -81,16 +81,16 @@ class GameActivity : AppCompatActivity() {
             if (viewModel.activeUser?.value!!.avatarId == 0) { // Open window to choose avatar
                 chooseAvatars(viewModel.getAvatarsHeadshots(applicationContext))
             } else { // Starts with the avatar the user has in the database
+                // Update viewModel active avatar
+                val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
+                viewModel._activeAvatar = MutableLiveData(tempAvatar)
+
                 //TODO for testing only
                 // Display full avatar in gallows
                 lifecycleScope.launch {
                     displayFullAvatar(viewModel.activeUser!!.value!!.avatarId)
                 }
                 // ---
-
-                // Update viewModel active avatar
-                val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
-                viewModel._activeAvatar = MutableLiveData(tempAvatar)
             }
         }
 
