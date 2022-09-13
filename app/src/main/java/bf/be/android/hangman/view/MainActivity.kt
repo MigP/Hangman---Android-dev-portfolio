@@ -17,10 +17,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityMainBinding
+import java.util.*
+import kotlin.concurrent.timerTask
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var introAnimationDelayTime: Long = 250
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val editor = prefs.edit()
         if(prefs.getString("rememberMe", "").equals("true")) {
+            introAnimationDelayTime = 0
             val gameIntent = Intent(this, GameActivity::class.java)
             startActivity(gameIntent)
         } else {
@@ -40,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
         }
 
-        introAnimations()
+        introAnimations(introAnimationDelayTime)
 
         // Show log in fragment (default starting place)
         val fm: FragmentManager = supportFragmentManager
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun introAnimations() {
+    fun introAnimations(introAnimationDelayTime: Long) {
         // Title blow up
         val titleBlowUp: ValueAnimator = ValueAnimator.ofFloat(0f, 110f)
         titleBlowUp.addUpdateListener(AnimatorUpdateListener { valueAnimator ->
@@ -82,12 +86,10 @@ class MainActivity : AppCompatActivity() {
         // Intro swoosh sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (prefs.getString("sound", "").equals("on")) {
-            var swooshSound = MediaPlayer.create(this, R.raw.intro_swoosh)
-            swooshSound.start()
-            swooshSound.setOnCompletionListener(OnCompletionListener { swooshSound ->
-                swooshSound.stop()
-                swooshSound?.release()
-            })
+            Timer().schedule(timerTask {
+                var soundFile = R.raw.intro_swoosh
+                playSound(soundFile)
+            }, introAnimationDelayTime)
         }
 
         val titleShrink: ValueAnimator = ValueAnimator.ofFloat(110f, 80f)
@@ -111,6 +113,16 @@ class MainActivity : AppCompatActivity() {
         fragmentFadeIn.startOffset = 1500
         fragmentFadeIn.setFillAfter(true);
         binding.fragmentContainerView.startAnimation(fragmentFadeIn)
+    }
+
+    // Sound effects
+    private fun playSound(soundFile: Int) {
+        var soundToPlay = MediaPlayer.create(applicationContext, soundFile)
+        soundToPlay.start()
+        soundToPlay.setOnCompletionListener(OnCompletionListener { soundToPlay ->
+            soundToPlay.stop()
+            soundToPlay?.release()
+        })
     }
 
     // Sound menu functions

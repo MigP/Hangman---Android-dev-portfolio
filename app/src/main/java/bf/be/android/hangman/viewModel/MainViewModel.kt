@@ -2,27 +2,25 @@ package bf.be.android.hangman.viewModel
 
 import android.app.Application
 import android.content.Context
-import android.text.method.ScrollingMovementMethod
 import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import bf.be.android.hangman.R
 import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.apis.*
+import bf.be.android.hangman.model.dal.dao.AvatarDao
 import bf.be.android.hangman.model.dal.dao.UserDao
+import bf.be.android.hangman.model.dal.entities.Avatar
 import bf.be.android.hangman.model.dal.entities.User
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Integer.parseInt
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
 
@@ -41,6 +39,54 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private var _word = MutableLiveData<Word>()
     val word: LiveData<Word>
         get() = _word
+
+    // List of avatars
+    var avatarList = MutableLiveData<ArrayList<Avatar>>()
+
+    // Active avatar
+    var _activeAvatar: MutableLiveData<Avatar>? = null
+    val activeAvatar: LiveData<Avatar>?
+        get() = _activeAvatar
+
+    // Selected avatar on the list of avatars
+    var avatarLastSelectedCheckbox = MutableLiveData<Int>(1)
+
+    // Get all avatars
+    suspend fun findAllAvatars(context: Context): ArrayList<Avatar> = coroutineScope {
+        var allAvatars: ArrayList<Avatar>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val avatarDao = AvatarDao(context)
+            avatarDao.openReadable()
+            allAvatars = avatarDao.findAll() as ArrayList<Avatar>?
+            return@async allAvatars
+        }
+        waitFor.await()
+        return@coroutineScope allAvatars!!
+    }
+
+    // User related methods
+    suspend fun createUser(context: Context, id: Long) = coroutineScope {
+        var user = User()
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val userDao = UserDao(context)
+            userDao.openReadable()
+            user = userDao.findById(id)[0]
+
+            return@async user
+        }
+        waitFor.await()
+
+        _activeUser = MutableLiveData(user)
+    }
+
+    fun updateUser(context: Context, id: Long, user: User) {
+        val userDao = UserDao(context)
+        userDao.openWritable()
+        userDao.update(id, user)
+
+        _activeUser = MutableLiveData(user)
+    }
 
     //Word object related methods
     private fun generateNewWord(language: String) {
@@ -70,6 +116,27 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     }
 
     //Database related methods
+    suspend fun getAvatarsHeadshots(context: Context): ArrayList<String> = coroutineScope {
+        lateinit var avatars: MutableList<Avatar>
+        val avatarsHeadshots = ArrayList<String>()
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val avatarDao = AvatarDao(context)
+            avatarDao.openReadable()
+
+            avatars = avatarDao.findAll()
+
+            return@async avatars
+        }
+        waitFor.await()
+
+        for (item in avatars) {
+            avatarsHeadshots.add(item.headShot)
+        }
+
+        return@coroutineScope avatarsHeadshots
+    }
+
     suspend fun usernameExists(context: Context, username: String): Boolean = coroutineScope {
         var usernameFound = false
 
@@ -86,20 +153,20 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         return@coroutineScope usernameFound
     }
 
-    suspend fun userExists(context: Context, username: String, password: String): Boolean = coroutineScope {
-        var userFound = false
+    suspend fun findUserId(context: Context, username: String, password: String): Long = coroutineScope {
+        var userFoundId: Long = 0
 
         val waitFor = CoroutineScope(Dispatchers.IO).async {
             val userDao = UserDao(context)
             userDao.openReadable()
             if (userDao.findByUsernameAndPassword(username, password).size > 0) {
-                userFound = true
+                userFoundId = userDao.findByUsernameAndPassword(username, password)[0].id
             }
 
-            return@async userFound
+            return@async userFoundId
         }
         waitFor.await()
-        return@coroutineScope userFound
+        return@coroutineScope userFoundId
     }
 
     suspend fun findAllUsers(context: Context): List<User> = coroutineScope {
@@ -128,28 +195,22 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         return@coroutineScope userFound
     }
 
-    suspend fun insertUser(context: Context, user: User) = coroutineScope {
-        launch {
-            val userDao = UserDao(context)
-            userDao.openWritable()
-            userDao.insert(user)
-        }
+    fun insertUser(context: Context, user: User) {
+        val userDao = UserDao(context)
+        userDao.openWritable()
+        userDao.insert(user)
     }
 
-    suspend fun updateUser(context: Context, id: Long, user: User) = coroutineScope {
-        launch {
-            val userDao = UserDao(context)
-            userDao.openWritable()
-            userDao.update(id, user)
-        }
-    }
+//    suspend fun updateDbUser(context: Context, id: Long, user: User) = coroutineScope {
+//        val userDao = UserDao(context)
+//        userDao.openWritable()
+//        userDao.update(id, user)
+//    }
 
-    suspend fun deleteUser(context: Context, id: Long) = coroutineScope {
-        launch {
-            val userDao = UserDao(context)
-            userDao.openWritable()
-            userDao.delete(id)
-        }
+    fun deleteUser(context: Context, id: Long) {
+        val userDao = UserDao(context)
+        userDao.openWritable()
+        userDao.delete(id)
     }
 
     //Api related methods

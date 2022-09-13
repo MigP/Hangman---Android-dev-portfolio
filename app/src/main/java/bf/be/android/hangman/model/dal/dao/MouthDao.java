@@ -83,7 +83,7 @@ public class MouthDao {
         return this.database.insert("extras", null, cv);
     }
 
-    public int update(long id, Mouth mouth) {
+    public long update(long id, Mouth mouth) {
         ContentValues cv = new ContentValues();
         cv.put("src", mouth.getSrc());
         cv.put("left", mouth.getLeft());
@@ -92,7 +92,7 @@ public class MouthDao {
         return this.database.update("mouths", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("mouths", "id = ?", new String[]{id + ""});
     }
 

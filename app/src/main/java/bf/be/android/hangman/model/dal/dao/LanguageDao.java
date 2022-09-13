@@ -77,14 +77,14 @@ public class LanguageDao {
         return this.database.insert("languages", null, cv);
     }
 
-    public int update(long id, Language language) {
+    public long update(long id, Language language) {
         ContentValues cv = new ContentValues();
         cv.put("name", language.getName());
 
         return this.database.update("languages", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("languages", "id = ?", new String[]{id + ""});
     }
 

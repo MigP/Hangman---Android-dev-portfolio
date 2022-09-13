@@ -21,4 +21,8 @@
     <string name="change_username">Changer le nom d\'utilisateur</string>
     <string name="change_password">Changer le mot de passe</string>
     <string name="delete_account">Supprimer le compte</string>
+    <string name="choose_avatar">Choisissez votre avatar</string>
+    <string name="man">Homme</string>
+    <string name="woman">Femme</string>
+    <string name="max_one_avatar">Vous pouvez choisir un seul avatar</string>
 </resources>

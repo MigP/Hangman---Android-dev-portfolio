@@ -20,8 +20,8 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.languageId = 1;
-        this.avatarId = 1;
+        this.languageId = 0;
+        this.avatarId = 0;
         this.highscoreId = 0;
         this.coins = 0;
         this.banknotes = 0;

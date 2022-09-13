@@ -18,8 +18,8 @@ public class UserDao {
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "username VARCHAR(25) NOT NULL UNIQUE, " +
             "password VARCHAR(25) NOT NULL, " +
-            "languageId INTEGER NOT NULL DEFAULT 1, " +
-            "avatarId INTEGER NOT NULL DEFAULT 1, " +
+            "languageId INTEGER NOT NULL DEFAULT 0, " +
+            "avatarId INTEGER NOT NULL DEFAULT 0, " +
             "highscoreId INTEGER NOT NULL DEFAULT 0, " +
             "coins INTEGER NOT NULL DEFAULT 0, " +
             "banknotes INTEGER NOT NULL DEFAULT 0, " +
@@ -130,7 +130,7 @@ public class UserDao {
         return this.database.insert("users", null, cv);
     }
 
-    public int update(long id, User user) {
+    public long update(long id, User user) {
         ContentValues cv = new ContentValues();
         cv.put("username", user.getUsername());
         cv.put("password", user.getPassword());
@@ -145,7 +145,7 @@ public class UserDao {
         return this.database.update("users", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("users", "id = ?", new String[]{id + ""});
     }
 

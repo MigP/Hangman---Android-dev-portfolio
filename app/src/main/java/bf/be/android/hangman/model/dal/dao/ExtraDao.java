@@ -83,7 +83,7 @@ public class ExtraDao {
         return this.database.insert("extras", null, cv);
     }
 
-    public int update(long id, Extra extra) {
+    public long update(long id, Extra extra) {
         ContentValues cv = new ContentValues();
         cv.put("src", extra.getSrc());
         cv.put("left", extra.getLeft());
@@ -92,7 +92,7 @@ public class ExtraDao {
         return this.database.update("extras", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("extras", "id = ?", new String[]{id + ""});
     }
 

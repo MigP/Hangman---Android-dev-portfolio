@@ -22,4 +22,8 @@
     <string name="change_username">Change user name</string>
     <string name="change_password">Change password</string>
     <string name="delete_account">Delete account</string>
+    <string name="choose_avatar">Choose your avatar</string>
+    <string name="man">Man</string>
+    <string name="woman">Woman</string>
+    <string name="max_one_avatar">You can only choose one avatar</string>
 </resources>

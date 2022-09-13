@@ -57,12 +57,8 @@ class LoginFragment : Fragment() {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (prefs.getString("sound", "").equals("on")) {
-            var buttonClickSound = MediaPlayer.create(requireContext(), R.raw.click_button)
-            buttonClickSound.start()
-            buttonClickSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { buttonClickSound ->
-                buttonClickSound.stop()
-                buttonClickSound?.release()
-            })
+            var soundFile = R.raw.click_button
+            playSound(soundFile)
         }
 
         val enteredUsername = binding.loginUsernameInput.text.toString()
@@ -73,10 +69,12 @@ class LoginFragment : Fragment() {
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
         } else {
             viewLifecycleOwner.lifecycleScope.launch {
-                if (viewModel.userExists(requireContext(), enteredUsername, enteredPassword)) { // Log in successful
-                    // Adds remember me option to preferences and start game
+                val userId = viewModel.findUserId(requireContext(), enteredUsername, enteredPassword)
+                if (userId > 0) { // Log in successful
+                    // Adds userId and remember me option to preferences and start game
                     val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
                     val editor = prefs.edit()
+                    editor.putString("userId", userId.toString())
                     val gameIntent = Intent(requireContext(), GameActivity::class.java)
                     if (rememberMe.isChecked) {
                         editor.putString("rememberMe", "true")
@@ -90,5 +88,15 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+    // Sound effects
+    private fun playSound(soundFile: Int) {
+        var soundToPlay = MediaPlayer.create(requireContext(), soundFile)
+        soundToPlay.start()
+        soundToPlay.setOnCompletionListener(MediaPlayer.OnCompletionListener { soundToPlay ->
+            soundToPlay.stop()
+            soundToPlay?.release()
+        })
     }
 }

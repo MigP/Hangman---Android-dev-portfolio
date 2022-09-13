@@ -159,7 +159,7 @@ public class AvatarDao {
         return this.database.insert("avatars", null, cv);
     }
 
-    public int update(long id, Avatar avatar) {
+    public long update(long id, Avatar avatar) {
         ContentValues cv = new ContentValues();
         cv.put("head_shot", avatar.getHeadShot());
         cv.put("head_src", avatar.getHeadSrc());
@@ -195,7 +195,7 @@ public class AvatarDao {
         return this.database.update("avatars", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("avatars", "id = ?", new String[]{id + ""});
     }
 

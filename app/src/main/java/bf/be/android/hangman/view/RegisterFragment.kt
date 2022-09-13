@@ -61,12 +61,8 @@ class RegisterFragment : Fragment() {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (prefs.getString("sound", "").equals("on")) {
-            var buttonClickSound = MediaPlayer.create(requireContext(), R.raw.click_button)
-            buttonClickSound.start()
-            buttonClickSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { buttonClickSound ->
-                buttonClickSound.stop()
-                buttonClickSound?.release()
-            })
+            var soundFile = R.raw.click_button
+            playSound(soundFile)
         }
 
         val enteredUsername = binding.registerUsernameInput.text.toString()
@@ -89,5 +85,15 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
+    }
+
+    // Sound effects
+    private fun playSound(soundFile: Int) {
+        var soundToPlay = MediaPlayer.create(requireContext(), soundFile)
+        soundToPlay.start()
+        soundToPlay.setOnCompletionListener(MediaPlayer.OnCompletionListener { soundToPlay ->
+            soundToPlay.stop()
+            soundToPlay?.release()
+        })
     }
 }

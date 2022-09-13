@@ -87,7 +87,7 @@ public class HighscoreDao {
         return this.database.insert("highscores", null, cv);
     }
 
-    public int update(long id, Highscore highscore) {
+    public long update(long id, Highscore highscore) {
         ContentValues cv = new ContentValues();
         cv.put("score", highscore.getScore());
         cv.put("date", highscore.getDate());
@@ -97,7 +97,7 @@ public class HighscoreDao {
         return this.database.update("highscores", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("highscores", "id = ?", new String[]{id + ""});
     }
 

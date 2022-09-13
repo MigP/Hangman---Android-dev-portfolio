@@ -48,12 +48,29 @@
             android:id="@+id/game_gallows_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/grass"
             app:srcCompat="@drawable/gallows_bottom" />
+
+        <!-- For testing !-->
+        <TextView
+            android:id="@+id/game_greeting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FF5722"
+            android:textSize="40sp"
+            android:typeface="normal"
+            app:layout_constraintBottom_toTopOf="@+id/game_gallows_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sky" />
+        <!--               !-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Sliding side menu !-->

@@ -82,7 +82,7 @@ public class EyesDao {
         return this.database.insert("eyes", null, cv);
     }
 
-    public int update(long id, Eyes eyes) {
+    public long update(long id, Eyes eyes) {
         ContentValues cv = new ContentValues();
         cv.put("src", eyes.getSrc());
         cv.put("left", eyes.getLeft());
@@ -91,7 +91,7 @@ public class EyesDao {
         return this.database.update("eyes", cv, "id = ?", new String[]{String.valueOf(id)});
     }
 
-    public int delete(long id) {
+    public long delete(long id) {
         return this.database.delete("eyes", "id = ?", new String[]{id + ""});
     }
 
