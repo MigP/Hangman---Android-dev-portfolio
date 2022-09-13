@@ -13,6 +13,7 @@ public class User {
     private Integer banknotes;
     private Integer diamonds;
     private Integer lives;
+    private Integer score;
 
     public User() {
     }
@@ -27,9 +28,10 @@ public class User {
         this.banknotes = 0;
         this.diamonds = 0;
         this.lives = 3;
+        this.score = 0;
     }
 
-    public User(String username, String password, Integer languageId, Integer avatarId, Integer highscoreId, Integer coins, Integer banknotes, Integer diamonds, Integer lives) {
+    public User(String username, String password, Integer languageId, Integer avatarId, Integer highscoreId, Integer coins, Integer banknotes, Integer diamonds, Integer lives, Integer score) {
         this.username = username;
         this.password = password;
         this.languageId = languageId;
@@ -39,6 +41,7 @@ public class User {
         this.banknotes = banknotes;
         this.diamonds = diamonds;
         this.lives = lives;
+        this.score = score;
     }
 
     @NonNull
@@ -55,6 +58,7 @@ public class User {
                 ", banknotes='" + banknotes + '\'' +
                 ", diamonds='" + diamonds + '\'' +
                 ", lives='" + lives + '\'' +
+                ", score='" + score + '\'' +
                 '}';
     }
 
@@ -145,6 +149,15 @@ public class User {
 
     public User setLives(Integer lives) {
         this.lives = lives;
+        return this;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public User setScore(Integer score) {
+        this.score = score;
         return this;
     }
 }

@@ -1,5 +1,9 @@
 package bf.be.android.hangman.model.dal.entities;
 
+import android.content.Context;
+import android.graphics.drawable.LayerDrawable;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 public class Avatar {

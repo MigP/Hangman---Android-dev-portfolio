@@ -6,12 +6,11 @@ import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.apis.*
-import bf.be.android.hangman.model.dal.dao.AvatarDao
-import bf.be.android.hangman.model.dal.dao.UserDao
-import bf.be.android.hangman.model.dal.entities.Avatar
-import bf.be.android.hangman.model.dal.entities.User
+import bf.be.android.hangman.model.dal.dao.*
+import bf.be.android.hangman.model.dal.entities.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -48,8 +47,13 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val activeAvatar: LiveData<Avatar>?
         get() = _activeAvatar
 
+    // Active game round
+    var _activeGameRound: MutableLiveData<GameRound>? = null
+    val activeGameRound: LiveData<GameRound>?
+        get() = _activeGameRound
+
     // Selected avatar on the list of avatars
-    var avatarLastSelectedCheckbox = MutableLiveData<Int>(1)
+    var avatarLastSelectedCheckbox = MutableLiveData<Int>(0)
 
     // Get all avatars
     suspend fun findAllAvatars(context: Context): ArrayList<Avatar> = coroutineScope {
@@ -86,6 +90,12 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         userDao.update(id, user)
 
         _activeUser = MutableLiveData(user)
+    }
+
+    // Game round related methods
+    fun createNewGameRound() {
+            val tempGameRound = GameRound()
+            _activeGameRound = MutableLiveData(tempGameRound)
     }
 
     //Word object related methods
@@ -193,6 +203,58 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
         waitFor.await()
         return@coroutineScope userFound
+    }
+
+    suspend fun findEyebrowsById(context: Context, id: Long): List<Eyebrows>? = coroutineScope {
+        var eyebrowsFound: List<Eyebrows>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val eyebrowsDao = EyebrowsDao(context)
+            eyebrowsDao.openReadable()
+            eyebrowsFound = eyebrowsDao.findById(id)
+            return@async eyebrowsFound
+        }
+        waitFor.await()
+        return@coroutineScope eyebrowsFound
+    }
+
+    suspend fun findEyesById(context: Context, id: Long): List<Eyes>? = coroutineScope {
+        var eyesFound: List<Eyes>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val eyesDao = EyesDao(context)
+            eyesDao.openReadable()
+            eyesFound = eyesDao.findById(id)
+            return@async eyesFound
+        }
+        waitFor.await()
+        return@coroutineScope eyesFound
+    }
+
+    suspend fun findExtraById(context: Context, id: Long): List<Extra>? = coroutineScope {
+        var extrasFound: List<Extra>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val extraDao = ExtraDao(context)
+            extraDao.openReadable()
+            extrasFound = extraDao.findById(id)
+            return@async extrasFound
+        }
+        waitFor.await()
+        return@coroutineScope extrasFound
+    }
+
+    suspend fun findMouthById(context: Context, id: Long): List<Mouth>? = coroutineScope {
+        var mouthsFound: List<Mouth>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val mouthDao = MouthDao(context)
+            mouthDao.openReadable()
+            mouthsFound = mouthDao.findById(id)
+            return@async mouthsFound
+        }
+        waitFor.await()
+        return@coroutineScope mouthsFound
     }
 
     fun insertUser(context: Context, user: User) {

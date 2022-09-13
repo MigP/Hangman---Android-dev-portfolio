@@ -21,6 +21,7 @@ public class HighscoreDao {
             "userId INTEGER NOT NULL, " +
             "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
             "CONSTRAINT fk_users FOREIGN KEY (userId) REFERENCES users(id))";
+
     public static final String UPGRADE_QUERY = "DROP TABLE highscores;";
 
     private final DbHelper helper;

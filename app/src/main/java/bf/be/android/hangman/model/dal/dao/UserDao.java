@@ -25,9 +25,11 @@ public class UserDao {
             "banknotes INTEGER NOT NULL DEFAULT 0, " +
             "diamonds INTEGER NOT NULL DEFAULT 0, " +
             "lives INTEGER NOT NULL DEFAULT 3, " +
+            "score INTEGER NOT NULL DEFAULT 0, " +
             "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
             "CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id), " +
             "CONSTRAINT fk_highscores FOREIGN KEY (highscoreId) REFERENCES highscores(id))";
+
     public static final String UPGRADE_QUERY = "DROP TABLE users;";
 
     private final DbHelper helper;
@@ -58,6 +60,7 @@ public class UserDao {
         user.setBanknotes(cursor.getInt(cursor.getColumnIndex("banknotes")));
         user.setDiamonds(cursor.getInt(cursor.getColumnIndex("diamonds")));
         user.setLives(cursor.getInt(cursor.getColumnIndex("lives")));
+        user.setScore(cursor.getInt(cursor.getColumnIndex("score")));
         return user;
     }
 
@@ -126,6 +129,7 @@ public class UserDao {
         cv.put("banknotes", user.getBanknotes());
         cv.put("diamonds", user.getDiamonds());
         cv.put("lives", user.getLives());
+        cv.put("score", user.getScore());
 
         return this.database.insert("users", null, cv);
     }
@@ -141,6 +145,7 @@ public class UserDao {
         cv.put("banknotes", user.getBanknotes());
         cv.put("diamonds", user.getDiamonds());
         cv.put("lives", user.getLives());
+        cv.put("score", user.getScore());
 
         return this.database.update("users", cv, "id = ?", new String[]{String.valueOf(id)});
     }

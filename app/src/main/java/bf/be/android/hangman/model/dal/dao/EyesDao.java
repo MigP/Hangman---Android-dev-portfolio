@@ -15,9 +15,8 @@ import bf.be.android.hangman.model.dal.entities.Eyes;
 public class EyesDao {
     public static final String CREATE_QUERY = "CREATE TABLE eyes(" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "src VARCHAR(20) NOT NULL UNIQUE, " +
-            "left INTEGER NOT NULL, " +
-            "bottom INTEGER NOT NULL)";
+            "src VARCHAR(20) NOT NULL UNIQUE)";
+
     public static final String UPGRADE_QUERY = "DROP TABLE eyes;";
 
     private final DbHelper helper;
@@ -40,8 +39,6 @@ public class EyesDao {
         Eyes eyes = new Eyes();
         eyes.setId(cursor.getLong(cursor.getColumnIndex("id")));
         eyes.setSrc(cursor.getString(cursor.getColumnIndex("src")));
-        eyes.setLeft(cursor.getInt(cursor.getColumnIndex("left")));
-        eyes.setBottom(cursor.getInt(cursor.getColumnIndex("bottom")));
         return eyes;
     }
 
@@ -76,8 +73,6 @@ public class EyesDao {
     public long insert(Eyes eyes) {
         ContentValues cv = new ContentValues();
         cv.put("src", eyes.getSrc());
-        cv.put("left", eyes.getLeft());
-        cv.put("bottom", eyes.getBottom());
 
         return this.database.insert("eyes", null, cv);
     }
@@ -85,8 +80,6 @@ public class EyesDao {
     public long update(long id, Eyes eyes) {
         ContentValues cv = new ContentValues();
         cv.put("src", eyes.getSrc());
-        cv.put("left", eyes.getLeft());
-        cv.put("bottom", eyes.getBottom());
 
         return this.database.update("eyes", cv, "id = ?", new String[]{String.valueOf(id)});
     }

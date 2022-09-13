@@ -32,7 +32,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sky" />
+            app:layout_constraintTop_toBottomOf="@id/sky" >
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/game_gallows_top"
@@ -71,6 +72,312 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/sky" />
         <!--               !-->
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/grass"
+            android:id="@+id/keyboard">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/keyboardA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="A"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="B"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="C"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="D"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="E"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="F"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardG"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="G"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="H"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="I"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/keyboardJ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="J"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="K"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="L"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="M"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="N"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="O"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="P"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardQ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="Q"
+                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/keyboardR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="R"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/keyboardS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="S"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="T"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardU"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="U"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="V"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="W"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardX"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="X"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardY"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="Y"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardZ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text="Z"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/keyboardNull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:alpha="0"
+                    android:fontFamily="@font/alata"
+                    android:padding="5dp"
+                    android:text=" "
+                    android:textSize="24sp" />
+            </TableRow>
+        </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Sliding side menu !-->

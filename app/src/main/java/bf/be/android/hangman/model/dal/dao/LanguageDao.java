@@ -17,6 +17,7 @@ public class LanguageDao {
     public static final String CREATE_QUERY = "CREATE TABLE languages(" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name VARCHAR(10) NOT NULL UNIQUE)";
+
     public static final String UPGRADE_QUERY = "DROP TABLE languages;";
 
     private final DbHelper helper;

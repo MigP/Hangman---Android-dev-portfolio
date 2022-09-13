@@ -16,9 +16,8 @@ import bf.be.android.hangman.model.dal.entities.Extra;
 public class ExtraDao {
     public static final String CREATE_QUERY = "CREATE TABLE extras(" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "src VARCHAR(20) NOT NULL UNIQUE, " +
-            "left INTEGER NOT NULL, " +
-            "bottom INTEGER NOT NULL)";
+            "src VARCHAR(20) NOT NULL UNIQUE)";
+
     public static final String UPGRADE_QUERY = "DROP TABLE extras;";
 
     private final DbHelper helper;
@@ -41,8 +40,6 @@ public class ExtraDao {
         Extra extra = new Extra();
         extra.setId(cursor.getLong(cursor.getColumnIndex("id")));
         extra.setSrc(cursor.getString(cursor.getColumnIndex("src")));
-        extra.setLeft(cursor.getInt(cursor.getColumnIndex("left")));
-        extra.setBottom(cursor.getInt(cursor.getColumnIndex("bottom")));
         return extra;
     }
 
@@ -77,8 +74,6 @@ public class ExtraDao {
     public long insert(Extra extra) {
         ContentValues cv = new ContentValues();
         cv.put("src", extra.getSrc());
-        cv.put("left", extra.getLeft());
-        cv.put("bottom", extra.getBottom());
 
         return this.database.insert("extras", null, cv);
     }
@@ -86,8 +81,6 @@ public class ExtraDao {
     public long update(long id, Extra extra) {
         ContentValues cv = new ContentValues();
         cv.put("src", extra.getSrc());
-        cv.put("left", extra.getLeft());
-        cv.put("bottom", extra.getBottom());
 
         return this.database.update("extras", cv, "id = ?", new String[]{String.valueOf(id)});
     }

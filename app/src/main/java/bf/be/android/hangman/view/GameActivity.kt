@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -20,6 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityGameBinding
+import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.dal.entities.Avatar
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
@@ -43,16 +45,27 @@ class GameActivity : AppCompatActivity() {
         // View binding
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Keyboard bindings
+        initialiseKeyboardBinding()
+
+        // Shared preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         gameContext = this
-        initialiseAvatarGraphics()
 
-        // Create avatars and user objects
+        // Initialises avatar images on the screen
+        hideAvatarGraphics()
+
+        // Creates viewModel game round object
+        viewModel.createNewGameRound()
+
         lifecycleScope.launch {
+            // Creates viewModel avatar list
             val allAvatars = viewModel.findAllAvatars(applicationContext)
             viewModel.avatarList = MutableLiveData(allAvatars)
 
+            // Creates user object
             viewModel.createUser(applicationContext, prefs.getString("userId", "")!!.toLong())
 
             //TODO this is for testing
@@ -61,11 +74,23 @@ class GameActivity : AppCompatActivity() {
 
             // Check if user has chosen an avatar and a language yet and if not, prompt for them
             if (viewModel.activeUser?.value!!.languageId == 0) {
+                //TODO Implement
                 println("============= User needs to choose a language")
             }
 
             if (viewModel.activeUser?.value!!.avatarId == 0) { // Open window to choose avatar
                 chooseAvatars(viewModel.getAvatarsHeadshots(applicationContext))
+            } else { // Starts with the avatar the user has in the database
+                //TODO for testing only
+                // Display full avatar in gallows
+                lifecycleScope.launch {
+                    displayFullAvatar(viewModel.activeUser!!.value!!.avatarId)
+                }
+                // ---
+
+                // Update viewModel active avatar
+                val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
+                viewModel._activeAvatar = MutableLiveData(tempAvatar)
             }
         }
 
@@ -121,9 +146,152 @@ class GameActivity : AppCompatActivity() {
 
     }
 
+    // Keyboard biding initialisation
+    private fun initialiseKeyboardBinding() {
+        binding.keyboardA.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("A")
+            }
+        })
+        binding.keyboardB.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("B")
+            }
+        })
+        binding.keyboardC.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("C")
+            }
+        })
+        binding.keyboardD.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("D")
+            }
+        })
+        binding.keyboardE.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("E")
+            }
+        })
+        binding.keyboardF.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("F")
+            }
+        })
+        binding.keyboardG.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("G")
+            }
+        })
+        binding.keyboardH.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("H")
+            }
+        })
+        binding.keyboardI.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("I")
+            }
+        })
+        binding.keyboardJ.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("J")
+            }
+        })
+        binding.keyboardK.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("K")
+            }
+        })
+        binding.keyboardL.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("L")
+            }
+        })
+        binding.keyboardM.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("M")
+            }
+        })
+        binding.keyboardN.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("N")
+            }
+        })
+        binding.keyboardO.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("O")
+            }
+        })
+        binding.keyboardP.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("P")
+            }
+        })
+        binding.keyboardQ.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("Q")
+            }
+        })
+        binding.keyboardR.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("R")
+            }
+        })
+        binding.keyboardS.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("S")
+            }
+        })
+        binding.keyboardT.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("T")
+            }
+        })
+        binding.keyboardU.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("U")
+            }
+        })
+        binding.keyboardV.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("V")
+            }
+        })
+        binding.keyboardW.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("W")
+            }
+        })
+        binding.keyboardX.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("X")
+            }
+        })
+        binding.keyboardY.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("Y")
+            }
+        })
+        binding.keyboardZ.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                keyboardPressed("Z")
+            }
+        })
+    }
+
+    //TODO pass this to game round object
+    fun keyboardPressed(pressed: String) {
+        // Button click sound
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        if (prefs.getString("sound", "").equals("on")) {
+            var soundFile = R.raw.click_letter_miss
+            playSound(soundFile)
+        }
+    }
+
     // Displays window where the user can choose an avatar
     private fun chooseAvatars(avatarsHeadshots: ArrayList<String>) {
-        viewModel.avatarLastSelectedCheckbox.value = 0
         val dialogbuider = AlertDialog.Builder(this)
         dialogbuider.setCancelable(false)
         dialogbuider.setTitle(R.string.choose_avatar)
@@ -172,25 +340,26 @@ class GameActivity : AppCompatActivity() {
                 playSound(soundFile)
             }
 
-            fetchAvatarImgs(viewModel.avatarLastSelectedCheckbox.value!! + 1)
+            // Update user object and db with the selected avatar
+            val tempUser = viewModel.activeUser!!.value
+            tempUser!!.avatarId = viewModel.avatarLastSelectedCheckbox.value!! + 1
+            viewModel.updateUser(gameContext, tempUser.id, tempUser)
+
+            // Update viewModel active avatar
+            val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.avatarLastSelectedCheckbox.value!!]
+            viewModel._activeAvatar = MutableLiveData(tempAvatar)
+
+            //TODO for testing only
+            // Display full avatar in gallows
+            lifecycleScope.launch {
+                displayFullAvatar(viewModel.avatarLastSelectedCheckbox.value!! + 1)
+            }
+            // ---
         }
 
         val dialog = dialogbuider.create()
         val listView = dialog.listView
         dialog.show()
-    }
-
-    //TODO temporary for testing
-    private fun fetchAvatarImgs(id: Int) {
-        // Update user object and db with the selected avatar
-        val tempUser = viewModel.activeUser!!.value
-        tempUser!!.avatarId = id
-        viewModel.updateUser(gameContext, tempUser.id, tempUser)
-
-        // Update viewModel active avatar
-        val tempAvatar: Avatar = viewModel.avatarList.value!![id - 1]
-        viewModel._activeAvatar = MutableLiveData(tempAvatar)
-        avatarUpdateObserver()
     }
 
     // Options menu functions
@@ -288,7 +457,7 @@ class GameActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    fun initialiseAvatarGraphics() {
+    fun hideAvatarGraphics() {
         // Gets the layer drawable
         val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
         // Gets the item by its id
@@ -306,21 +475,41 @@ class GameActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceType")
-    private fun avatarUpdateObserver() {
-//        viewModel.activeAvatar?.observe(vie, Observer { updatedText ->
-//            binding.gameGreeting = updatedText.
-//        })
+    private suspend fun displayFullAvatar(id: Int) {
 
-        var avatarName = "man1"
-        initialiseAvatarGraphics()
+        // Hides all displayed avatar graphics
+        hideAvatarGraphics()
+
+        // Gets relevant Ids from avatar object
+        var avatarComplexion = viewModel.activeAvatar!!.value!!.complexion
+        var avatarExtra = viewModel.activeAvatar!!.value!!.extrasId
+        var avatarEyes = viewModel.activeAvatar!!.value!!.eyesId
+        var avatarEyebrows = viewModel.activeAvatar!!.value!!.eyebrowsId
+        var avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
+
         // Gets the layer drawable
         val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
-        // Gets the item by its id
-        val extra = layerDrawable.findDrawableByLayerId(R.id.glasses1)
-        val eyes = layerDrawable.findDrawableByLayerId(R.id.face_eyes_happy_forward)
-        val eyebrows = layerDrawable.findDrawableByLayerId(R.id.eyebrows_neutral_dark)
-        val mouth = layerDrawable.findDrawableByLayerId(R.id.mouth_light_smiling)
 
+        // Extra: Gets the resource id, then gets the item drawable by its id
+        var extra: Drawable? = null
+        if (avatarExtra > 0) {
+            var extraResourceName = viewModel.findExtraById(gameContext, avatarExtra.toLong())?.get(0)?.src
+            extra = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, extraResourceName))
+        }
+
+        // Eyes: Gets the resource id, then gets the item drawable by its id
+        var eyesResourceName = viewModel.findEyesById(gameContext, avatarEyes.toLong())?.get(0)?.src
+        val eyes = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, eyesResourceName))
+
+        // Eyebrows: Gets the resource id, then gets the item drawable by its id
+        var eyebrowsResourceName = viewModel.findEyebrowsById(gameContext, avatarEyebrows.toLong())?.get(0)?.src
+        val eyebrows = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, eyebrowsResourceName))
+
+        // Mouth: Gets the resource id, then gets the item drawable by its id
+        var mouthResourceName = viewModel.findMouthById(gameContext, avatarMouth.toLong())?.get(0)?.src
+        val mouth = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, mouthResourceName))
+
+        // Body parts: Gets the item drawable by its id
         val head = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.headSrc))
         val leftArm = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.leftArmSrc))
         val rightArm = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.rightArmSrc))
@@ -328,8 +517,7 @@ class GameActivity : AppCompatActivity() {
         val rightLeg = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.rightLegSrc))
         val torso = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.torsoSrc))
 
-
-        println("---------------- Active avatar: " + viewModel.activeAvatar!!.value.toString())
+        // Sets the opacity of the avatar's parts
         head.alpha = 255
         leftArm.alpha = 255
         rightArm.alpha = 255
@@ -337,14 +525,20 @@ class GameActivity : AppCompatActivity() {
         rightLeg.alpha = 255
         torso.alpha = 255
 
-        extra.alpha = 0
+        if (avatarExtra > 0) {
+            extra!!.alpha = 255
+        }
         eyes.alpha = 255
         eyebrows.alpha = 255
         mouth.alpha = 255
 
         // Gets the ImageView where the layer drawable is by its id
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
-        // Sets ts src to the new updated layer drawable
+        // Sets its src to the new updated layer drawable
         layoutlist1.setImageDrawable(layerDrawable)
+    }
+
+    fun displayKeyboard() {
+
     }
 }
