@@ -287,7 +287,7 @@ class GameActivity : AppCompatActivity() {
             override fun onClick(view: View?) {
                 // Button click sound
                 val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
-                if (prefs.getString("sound", "").equals("on")) {
+                if (prefs.getString("sound", "on").equals("on")) {
                     var soundFile = R.raw.click_button
                     playSound(soundFile)
                 }
@@ -316,7 +316,7 @@ class GameActivity : AppCompatActivity() {
                 if(optionsMenu.isDrawerOpen(GravityCompat.START)) {
                     // Close menu sound
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                    if (prefs.getString("sound", "").equals("on")) {
+                    if (prefs.getString("sound", "on").equals("on")) {
                         var closeMenuSound = MediaPlayer.create(applicationContext, R.raw.close_window)
                         closeMenuSound.start()
                         closeMenuSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { closeMenuSound ->
@@ -327,7 +327,7 @@ class GameActivity : AppCompatActivity() {
                 } else {
                     // Open menu sound
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                    if (prefs.getString("sound", "").equals("on")) {
+                    if (prefs.getString("sound", "on").equals("on")) {
                         var closeMenuSound = MediaPlayer.create(applicationContext, R.raw.open_window)
                         closeMenuSound.start()
                         closeMenuSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { closeMenuSound ->
@@ -383,8 +383,8 @@ class GameActivity : AppCompatActivity() {
                     r.setOnClickListener { view ->
                         selectedPosition = view.tag as Int
                         notifyDataSetChanged()
-                        viewModel.avatarLastSelectedCheckbox.value = selectedPosition
                     }
+                    viewModel.avatarLastSelectedCheckbox.value = selectedPosition
                     return v!!
                 }
             }
@@ -394,7 +394,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setPositiveButton("OK") { dialogInterface: DialogInterface?, which: Int ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -468,7 +468,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setPositiveButton("OK") { dialogInterface: DialogInterface?, which: Int ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -499,7 +499,7 @@ class GameActivity : AppCompatActivity() {
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -512,7 +512,7 @@ class GameActivity : AppCompatActivity() {
         builder.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener {dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -531,7 +531,7 @@ class GameActivity : AppCompatActivity() {
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -544,7 +544,7 @@ class GameActivity : AppCompatActivity() {
         builder.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener {dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -562,7 +562,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setPositiveButton(R.string.yes, DialogInterface.OnClickListener { dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -582,7 +582,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setNegativeButton(R.string.no, DialogInterface.OnClickListener {dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "").equals("on")) {
+            if (prefs.getString("sound", "on").equals("on")) {
                 var soundFile = R.raw.click_button
                 playSound(soundFile)
             }
@@ -612,7 +612,7 @@ class GameActivity : AppCompatActivity() {
         // Change sound menu icon according to the settings in preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val editor = prefs.edit()
-        if (prefs.getString("sound", "").equals("off")) {
+        if (prefs.getString("sound", "on").equals("off")) {
             menu?.findItem(R.id.soundOptions)?.setIcon(R.drawable.sound_off)
             menu?.findItem(R.id.soundOptions)?.setTitle("Off")
         }
@@ -626,7 +626,7 @@ class GameActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Button click sound
-        if (prefs.getString("sound", "").equals("on")) {
+        if (prefs.getString("sound", "on").equals("on")) {
             var buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
             buttonClickSound.start()
             buttonClickSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { buttonClickSound ->
@@ -766,7 +766,7 @@ class GameActivity : AppCompatActivity() {
     fun keyboardPressed(pressed: String) {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "").equals("on")) {
+        if (prefs.getString("sound", "on").equals("on")) {
             var soundFile = R.raw.click_letter_miss
             playSound(soundFile)
         }

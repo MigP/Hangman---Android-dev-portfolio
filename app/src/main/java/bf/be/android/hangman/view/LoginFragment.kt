@@ -1,9 +1,12 @@
 package bf.be.android.hangman.view
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +21,8 @@ import bf.be.android.hangman.databinding.FragmentLoginBinding
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
 
-class LoginFragment : Fragment() {
 
+class LoginFragment : Fragment() {
     // View binding
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -42,11 +45,23 @@ class LoginFragment : Fragment() {
         })
 
         _binding!!.loginButton.setOnClickListener(this::login)
+        val pwVisibility = binding.loginVisibleIcon
 
+        pwVisibility.setOnClickListener {
+            if(pwVisibilityState) {
+                binding.loginPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
+                pwVisibility.setImageResource(R.drawable.invisible);
+            } else{
+                binding.loginPasswordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                pwVisibility.setImageResource(R.drawable.visible);
+            }
+            pwVisibilityState = !pwVisibilityState
+        }
         return view
     }
 
     companion object {
+        var pwVisibilityState = false
         @JvmStatic
         fun newInstance() =
             LoginFragment().apply {
@@ -56,7 +71,7 @@ class LoginFragment : Fragment() {
     fun login (view: View) {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        if (prefs.getString("sound", "").equals("on")) {
+        if (prefs.getString("sound", "on").equals("on")) {
             var soundFile = R.raw.click_button
             playSound(soundFile)
         }

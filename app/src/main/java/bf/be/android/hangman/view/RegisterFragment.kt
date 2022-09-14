@@ -3,6 +3,8 @@ package bf.be.android.hangman.view
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,11 +48,36 @@ class RegisterFragment : Fragment() {
         })
 
         _binding!!.registerButton.setOnClickListener(this::register)
+        val pwVisibility = binding.registerVisibleIcon
+        val pwVisibility2 = binding.registerConfirmVisibleIcon
 
+        pwVisibility.setOnClickListener {
+            if(pwVisibilityState) {
+                binding.registerPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
+                pwVisibility.setImageResource(R.drawable.invisible);
+            } else{
+                binding.registerPasswordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                pwVisibility.setImageResource(R.drawable.visible);
+            }
+            pwVisibilityState = !pwVisibilityState
+        }
+
+        pwVisibility2.setOnClickListener {
+            if(pw2VisibilityState) {
+                binding.registerConfirmPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
+                pwVisibility2.setImageResource(R.drawable.invisible);
+            } else{
+                binding.registerConfirmPasswordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                pwVisibility2.setImageResource(R.drawable.visible);
+            }
+            pw2VisibilityState = !pw2VisibilityState
+        }
         return view
     }
 
     companion object {
+        var pwVisibilityState = false
+        var pw2VisibilityState = false
         @JvmStatic
         fun newInstance() =
             RegisterFragment().apply {
@@ -60,7 +87,7 @@ class RegisterFragment : Fragment() {
     fun register (view: View) {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        if (prefs.getString("sound", "").equals("on")) {
+        if (prefs.getString("sound", "on").equals("on")) {
             var soundFile = R.raw.click_button
             playSound(soundFile)
         }

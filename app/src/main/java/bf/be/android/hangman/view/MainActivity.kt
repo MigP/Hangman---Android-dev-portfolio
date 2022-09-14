@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
         // Intro swoosh sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "").equals("on")) {
+        if (prefs.getString("sound", "on").equals("on")) {
             Timer().schedule(timerTask {
                 var soundFile = R.raw.intro_swoosh
                 playSound(soundFile)
