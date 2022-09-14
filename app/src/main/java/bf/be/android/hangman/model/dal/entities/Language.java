@@ -5,12 +5,14 @@ import androidx.annotation.NonNull;
 public class Language {
     private long id;
     private String name;
+    private String src;
 
     public Language() {
     }
 
-    public Language(String name) {
+    public Language(String name, String src) {
         this.name = name;
+        this.src = src;
     }
 
     @NonNull
@@ -19,6 +21,7 @@ public class Language {
         return "Language{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", src='" + src + '\'' +
                 '}';
     }
 
@@ -37,6 +40,15 @@ public class Language {
 
     public Language setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getSrc() {
+        return src;
+    }
+
+    public Language setSrc(String src) {
+        this.src = src;
         return this;
     }
 }

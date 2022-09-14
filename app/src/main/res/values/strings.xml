@@ -26,4 +26,12 @@
     <string name="man">Man</string>
     <string name="woman">Woman</string>
     <string name="max_one_avatar">You can only choose one avatar</string>
+    <string name="new_round">Play</string>
+    <string name="choose_language">Choose a language</string>
+    <string name="choose_username">Choose a user name</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_password">Choose a password</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -20,7 +20,7 @@
             android:layout_height="0dp"
             android:background="#bdf1ff"
             android:orientation="horizontal"
-            app:layout_constraintHeight_percent="0.65"
+            app:layout_constraintHeight_percent="0.6"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
@@ -32,8 +32,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sky" >
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/sky"></LinearLayout>
 
         <ImageView
             android:id="@+id/game_gallows_top"
@@ -55,35 +54,32 @@
             app:layout_constraintTop_toTopOf="@id/grass"
             app:srcCompat="@drawable/gallows_bottom" />
 
-        <!-- For testing !-->
-        <TextView
-            android:id="@+id/game_greeting"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/newRoundBtn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#FF5722"
-            android:textSize="40sp"
-            android:typeface="normal"
-            app:layout_constraintBottom_toTopOf="@+id/game_gallows_top"
+            android:fontFamily="@font/alata"
+            android:text="@string/new_round"
+            android:textSize="30sp"
+            android:theme="@style/Theme.Hangman.NewRoundBtn"
+            app:cornerRadius="25dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintTop_toBottomOf="@id/game_gallows_top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sky" />
-        <!--               !-->
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TableLayout
+            android:id="@+id/keyboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
             android:paddingBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="@id/grass"
-            android:id="@+id/keyboard">
+            app:layout_constraintBottom_toBottomOf="@id/grass">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/keyboardA"
@@ -95,6 +91,7 @@
                     android:padding="5dp"
                     android:text="A"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardB"
                     android:layout_width="wrap_content"
@@ -105,6 +102,7 @@
                     android:padding="5dp"
                     android:text="B"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardC"
                     android:layout_width="wrap_content"
@@ -115,6 +113,7 @@
                     android:padding="5dp"
                     android:text="C"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardD"
                     android:layout_width="wrap_content"
@@ -125,6 +124,7 @@
                     android:padding="5dp"
                     android:text="D"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardE"
                     android:layout_width="wrap_content"
@@ -135,6 +135,7 @@
                     android:padding="5dp"
                     android:text="E"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardF"
                     android:layout_width="wrap_content"
@@ -145,6 +146,7 @@
                     android:padding="5dp"
                     android:text="F"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardG"
                     android:layout_width="wrap_content"
@@ -155,6 +157,7 @@
                     android:padding="5dp"
                     android:text="G"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardH"
                     android:layout_width="wrap_content"
@@ -165,6 +168,7 @@
                     android:padding="5dp"
                     android:text="H"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardI"
                     android:layout_width="wrap_content"
@@ -179,7 +183,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/keyboardJ"
@@ -191,6 +195,7 @@
                     android:padding="5dp"
                     android:text="J"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardK"
                     android:layout_width="wrap_content"
@@ -201,6 +206,7 @@
                     android:padding="5dp"
                     android:text="K"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardL"
                     android:layout_width="wrap_content"
@@ -211,6 +217,7 @@
                     android:padding="5dp"
                     android:text="L"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardM"
                     android:layout_width="wrap_content"
@@ -221,6 +228,7 @@
                     android:padding="5dp"
                     android:text="M"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardN"
                     android:layout_width="wrap_content"
@@ -231,6 +239,7 @@
                     android:padding="5dp"
                     android:text="N"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardO"
                     android:layout_width="wrap_content"
@@ -241,6 +250,7 @@
                     android:padding="5dp"
                     android:text="O"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardP"
                     android:layout_width="wrap_content"
@@ -251,6 +261,7 @@
                     android:padding="5dp"
                     android:text="P"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardQ"
                     android:layout_width="wrap_content"
@@ -261,6 +272,7 @@
                     android:padding="5dp"
                     android:text="Q"
                     android:textSize="24sp" />
+
                 <Button
                     android:id="@+id/keyboardR"
                     android:layout_width="wrap_content"

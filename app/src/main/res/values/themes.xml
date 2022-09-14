@@ -18,4 +18,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="Theme.Hangman.NewRoundBtn">
+        <item name="android:backgroundTint">#FF5722</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

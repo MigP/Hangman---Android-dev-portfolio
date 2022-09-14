@@ -16,7 +16,8 @@ import bf.be.android.hangman.model.dal.entities.User;
 public class LanguageDao {
     public static final String CREATE_QUERY = "CREATE TABLE languages(" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "name VARCHAR(10) NOT NULL UNIQUE)";
+            "name VARCHAR(10) NOT NULL UNIQUE, " +
+            "src VARCHAR(10) NOT NULL UNIQUE)";
 
     public static final String UPGRADE_QUERY = "DROP TABLE languages;";
 
@@ -40,6 +41,7 @@ public class LanguageDao {
         Language language = new Language();
         language.setId(cursor.getLong(cursor.getColumnIndex("id")));
         language.setName(cursor.getString(cursor.getColumnIndex("name")));
+        language.setSrc(cursor.getString(cursor.getColumnIndex("src")));
         return language;
     }
 
@@ -74,6 +76,7 @@ public class LanguageDao {
     public long insert(Language language) {
         ContentValues cv = new ContentValues();
         cv.put("name", language.getName());
+        cv.put("src", language.getSrc());
 
         return this.database.insert("languages", null, cv);
     }
@@ -81,6 +84,7 @@ public class LanguageDao {
     public long update(long id, Language language) {
         ContentValues cv = new ContentValues();
         cv.put("name", language.getName());
+        cv.put("src", language.getSrc());
 
         return this.database.update("languages", cv, "id = ?", new String[]{String.valueOf(id)});
     }

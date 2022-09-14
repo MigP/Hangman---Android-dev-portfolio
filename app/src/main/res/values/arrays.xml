@@ -12,8 +12,10 @@
 
     <!-- Database initial entries -->
     <string-array name="languages">
-        <item>French</item>
+        <item>Français</item>
+        <item>france</item>
         <item>English</item>
+        <item>uk</item>
     </string-array>
 
     <string-array name="eyebrows">

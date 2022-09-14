@@ -61,8 +61,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String[] languagesArray = res.getStringArray(R.array.languages);
         ContentValues languagesValues = new ContentValues();
-        for (int i = 0; i < languagesArray.length; i ++){
+        for (int i = 0; i < languagesArray.length; i += 2){
             languagesValues.put("name", languagesArray[i]);
+            languagesValues.put("src", languagesArray[i + 1]);
             sqLiteDatabase.insert("languages", null, languagesValues);
         }
 
