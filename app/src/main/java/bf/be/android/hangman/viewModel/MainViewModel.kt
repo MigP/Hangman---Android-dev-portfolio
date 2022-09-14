@@ -263,12 +263,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         userDao.insert(user)
     }
 
-//    suspend fun updateDbUser(context: Context, id: Long, user: User) = coroutineScope {
-//        val userDao = UserDao(context)
-//        userDao.openWritable()
-//        userDao.update(id, user)
-//    }
-
     fun deleteUser(context: Context, id: Long) {
         val userDao = UserDao(context)
         userDao.openWritable()

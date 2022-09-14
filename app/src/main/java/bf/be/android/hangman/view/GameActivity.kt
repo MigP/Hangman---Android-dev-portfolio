@@ -146,7 +146,7 @@ class GameActivity : AppCompatActivity() {
 
     }
 
-    // Keyboard biding initialisation
+    // Keyboard binding initialisation
     private fun initialiseKeyboardBinding() {
         binding.keyboardA.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
@@ -280,7 +280,7 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
-    //TODO pass this to game round object
+    //TODO implement this in game round object instead
     fun keyboardPressed(pressed: String) {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -536,9 +536,5 @@ class GameActivity : AppCompatActivity() {
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
         // Sets its src to the new updated layer drawable
         layoutlist1.setImageDrawable(layerDrawable)
-    }
-
-    fun displayKeyboard() {
-
     }
 }
