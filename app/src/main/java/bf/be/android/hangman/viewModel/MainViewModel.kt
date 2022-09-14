@@ -2,10 +2,15 @@ package bf.be.android.hangman.viewModel
 
 import android.app.Application
 import android.content.Context
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import bf.be.android.hangman.R
 import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.apis.*
@@ -95,7 +100,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     }
 
     // User related methods
-    suspend fun createUser(context: Context, id: Long) = coroutineScope {
+    suspend fun createUser(context: Context, id: Long, appBarMenu: Menu) = coroutineScope {
         var user = User()
         val waitFor = CoroutineScope(Dispatchers.IO).async {
             val userDao = UserDao(context)
@@ -107,6 +112,17 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         waitFor.await()
 
         _activeUser = MutableLiveData(user)
+
+        // Changes the language icon on the app bar
+        if (user.languageId != 0) {
+            _activeLanguage = MutableLiveData(this@MainViewModel.languageList?.value!![user.languageId - 1])
+            if (user.languageId == 1) {
+                appBarMenu.getItem(0).setIcon(ContextCompat.getDrawable(context, R.drawable.france));
+            } else if (user.languageId == 2) {
+                appBarMenu.getItem(0).setIcon(ContextCompat.getDrawable(context, R.drawable.uk));
+            }
+            appBarMenu.getItem(0).setVisible(true)
+        }
     }
 
     fun updateUser(context: Context, id: Long, user: User) {

@@ -10,12 +10,12 @@ import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.text.InputType
 import android.view.*
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +26,6 @@ import bf.be.android.hangman.model.dal.entities.Avatar
 import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 
 
 class GameActivity : AppCompatActivity() {
@@ -35,6 +34,7 @@ class GameActivity : AppCompatActivity() {
 
     companion object {
         lateinit var gameContext: Context
+        var appBarMenu: Menu? = null
     }
 
     //Create a ViewModel
@@ -71,7 +71,7 @@ class GameActivity : AppCompatActivity() {
             viewModel.languageList = MutableLiveData(allLanguages)
 
             // Creates user object
-            viewModel.createUser(applicationContext, prefs.getString("userId", "")!!.toLong())
+            viewModel.createUser(applicationContext, prefs.getString("userId", "")!!.toLong(), appBarMenu!!)
 
             // Check if user has chosen an avatar yet and if not, prompt for it (pass initial check parametre as true so that language check is also performed)
             if (viewModel.activeUser?.value!!.avatarId == 0) { // Open window to choose avatar
@@ -457,8 +457,8 @@ class GameActivity : AppCompatActivity() {
                     r.setOnClickListener { view ->
                         selectedPosition = view.tag as Int
                         notifyDataSetChanged()
-                        viewModel.languageLastSelectedCheckbox.value = selectedPosition
                     }
+                    viewModel.languageLastSelectedCheckbox.value = selectedPosition
                     return v!!
                 }
             }
@@ -481,6 +481,14 @@ class GameActivity : AppCompatActivity() {
             // Update viewModel active language
             val tempLanguage: Language = viewModel.languageList.value!![viewModel.languageLastSelectedCheckbox.value!!]
             viewModel._activeLanguage = MutableLiveData(tempLanguage)
+
+            // Changes the language icon on the app bar
+            if (viewModel.languageLastSelectedCheckbox.value == 0) {
+                appBarMenu?.getItem(0)?.setIcon(ContextCompat.getDrawable(gameContext, R.drawable.france));
+            } else if (viewModel.languageLastSelectedCheckbox.value == 1) {
+                appBarMenu?.getItem(0)?.setIcon(ContextCompat.getDrawable(gameContext, R.drawable.uk));
+            }
+            appBarMenu?.getItem(0)?.setVisible(true)
         }
 
         val dialog = dialogbuider.create()
@@ -604,10 +612,12 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
-    // Sound menu functions
+    // App bar menu functions
     override fun onCreateOptionsMenu(menu: Menu?): Boolean { // Create status bar menu with sound icon
         val inflater: MenuInflater = getMenuInflater()
         inflater.inflate(R.menu.sound_options, menu)
+
+        appBarMenu = menu
 
         // Change sound menu icon according to the settings in preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -620,7 +630,6 @@ class GameActivity : AppCompatActivity() {
         return true
     }
 
-    // --- Graphics ---
     // Handles sound icon click listener
     fun onItemClick(item: MenuItem) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -649,6 +658,7 @@ class GameActivity : AppCompatActivity() {
         editor.apply()
     }
 
+    // --- Graphics ---
     // Hides the keyboard
     fun hideKeyboard() {
         binding.keyboard.visibility = View.INVISIBLE
