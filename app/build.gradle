@@ -5,7 +5,9 @@ plugins {
 
 android {
     compileSdk 32
-
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "bf.be.android.hangman"
         minSdk 23

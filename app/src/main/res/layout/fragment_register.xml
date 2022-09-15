@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingHorizontal="35dp"
             android:gravity="center">
 
             <ImageView
@@ -39,7 +40,7 @@
 
             <EditText
                 android:id="@+id/registerUsernameInput"
-                android:layout_width="225dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/user_name"
@@ -51,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingHorizontal="25dp"
             android:gravity="center">
 
             <ImageView
@@ -85,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingHorizontal="25dp"
             android:gravity="center">
 
             <ImageView

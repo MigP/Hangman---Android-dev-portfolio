@@ -22,10 +22,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityGameBinding
+import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.dal.entities.Avatar
 import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 
 class GameActivity : AppCompatActivity() {
@@ -35,6 +37,7 @@ class GameActivity : AppCompatActivity() {
     companion object {
         lateinit var gameContext: Context
         var appBarMenu: Menu? = null
+        var activeRound = false
     }
 
     //Create a ViewModel
@@ -49,6 +52,8 @@ class GameActivity : AppCompatActivity() {
 
         // Initialise all bindings
         initialiseBindings()
+
+        initViewModel()
 
         // Shared preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -292,7 +297,7 @@ class GameActivity : AppCompatActivity() {
                     playSound(soundFile)
                 }
 
-                startNewRound()
+                startNewRound(view!!)
             }
         })
     }
@@ -351,149 +356,172 @@ class GameActivity : AppCompatActivity() {
     // --- Side menu pop up windows ---
     // Displays window where the user can choose an avatar
     private fun chooseAvatars(avatarsHeadshots: ArrayList<String>, initialCheck: Boolean) {
-        val dialogbuider = AlertDialog.Builder(this)
-        dialogbuider.setCancelable(false)
-        dialogbuider.setTitle(R.string.choose_avatar)
+        if (!activeRound) {
+            val dialogbuider = AlertDialog.Builder(this)
+            dialogbuider.setCancelable(false)
+            dialogbuider.setTitle(R.string.choose_avatar)
 
-        val adapter: ArrayAdapter<Avatar> =
-            object : ArrayAdapter<Avatar>(this, R.layout.avatar_list_item_layout, viewModel.avatarList.value!!) {
-                var selectedPosition = 0
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    var v = convertView
-                    if (v == null) {
-                        val vi =
-                            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                        v = vi.inflate(R.layout.avatar_list_item_layout, null)
+            val adapter: ArrayAdapter<Avatar> =
+                object : ArrayAdapter<Avatar>(
+                    this,
+                    R.layout.avatar_list_item_layout,
+                    viewModel.avatarList.value!!
+                ) {
+                    var selectedPosition = 0
+                    override fun getView(
+                        position: Int,
+                        convertView: View?,
+                        parent: ViewGroup
+                    ): View {
+                        var v = convertView
+                        if (v == null) {
+                            val vi =
+                                getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                            v = vi.inflate(R.layout.avatar_list_item_layout, null)
+                            val r = v!!.findViewById<View>(R.id.radiobox_avatarsList) as RadioButton
+                        }
+
+                        val avatarsListImg = v!!.findViewById<ImageView>(R.id.avatarsListImg)
+                        avatarsListImg.setImageResource(
+                            resources.getIdentifier(
+                                viewModel.avatarList.value!![position].headShot,
+                                "drawable",
+                                packageName
+                            )
+                        )
+
+                        val tvAvatarsName: TextView = v!!.findViewById(R.id.tv_avatarsName)
+                        if (viewModel.avatarList.value!![position].headShot.startsWith("woman")) {
+                            tvAvatarsName.text = "Woman " + (position + -11)
+                        } else if (viewModel.avatarList.value!![position].headShot.startsWith("man")) {
+                            tvAvatarsName.text = "Man " + (position + 1)
+                        }
+
                         val r = v!!.findViewById<View>(R.id.radiobox_avatarsList) as RadioButton
+                        r.isChecked = position == selectedPosition
+                        r.tag = position
+                        r.setOnClickListener { view ->
+                            selectedPosition = view.tag as Int
+                            notifyDataSetChanged()
+                        }
+                        viewModel.avatarLastSelectedCheckbox.value = selectedPosition
+                        return v!!
                     }
+                }
 
-                    val avatarsListImg = v!!.findViewById<ImageView>(R.id.avatarsListImg)
-                    avatarsListImg.setImageResource(resources.getIdentifier(viewModel.avatarList.value!![position].headShot, "drawable", packageName))
+            dialogbuider.setAdapter(adapter) { dialog: DialogInterface?, which: Int -> }
 
-                    val tvAvatarsName: TextView = v!!.findViewById(R.id.tv_avatarsName)
-                    if (viewModel.avatarList.value!![position].headShot.startsWith("woman")) {
-                        tvAvatarsName.text = "Woman " + (position + - 11)
-                    } else if (viewModel.avatarList.value!![position].headShot.startsWith("man")) {
-                        tvAvatarsName.text = "Man " + (position + 1)
-                    }
+            dialogbuider.setPositiveButton("OK") { dialogInterface: DialogInterface?, which: Int ->
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
 
-                    val r = v!!.findViewById<View>(R.id.radiobox_avatarsList) as RadioButton
-                    r.isChecked = position == selectedPosition
-                    r.tag = position
-                    r.setOnClickListener { view ->
-                        selectedPosition = view.tag as Int
-                        notifyDataSetChanged()
-                    }
-                    viewModel.avatarLastSelectedCheckbox.value = selectedPosition
-                    return v!!
+                // Update user object and db with the selected avatar
+                val tempUser = viewModel.activeUser!!.value
+                tempUser!!.avatarId = viewModel.avatarLastSelectedCheckbox.value!! + 1
+                viewModel.updateUser(gameContext, tempUser.id, tempUser)
+
+                // Update viewModel active avatar
+                val tempAvatar: Avatar =
+                    viewModel.avatarList.value!![viewModel.avatarLastSelectedCheckbox.value!!]
+                viewModel._activeAvatar = MutableLiveData(tempAvatar)
+
+                //TODO for testing only
+                // Display full avatar in gallows
+                lifecycleScope.launch {
+                    displayFullAvatar(viewModel.avatarLastSelectedCheckbox.value!! + 1)
+                }
+                // ---
+
+                // Check if user has chosen a language yet and if not, prompt for it
+                if (viewModel.activeUser?.value!!.languageId == 0 && initialCheck) { // Open window to choose language
+                    //TODO Implement
+                    chooseLanguage()
                 }
             }
 
-        dialogbuider.setAdapter(adapter) { dialog: DialogInterface?, which: Int -> }
-
-        dialogbuider.setPositiveButton("OK") { dialogInterface: DialogInterface?, which: Int ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                var soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-
-            // Update user object and db with the selected avatar
-            val tempUser = viewModel.activeUser!!.value
-            tempUser!!.avatarId = viewModel.avatarLastSelectedCheckbox.value!! + 1
-            viewModel.updateUser(gameContext, tempUser.id, tempUser)
-
-            // Update viewModel active avatar
-            val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.avatarLastSelectedCheckbox.value!!]
-            viewModel._activeAvatar = MutableLiveData(tempAvatar)
-
-            //TODO for testing only
-            // Display full avatar in gallows
-            lifecycleScope.launch {
-                displayFullAvatar(viewModel.avatarLastSelectedCheckbox.value!! + 1)
-            }
-            // ---
-
-            // Check if user has chosen a language yet and if not, prompt for it
-            if (viewModel.activeUser?.value!!.languageId == 0 && initialCheck) { // Open window to choose language
-                //TODO Implement
-                chooseLanguage()
-            }
+            val dialog = dialogbuider.create()
+            val listView = dialog.listView
+            dialog.show()
+        } else {
+            Toast.makeText(gameContext, R.string.not_available_during_round, Toast.LENGTH_LONG).show()
         }
-
-        val dialog = dialogbuider.create()
-        val listView = dialog.listView
-        dialog.show()
     }
 
     // Displays window where the user can choose a language
     private fun chooseLanguage() {
-        val dialogbuider = AlertDialog.Builder(this)
-        dialogbuider.setCancelable(false)
-        dialogbuider.setTitle(R.string.choose_language)
+        if (!activeRound) {
+            val dialogbuider = AlertDialog.Builder(this)
+            dialogbuider.setCancelable(false)
+            dialogbuider.setTitle(R.string.choose_language)
 
-        val adapter: ArrayAdapter<Language> =
-            object : ArrayAdapter<Language>(this, R.layout.language_list_item_layout, viewModel.languageList.value!!) {
-                var selectedPosition = 0
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    var v = convertView
-                    if (v == null) {
-                        val vi =
-                            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                        v = vi.inflate(R.layout.language_list_item_layout, null)
+            val adapter: ArrayAdapter<Language> =
+                object : ArrayAdapter<Language>(this, R.layout.language_list_item_layout, viewModel.languageList.value!!) {
+                    var selectedPosition = 0
+                    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                        var v = convertView
+                        if (v == null) {
+                            val vi =
+                                getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                            v = vi.inflate(R.layout.language_list_item_layout, null)
+                            val r = v!!.findViewById<View>(R.id.radiobox_languageList) as RadioButton
+                        }
+
+                        val languageListImg = v!!.findViewById<ImageView>(R.id.languageListImg)
+                        languageListImg.setImageResource(resources.getIdentifier(viewModel.languageList.value!![position].src, "drawable", packageName))
+
+                        val tvLanguage: TextView = v!!.findViewById(R.id.tv_languageName)
+                        tvLanguage.text = viewModel.languageList.value!![position].name
+
                         val r = v!!.findViewById<View>(R.id.radiobox_languageList) as RadioButton
+                        r.isChecked = position == selectedPosition
+                        r.tag = position
+                        r.setOnClickListener { view ->
+                            selectedPosition = view.tag as Int
+                            notifyDataSetChanged()
+                        }
+                        viewModel.languageLastSelectedCheckbox.value = selectedPosition
+                        return v!!
                     }
-
-                    val languageListImg = v!!.findViewById<ImageView>(R.id.languageListImg)
-                    languageListImg.setImageResource(resources.getIdentifier(viewModel.languageList.value!![position].src, "drawable", packageName))
-
-                    val tvLanguage: TextView = v!!.findViewById(R.id.tv_languageName)
-                    tvLanguage.text = viewModel.languageList.value!![position].name
-
-                    val r = v!!.findViewById<View>(R.id.radiobox_languageList) as RadioButton
-                    r.isChecked = position == selectedPosition
-                    r.tag = position
-                    r.setOnClickListener { view ->
-                        selectedPosition = view.tag as Int
-                        notifyDataSetChanged()
-                    }
-                    viewModel.languageLastSelectedCheckbox.value = selectedPosition
-                    return v!!
                 }
+
+            dialogbuider.setAdapter(adapter) { dialog: DialogInterface?, which: Int -> }
+
+            dialogbuider.setPositiveButton("OK") { dialogInterface: DialogInterface?, which: Int ->
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+
+                // Update user object and db with the selected language
+                val tempUser = viewModel.activeUser!!.value
+                tempUser!!.languageId = viewModel.languageLastSelectedCheckbox.value!! + 1
+                viewModel.updateUser(gameContext, tempUser.id, tempUser)
+
+                // Update viewModel active language
+                val tempLanguage: Language = viewModel.languageList.value!![viewModel.languageLastSelectedCheckbox.value!!]
+                viewModel._activeLanguage = MutableLiveData(tempLanguage)
+
+                // Changes the language icon on the app bar
+                if (viewModel.languageLastSelectedCheckbox.value == 0) {
+                    appBarMenu?.getItem(0)?.setIcon(ContextCompat.getDrawable(gameContext, R.drawable.france));
+                } else if (viewModel.languageLastSelectedCheckbox.value == 1) {
+                    appBarMenu?.getItem(0)?.setIcon(ContextCompat.getDrawable(gameContext, R.drawable.uk));
+                }
+                appBarMenu?.getItem(0)?.setVisible(true)
             }
 
-        dialogbuider.setAdapter(adapter) { dialog: DialogInterface?, which: Int -> }
-
-        dialogbuider.setPositiveButton("OK") { dialogInterface: DialogInterface?, which: Int ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                var soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-
-            // Update user object and db with the selected language
-            val tempUser = viewModel.activeUser!!.value
-            tempUser!!.languageId = viewModel.languageLastSelectedCheckbox.value!! + 1
-            viewModel.updateUser(gameContext, tempUser.id, tempUser)
-
-            // Update viewModel active language
-            val tempLanguage: Language = viewModel.languageList.value!![viewModel.languageLastSelectedCheckbox.value!!]
-            viewModel._activeLanguage = MutableLiveData(tempLanguage)
-
-            // Changes the language icon on the app bar
-            if (viewModel.languageLastSelectedCheckbox.value == 0) {
-                appBarMenu?.getItem(0)?.setIcon(ContextCompat.getDrawable(gameContext, R.drawable.france));
-            } else if (viewModel.languageLastSelectedCheckbox.value == 1) {
-                appBarMenu?.getItem(0)?.setIcon(ContextCompat.getDrawable(gameContext, R.drawable.uk));
-            }
-            appBarMenu?.getItem(0)?.setVisible(true)
+            val dialog = dialogbuider.create()
+            val listView = dialog.listView
+            dialog.show()
+        } else {
+            Toast.makeText(gameContext, R.string.not_available_during_round, Toast.LENGTH_LONG).show()
         }
-
-        val dialog = dialogbuider.create()
-        val listView = dialog.listView
-        dialog.show()
     }
 
     // Displays window where the user can change their user name
@@ -659,6 +687,17 @@ class GameActivity : AppCompatActivity() {
     }
 
     // --- Graphics ---
+    // Hides the displayed word
+    fun hideDisplayedWord() {
+        binding.displayedWord.visibility = View.INVISIBLE
+    }
+
+    // Show displayed word
+    fun showDisplayedWord() {
+        binding.displayedWord.setText(viewModel.word.value?.displayedWord)
+        binding.displayedWord.visibility = View.VISIBLE
+    }
+
     // Hides the keyboard
     fun hideKeyboard() {
         binding.keyboard.visibility = View.INVISIBLE
@@ -763,13 +802,36 @@ class GameActivity : AppCompatActivity() {
         return resources.getIdentifier(name, "id", packageName)
     }
 
+    // --- ViewModel ---
+    //Initialises view model observables
+    private fun initViewModel() {
+        viewModel.word.observe(this, this::startNewRoundUi)
+    }
+
     // --- New round ---
     // Start new round
-    private fun startNewRound() {
-        //TODO Implement a way to allow the user to change avatar or language only before a round begins
+    private fun startNewRound(view: View) {
+        //TODO Implement rest
+        activeRound = true
+
+        if (viewModel.activeLanguage?.value?.name.equals("Français")) {
+            viewModel.getRandomWordFr(view)
+        } else if (viewModel.activeLanguage?.value?.name.equals("English")) {
+            viewModel.getRandomWordEn(view)
+        }
+    }
+
+    private fun startNewRoundUi(it: Word) {
         showKeyboard()
         hideNewRoundBtn()
+        showDisplayedWord()
+
+        println("################# new word: " + viewModel.word.value.toString())
     }
+
+
+
+
 
 
     //TODO implement this in game round object instead
@@ -781,13 +843,4 @@ class GameActivity : AppCompatActivity() {
             playSound(soundFile)
         }
     }
-
-
-
-
-
-
-
-
-
 }

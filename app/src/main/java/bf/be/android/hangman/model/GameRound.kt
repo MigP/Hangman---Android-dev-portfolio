@@ -1,5 +1,6 @@
 package bf.be.android.hangman.model
 
+import android.os.CountDownTimer
 import bf.be.android.hangman.model.dal.entities.Mouth
 
 class GameRound {
@@ -7,9 +8,24 @@ class GameRound {
     var letterboard = HashMap<String, Int>()
     var displayedAvatar = HashMap<String, Boolean>()
 
+    companion object {
+        var timeLeft = 0L
+        var timer5: CountDownTimer? = null
+    }
+
     init {
         initialiseLetterboard()
         initialiseDisplayedAvatar()
+
+        timer5 = object: CountDownTimer(5000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeft = millisUntilFinished / 1000
+            }
+
+            override fun onFinish() {
+                // Do something
+            }
+        }
     }
 
     override fun toString(): String {
@@ -57,12 +73,17 @@ class GameRound {
         this.letterboard.put("Z", 0)
     }
 
-    private  fun initialiseDisplayedAvatar() {
+    private fun initialiseDisplayedAvatar() {
         this.displayedAvatar.put("head", false)
         this.displayedAvatar.put("torso", false)
         this.displayedAvatar.put("left arm", false)
         this.displayedAvatar.put("right arm", false)
         this.displayedAvatar.put("left leg", false)
         this.displayedAvatar.put("right leg", false)
+    }
+
+    private fun startTimer5() {
+        timer5?.cancel()
+        timer5?.start()
     }
 }
