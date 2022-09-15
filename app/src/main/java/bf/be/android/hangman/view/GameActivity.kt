@@ -17,6 +17,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,7 @@ import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.dal.entities.Avatar
 import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
@@ -307,6 +309,7 @@ class GameActivity : AppCompatActivity() {
     private fun initialiseUi() {
         hideAvatarGraphics()
         hideKeyboard()
+        Glide.with(this).load(R.drawable.waiting).into(binding.waitingPlaceholder);
     }
 
     // --- Options side menu ---
@@ -805,14 +808,17 @@ class GameActivity : AppCompatActivity() {
     // --- ViewModel ---
     //Initialises view model observables
     private fun initViewModel() {
+        // When view model word changes, startNewRoundUi is called
         viewModel.word.observe(this, this::startNewRoundUi)
     }
 
     // --- New round ---
     // Start new round
     private fun startNewRound(view: View) {
-        //TODO Implement rest
         activeRound = true
+
+        hideNewRoundBtn()
+        binding.waitingPlaceholder.isVisible = true
 
         if (viewModel.activeLanguage?.value?.name.equals("Français")) {
             viewModel.getRandomWordFr(view)
@@ -821,9 +827,11 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    // Starts the UI for a new round after getting a new word object
     private fun startNewRoundUi(it: Word) {
+        //TODO Implement rest
+        binding.waitingPlaceholder.isVisible = false
         showKeyboard()
-        hideNewRoundBtn()
         showDisplayedWord()
 
         println("################# new word: " + viewModel.word.value.toString())
