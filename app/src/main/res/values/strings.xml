@@ -39,6 +39,6 @@
     <string name="buy_hint">Buy a hint</string>
     <string name="reveal_letter">Reveal one letter</string>
     <string name="reveal_definition">Reveal one definition</string>
-    <string name="remove_body_part">Remove one body part from the avatar</string>
+    <string name="remove_body_part">Restore one body part</string>
     <string name="buy">Buy</string>
 </resources>

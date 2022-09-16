@@ -161,6 +161,7 @@ class GameActivity : AppCompatActivity() {
         initialiseKeyboardBinding()
         initialiseRoundBtnBinding()
         initialiseHintBtnBinding()
+        initialiseExchangeBtnBinding()
     }
 
     // Keyboard binding
@@ -324,6 +325,22 @@ class GameActivity : AppCompatActivity() {
                     playSound(soundFile)
                 }
                 showHints(view!!)
+            }
+        })
+    }
+
+    // Exchange button binding
+    private fun initialiseExchangeBtnBinding() {
+        binding.exchangeBtn.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                //TODO Implement
+                //showHints(view!!)
             }
         })
     }
@@ -796,6 +813,16 @@ class GameActivity : AppCompatActivity() {
         binding.hintBtn.visibility = View.VISIBLE
     }
 
+    // Hides the exchange button
+    fun hideExchangeBtn() {
+        binding.exchangeBtn.visibility = View.INVISIBLE
+    }
+
+    // Show the exchange button
+    fun showExchangeBtn() {
+        binding.exchangeBtn.visibility = View.VISIBLE
+    }
+
     // Hides the asset bar
     fun hideAssetBar() {
         binding.gameAssetsBar.visibility = View.INVISIBLE
@@ -939,6 +966,7 @@ class GameActivity : AppCompatActivity() {
         updateAssetBar()
         showAssetBar()
         showHintBtn()
+        showExchangeBtn()
         showDisplayedWord()
 
         println("################# new word: " + viewModel.word.value.toString())

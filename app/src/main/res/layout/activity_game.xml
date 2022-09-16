@@ -111,7 +111,19 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/button_states"
+            android:background="@drawable/hint_button_states"
+            android:clickable="true"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gameAssetsBar" />
+
+        <ImageButton
+            android:id="@+id/exchangeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="110dp"
+            android:background="@drawable/exchange_button_states"
             android:clickable="true"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
