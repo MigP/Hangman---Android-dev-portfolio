@@ -35,4 +35,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="not_available_during_round">You cannot do this during an active game round</string>
+    <string name="game_help">Game rules</string>
+    <string name="buy_hint">Buy a hint</string>
+    <string name="reveal_letter">Reveal one letter</string>
+    <string name="reveal_definition">Reveal one definition</string>
+    <string name="remove_body_part">Remove one body part from the avatar</string>
+    <string name="buy">Buy</string>
 </resources>

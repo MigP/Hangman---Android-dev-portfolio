@@ -24,6 +24,11 @@
         app:showAsAction="withText"/>
     </group>
     <group android:id="@+id/grp2">
+        <item
+            android:id="@+id/helpItem"
+            android:icon="@drawable/help"
+            android:title="@string/game_help"
+            app:showAsAction="withText"/>
     <item
         android:id="@+id/deleteItem"
         android:icon="@drawable/delete"

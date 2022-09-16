@@ -5,11 +5,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.text.Html
 import android.view.*
 import android.widget.*
 import androidx.activity.viewModels
@@ -29,7 +31,6 @@ import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 
 class GameActivity : AppCompatActivity() {
@@ -79,6 +80,8 @@ class GameActivity : AppCompatActivity() {
 
             // Creates user object
             viewModel.createUser(applicationContext, prefs.getString("userId", "")!!.toLong(), appBarMenu!!)
+            getActionBar()?.setTitle(viewModel.activeUser?.value!!.username);
+            supportActionBar?.setTitle(viewModel.activeUser?.value!!.username);
 
             // Check if user has chosen an avatar yet and if not, prompt for it (pass initial check parametre as true so that language check is also performed)
             if (viewModel.activeUser?.value!!.avatarId == 0) { // Open window to choose avatar
@@ -129,6 +132,11 @@ class GameActivity : AppCompatActivity() {
                             choosePassword()
                         }
                     }
+                    R.id.helpItem -> {
+                        lifecycleScope.launch {
+                            displayHelp()
+                        }
+                    }
                     R.id.deleteItem -> {
                         deleteAccount()
                     }
@@ -152,6 +160,7 @@ class GameActivity : AppCompatActivity() {
     private fun initialiseBindings() {
         initialiseKeyboardBinding()
         initialiseRoundBtnBinding()
+        initialiseHintBtnBinding()
     }
 
     // Keyboard binding
@@ -304,12 +313,54 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
+    // Hint button binding
+    private fun initialiseHintBtnBinding() {
+        binding.hintBtn.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                showHints(view!!)
+            }
+        })
+    }
+
     // --- Initialisations ---
     // Initialises the UI
     private fun initialiseUi() {
         hideAvatarGraphics()
-        hideKeyboard()
         Glide.with(this).load(R.drawable.waiting).into(binding.waitingPlaceholder);
+    }
+
+    // --- Hints menu ---
+    // Show hints menu
+    private fun showHints(view: View) {
+        val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+
+        val textView = TextView(gameContext)
+        textView.setText(R.string.buy_hint)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 20f
+        textView.setTextColor(ContextCompat.getColor(gameContext, R.color.hint_menu_text_blue))
+
+        builder.setCustomTitle(textView);
+        builder.setView(R.layout.hint_menu_layout)
+
+        builder.setNegativeButton("OK", DialogInterface.OnClickListener {dialog, which ->
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_button
+                playSound(soundFile)
+            }
+            dialog.cancel() })
+
+        val dialog = builder.create()
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.hint_menu_shape)
+        dialog.show()
     }
 
     // --- Options side menu ---
@@ -547,6 +598,9 @@ class GameActivity : AppCompatActivity() {
             val tempUser = viewModel.activeUser!!.value
             tempUser!!.username = input.text.toString()
             viewModel.updateUser(gameContext, tempUser.id, tempUser)
+
+            getActionBar()?.setTitle(viewModel.activeUser?.value!!.username);
+            supportActionBar?.setTitle(viewModel.activeUser?.value!!.username);
         })
         builder.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener {dialog, which ->
             // Button click sound
@@ -619,6 +673,27 @@ class GameActivity : AppCompatActivity() {
 
         })
         dialogbuider.setNegativeButton(R.string.no, DialogInterface.OnClickListener {dialog, which ->
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_button
+                playSound(soundFile)
+            }
+            dialog.cancel() })
+
+        val dialog = dialogbuider.create()
+        val listView = dialog.listView
+        dialog.show()
+    }
+
+    // Displays window containing the game rules
+    private fun displayHelp() {
+        val dialogbuider = AlertDialog.Builder(this)
+        dialogbuider.setCancelable(false)
+        dialogbuider.setTitle(R.string.game_help)
+        dialogbuider.setView(R.layout.game_help_layout)
+
+        dialogbuider.setNegativeButton("OK", DialogInterface.OnClickListener {dialog, which ->
             // Button click sound
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             if (prefs.getString("sound", "on").equals("on")) {
@@ -709,6 +784,35 @@ class GameActivity : AppCompatActivity() {
     // Show keyboard
     fun showKeyboard() {
         binding.keyboard.visibility = View.VISIBLE
+    }
+
+    // Hides the hint button
+    fun hideHintBtn() {
+        binding.hintBtn.visibility = View.INVISIBLE
+    }
+
+    // Show the hint button
+    fun showHintBtn() {
+        binding.hintBtn.visibility = View.VISIBLE
+    }
+
+    // Hides the asset bar
+    fun hideAssetBar() {
+        binding.gameAssetsBar.visibility = View.INVISIBLE
+    }
+
+    // Show the asset bar
+    fun showAssetBar() {
+        binding.gameAssetsBar.visibility = View.VISIBLE
+    }
+
+    // Update the values on the asset bar
+    private fun updateAssetBar() {
+        binding.tvScore.setText(viewModel.activeUser?.value!!.score.toString())
+        binding.tvCoins.setText(viewModel.activeUser?.value!!.coins.toString())
+        binding.tvBanknotes.setText(viewModel.activeUser?.value!!.banknotes.toString())
+        binding.tvDiamonds.setText(viewModel.activeUser?.value!!.diamonds.toString())
+        binding.tvLives.setText(viewModel.activeUser?.value!!.lives.toString())
     }
 
     // Hides new round button
@@ -832,6 +936,9 @@ class GameActivity : AppCompatActivity() {
         //TODO Implement rest
         binding.waitingPlaceholder.isVisible = false
         showKeyboard()
+        updateAssetBar()
+        showAssetBar()
+        showHintBtn()
         showDisplayedWord()
 
         println("################# new word: " + viewModel.word.value.toString())

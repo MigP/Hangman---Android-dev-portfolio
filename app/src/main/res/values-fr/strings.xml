@@ -34,4 +34,10 @@
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="not_available_during_round">Vous ne pouvez pas faire cela pendant une partie de jeu</string>
+    <string name="game_help">Régles du jeu</string>
+    <string name="buy_hint">Achetez un indice</string>
+    <string name="reveal_letter">Dévoiler une lettre</string>
+    <string name="reveal_definition">Dévoiler une définition</string>
+    <string name="remove_body_part">Enlever une partie du corps de l\'avatar</string>
+    <string name="buy">Acheter</string>
 </resources>
