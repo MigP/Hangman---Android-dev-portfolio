@@ -46,4 +46,5 @@
     <string name="buy_help">Buy help</string>
     <string name="abandon_round_sure">Are you sure you want to abandon this game round?</string>
     <string name="abandon_round">Abandon</string>
+    <string name="continue_">Continue</string>
 </resources>

@@ -8,7 +8,8 @@ import bf.be.android.hangman.model.dal.entities.Mouth
 class GameRound {
 
     var letterboard = HashMap<String, Int>()
-    var displayedAvatar = HashMap<String, Boolean>()
+    var displayedAvatar = ArrayList<String>()
+    var letterMisses = 0
     var guessedLetters = 0
 
     companion object {
@@ -77,12 +78,12 @@ class GameRound {
     }
 
     private fun initialiseDisplayedAvatar() {
-        this.displayedAvatar.put("head", false)
-        this.displayedAvatar.put("torso", false)
-        this.displayedAvatar.put("left arm", false)
-        this.displayedAvatar.put("right arm", false)
-        this.displayedAvatar.put("left leg", false)
-        this.displayedAvatar.put("right leg", false)
+        this.displayedAvatar.add("head")
+        this.displayedAvatar.add("torso")
+        this.displayedAvatar.add("left arm")
+        this.displayedAvatar.add("right arm")
+        this.displayedAvatar.add("left leg")
+        this.displayedAvatar.add("right leg")
     }
 
     private fun startTimer5() {

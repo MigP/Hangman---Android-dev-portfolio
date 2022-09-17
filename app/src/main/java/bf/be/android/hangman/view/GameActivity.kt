@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
 import android.preference.PreferenceManager
 import android.view.*
 import android.widget.*
@@ -23,6 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityGameBinding
+import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.dal.entities.Avatar
 import bf.be.android.hangman.model.dal.entities.Language
@@ -89,13 +91,6 @@ class GameActivity : AppCompatActivity() {
                 // Update viewModel active avatar
                 val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
-
-                //TODO for testing only
-                // Display full avatar in gallows
-                lifecycleScope.launch {
-                    displayFullAvatar(viewModel.activeUser!!.value!!.avatarId)
-                }
-                // ---
             }
         }
 
@@ -365,6 +360,7 @@ class GameActivity : AppCompatActivity() {
     // Initialises the UI
     private fun initialiseUi() {
         hideAvatarGraphics()
+        hideAllAnimations()
         hideHintBtn()
         hideExchangeBtn()
         hideAbandonBtn()
@@ -655,13 +651,6 @@ class GameActivity : AppCompatActivity() {
                 val tempAvatar: Avatar =
                     viewModel.avatarList.value!![viewModel.avatarLastSelectedCheckbox.value!!]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
-
-                //TODO for testing only
-                // Display full avatar in gallows
-                lifecycleScope.launch {
-                    displayFullAvatar(viewModel.avatarLastSelectedCheckbox.value!! + 1)
-                }
-                // ---
 
                 // Check if user has chosen a language yet and if not, prompt for it
                 if (viewModel.activeUser?.value!!.languageId == 0 && initialCheck) { // Open window to choose language
@@ -976,6 +965,12 @@ class GameActivity : AppCompatActivity() {
     }
 
     // --- Graphics ---
+    // Hides end animations
+    fun hideAllAnimations() {
+        binding.endAnimLeft.isVisible = false
+        binding.endAnimRight.isVisible = false
+    }
+
     // Hides the displayed word
     fun hideDisplayedWord() {
         binding.displayedWord.visibility = View.INVISIBLE
@@ -1056,23 +1051,254 @@ class GameActivity : AppCompatActivity() {
         binding.newRoundBtn.visibility = View.VISIBLE
     }
 
+    // --- ViewModel ---
+    //Initialises view model observables
+    private fun initViewModel() {
+        // When view model word changes, startNewRoundUi is called
+        viewModel.word.observe(this, this::validateRandomWord)
+    }
+
+    // --- Game round ---
+    // Reset the view model game round object
+    private fun resetGameRound() {
+        val tempGameRound = GameRound()
+        viewModel._activeGameRound = MutableLiveData(tempGameRound)
+    }
+
+    // Initiates a new round
+    private fun initiateNewRound(view: View) {
+        resetGameRound()
+        hideNewRoundBtn()
+        hideAllAnimations()
+        hideDisplayedWord()
+        hideAvatarGraphics()
+
+        binding.waitingPlaceholder.isVisible = true
+
+        if (viewModel.activeLanguage?.value?.name.equals("Français")) {
+            viewModel.getRandomWordFr(view)
+        } else if (viewModel.activeLanguage?.value?.name.equals("English")) {
+            viewModel.getRandomWordEn(view)
+        }
+    }
+
+    // Check if the word found isn't too long. If it is, find another one
+    private fun validateRandomWord(it: Word) {
+        if (viewModel.word.value!!.hiddenWord.length <= 15) {
+            startNewRound()
+        } else {
+            initiateNewRound(gameView!!)
+        }
+    }
+
+    // Starts the UI for a new round after getting a new word object
+    private fun startNewRound() {
+        if (!activeRound) {
+            activeRound = true
+            resetKeyboard()
+
+            // New word sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.new_word
+                playSound(soundFile)
+            }
+        }
+        binding.waitingPlaceholder.isVisible = false
+
+        showKeyboard()
+        updateAssetBar()
+        showAssetBar()
+        showHintBtn()
+        showExchangeBtn()
+        showAbandonBtn()
+        showDisplayedWord()
+        //TODO Implement rest
+    }
+
+    // Abandon round
+    private fun abandonGameRound() {
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        activeRound = false
+        resetKeyboard()
+        viewModel.activeUser?.value!!.diamonds = 0
+        viewModel.activeUser?.value!!.banknotes = 0
+        viewModel.activeUser?.value!!.coins = 0
+        viewModel.activeUser?.value!!.lives = 3
+        viewModel.activeUser?.value!!.score = 0
+
+        updateAssetBar()
+        hideKeyboard()
+        hideAssetBar()
+        hideHintBtn()
+        hideExchangeBtn()
+        hideAbandonBtn()
+        hideDisplayedWord()
+        hideAllAnimations()
+        hideAvatarGraphics()
+        binding.newRoundBtn.setText(R.string.new_round)
+        showNewRoundBtn()
+        //TODO Implement the rest
+        // reset displayed avatar
+
+        // Abandon game sound
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        if (prefs.getString("sound", "on").equals("on")) {
+            var soundFile = R.raw.abandon_round
+            playSound(soundFile)
+        }
+    }
+
+    // Guessed the word
+    fun wordGuessed() {
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        activeRound = false
+        hideKeyboard()
+        resetKeyboard()
+        binding.newRoundBtn.setText(R.string.continue_)
+        showNewRoundBtn()
+        pickEndAnimation("win")
+        //TODO Implement the rest
+
+        // Win word sound
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        if (prefs.getString("sound", "on").equals("on")) {
+            var soundFile = R.raw.win_word
+            playSound(soundFile)
+        }
+    }
+
+    // Failed the word
+    fun wordFailed() {
+        // Fail word sound
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        if (prefs.getString("sound", "on").equals("on")) {
+            var soundFile = R.raw.fail_word
+            playSound(soundFile)
+        }
+
+        var tempWord = viewModel.word.value
+        tempWord!!.displayedWord = tempWord.hiddenWord
+        viewModel._word.value = tempWord
+
+        binding.newRoundBtn.setText(R.string.continue_)
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        activeRound = false
+        showNewRoundBtn()
+        pickEndAnimation("lose")
+        resetKeyboard()
+        hideKeyboard()
+        //TODO Implement the rest
+    }
+
+    // Randomly picks an end animation and displays it
+    private fun pickEndAnimation(type: String) {
+        val randomAnimNr = (0..1).random()
+
+        when (randomAnimNr) {
+            0 -> {
+                if (type.equals("win")) {
+                    Glide.with(this).load(R.drawable.win1).into(binding.endAnimLeft)
+                    binding.endAnimLeft.isVisible = true
+                } else if (type.equals("lose")) {
+                    Glide.with(this).load(R.drawable.lose1).into(binding.endAnimLeft)
+                    binding.endAnimLeft.isVisible = true
+                }
+            }
+            1 -> {
+                if (type.equals("win")) {
+                    Glide.with(this).load(R.drawable.win2).into(binding.endAnimRight)
+                    binding.endAnimRight.isVisible = true
+                } else if (type.equals("lose")) {
+                    Glide.with(this).load(R.drawable.lose2).into(binding.endAnimRight)
+                    binding.endAnimRight.isVisible = true
+                }
+            }
+        }
+    }
+
+    // --- Keyboard ---
+    // Handles the letters pressed on the keyboard
+    fun keyboardPressed(pressed: String, buttonPressed: Button) {
+        //TODO Implement score, coins, etc.
+        if (viewModel.updateDisplayedWord(pressed)) { // Guessed letter
+            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, 1)
+
+            buttonPressed.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.guessed_letter))
+
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_letter_guess
+                playSound(soundFile)
+            }
+        } else { // Missed letter
+            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, -1)
+            viewModel.activeGameRound?.value!!.letterMisses++
+
+            buttonPressed.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.missed_letter))
+
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_letter_miss
+                playSound(soundFile)
+            }
+
+            lifecycleScope.launch {
+                updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+            }
+
+            if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
+                wordFailed()
+            }
+        }
+        buttonPressed.isEnabled = false
+
+        viewModel.activeGameRound?.value!!.letterGuessed(pressed)
+
+        if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
+            wordGuessed()
+        }
+    }
+
+    // Reset the keyboard
+    private fun resetKeyboard() {
+        var c: Char
+
+        c = 'A'
+        while (c <= 'Z') {
+            var letterBtn: Button = findViewById(resources.getIdentifier("keyboard" + c.toString(), "id", packageName))
+            letterBtn.isEnabled = true
+            letterBtn.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.reset_letter))
+            viewModel._activeGameRound?.value!!.setLetterboardState(c.toString(), 0)
+
+            ++c
+        }
+    }
+
+    // --- Displayed avatar ---
     // Hides all the graphics related to the avatar
     fun hideAvatarGraphics() {
         // Gets the layer drawable
         val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
-        // Gets the item by its id
-        val item1 = layerDrawable.findDrawableByLayerId(R.id.woman12_head)
-        val item2 = layerDrawable.findDrawableByLayerId(R.id.woman11_head)
 
         //Hides them all
         for (i in 1..layerDrawable.numberOfLayers - 1) { // starts with 1 because 0 is the gallows
             layerDrawable.getDrawable(i).alpha = 0
         }
+
+        // Gets the ImageView where the layer drawable is by its id
+        val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
+        // Sets its src to the new updated layer drawable
+        layoutlist1.setImageDrawable(layerDrawable)
     }
 
-    // Shows the complete active avatar
-    @SuppressLint("ResourceType")
-    private suspend fun displayFullAvatar(id: Int) {
+    // Update displayed avatar
+    private suspend fun updateAvatar(id: Int) {
+        // Get displayedAvatar in active game round
+        val displayedAvatar = viewModel.activeGameRound?.value!!.displayedAvatar
+        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar graphics
         hideAvatarGraphics()
@@ -1114,20 +1340,104 @@ class GameActivity : AppCompatActivity() {
         val rightLeg = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.rightLegSrc))
         val torso = layerDrawable.findDrawableByLayerId(getStringIdentifier(gameContext, viewModel.activeAvatar!!.value!!.torsoSrc))
 
-        // Sets the opacity of the avatar's parts
-        head.alpha = 255
-        leftArm.alpha = 255
-        rightArm.alpha = 255
-        leftLeg.alpha = 255
-        rightLeg.alpha = 255
-        torso.alpha = 255
+        when(nrOfMisses) {
+            1 -> { // Show head
+                // Sets the opacity of the avatar's parts
+                head.alpha = 255
+                leftArm.alpha = 0
+                rightArm.alpha = 0
+                leftLeg.alpha = 0
+                rightLeg.alpha = 0
+                torso.alpha = 0
 
-        if (avatarExtra > 0) {
-            extra!!.alpha = 255
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            2 -> { // Show head and torso
+                // Sets the opacity of the avatar's parts
+                head.alpha = 255
+                leftArm.alpha = 0
+                rightArm.alpha = 0
+                leftLeg.alpha = 0
+                rightLeg.alpha = 0
+                torso.alpha = 255
+
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            3 -> { // Show head, torso, and left arm
+                // Sets the opacity of the avatar's parts
+                head.alpha = 255
+                leftArm.alpha = 255
+                rightArm.alpha = 0
+                leftLeg.alpha = 0
+                rightLeg.alpha = 0
+                torso.alpha = 255
+
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            4 -> { // Show head, torso, and both arms
+                // Sets the opacity of the avatar's parts
+                head.alpha = 255
+                leftArm.alpha = 255
+                rightArm.alpha = 255
+                leftLeg.alpha = 0
+                rightLeg.alpha = 0
+                torso.alpha = 255
+
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            5 -> { // Shpw head, torso, both arms, and left leg
+                // Sets the opacity of the avatar's parts
+                head.alpha = 255
+                leftArm.alpha = 255
+                rightArm.alpha = 255
+                leftLeg.alpha = 255
+                rightLeg.alpha = 0
+                torso.alpha = 255
+
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            6 -> { // Show full avatar
+                // Sets the opacity of the avatar's parts
+                head.alpha = 255
+                leftArm.alpha = 255
+                rightArm.alpha = 255
+                leftLeg.alpha = 255
+                rightLeg.alpha = 255
+                torso.alpha = 255
+
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
         }
-        eyes.alpha = 255
-        eyebrows.alpha = 255
-        mouth.alpha = 255
 
         // Gets the ImageView where the layer drawable is by its id
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
@@ -1138,129 +1448,5 @@ class GameActivity : AppCompatActivity() {
     // Returns the drawable id of a string (image src name)
     fun getStringIdentifier(context: Context, name: String?): Int {
         return resources.getIdentifier(name, "id", packageName)
-    }
-
-    // --- ViewModel ---
-    //Initialises view model observables
-    private fun initViewModel() {
-        // When view model word changes, startNewRoundUi is called
-        viewModel.word.observe(this, this::validateRandomWord)
-    }
-
-    // --- Game round ---
-    // Initiates a new round
-    private fun initiateNewRound(view: View) {
-        activeRound = true
-
-        hideNewRoundBtn()
-        binding.waitingPlaceholder.isVisible = true
-
-        if (viewModel.activeLanguage?.value?.name.equals("Français")) {
-            viewModel.getRandomWordFr(view)
-        } else if (viewModel.activeLanguage?.value?.name.equals("English")) {
-            viewModel.getRandomWordEn(view)
-        }
-    }
-
-    // Check if the word found isn't too long. If it is, find another one
-    private fun validateRandomWord(it: Word) {
-        if (viewModel.word.value!!.hiddenWord.length <= 15) {
-            startNewRound()
-        } else {
-            initiateNewRound(gameView!!)
-        }
-    }
-
-    // Starts the UI for a new round after getting a new word object
-    private fun startNewRound() {
-        binding.waitingPlaceholder.isVisible = false
-        showKeyboard()
-        updateAssetBar()
-        showAssetBar()
-        showHintBtn()
-        showExchangeBtn()
-        showAbandonBtn()
-        showDisplayedWord()
-        //TODO Implement rest
-        println("################# new word: " + viewModel.word.value.toString())
-    }
-
-    // Abandon round
-    private fun abandonGameRound() {
-        activeRound = false
-        resetKeyboard()
-        viewModel.activeUser?.value!!.diamonds = 0
-        viewModel.activeUser?.value!!.banknotes = 0
-        viewModel.activeUser?.value!!.coins = 0
-        viewModel.activeUser?.value!!.lives = 3
-        viewModel.activeUser?.value!!.score = 0
-//        viewModel._activeGameRound = MutableLiveData(null)
-
-        updateAssetBar()
-        //TODO Implement the rest
-        // reset displayed avatar
-        hideKeyboard()
-        hideAssetBar()
-        hideHintBtn()
-        hideExchangeBtn()
-        hideAbandonBtn()
-        hideDisplayedWord()
-        showNewRoundBtn()
-    }
-
-
-
-    // --- Keyboard ---
-    // Handles the letters pressed on the keyboard
-    fun keyboardPressed(pressed: String, buttonPressed: Button) {
-        //TODO Implement score, coins, etc.
-        if (viewModel.updateDisplayedWord(pressed)) { // Guessed letter
-            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, 1)
-
-            buttonPressed.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.guessed_letter))
-
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                var soundFile = R.raw.click_letter_guess
-                playSound(soundFile)
-            }
-        } else { // Missed letter
-            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, -1)
-
-            buttonPressed.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.missed_letter))
-
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                var soundFile = R.raw.click_letter_miss
-                playSound(soundFile)
-            }
-
-            //TODO update displayed avatar
-        }
-        buttonPressed.isEnabled = false
-
-        if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
-            //TODO Implement the rest
-            // Guessed word
-        }
-
-        viewModel.activeGameRound?.value!!.letterGuessed(pressed)
-    }
-
-    // Reset the keyboard
-    private fun resetKeyboard() {
-        var c: Char
-
-        c = 'A'
-        while (c <= 'Z') {
-            var letterBtn: Button = findViewById(resources.getIdentifier("keyboard" + c.toString(), "id", packageName))
-            letterBtn.isEnabled = true
-            letterBtn.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.reset_letter))
-            viewModel._activeGameRound?.value!!.setLetterboardState(c.toString(), -1)
-
-            ++c
-        }
     }
 }

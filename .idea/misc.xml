@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/abandon_button_states.xml" value="0.2285" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/animations_bg_shape.xml" value="0.2285" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/asset_bar_shape.xml" value="0.2295" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/exchange_button_states.xml" value="0.2295" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/hint_menu_shape.xml" value="0.2295" />
-        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_gallows.xml" value="0.67" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_animations.xml" value="0.2285" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_gallows.xml" value="0.25" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_man.xml" value="0.2225" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/abandon_round_layout.xml" value="0.5" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/activity_game.xml" value="0.292259083728278" />

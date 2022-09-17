@@ -40,7 +40,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private var _definitions = MutableLiveData<ArrayList<String>>()
 
     // Word object
-    private var _word = MutableLiveData<Word>()
+    var _word = MutableLiveData<Word>()
     val word: LiveData<Word>
         get() = _word
 
