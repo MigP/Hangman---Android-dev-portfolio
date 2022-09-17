@@ -33,6 +33,8 @@ class GameRound {
         return "Word{" +
                 "letterboard='" + letterboard + '\'' +
                 ", displayedAvatar='" + displayedAvatar + '\'' +
+                ", letterMisses='" + letterMisses + '\'' +
+                ", guessedLetters='" + guessedLetters + '\'' +
                 '}'
     }
 

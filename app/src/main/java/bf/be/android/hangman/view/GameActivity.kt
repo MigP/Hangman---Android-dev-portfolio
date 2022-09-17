@@ -128,18 +128,12 @@ class GameActivity : AppCompatActivity() {
                         deleteAccount()
                     }
                     R.id.logOutItem -> {
-                        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                        val editor = prefs.edit()
-                        val loginIntent = Intent(applicationContext, MainActivity::class.java)
-                        editor.putString("rememberMe", "false")
-                        editor.apply()
-                        startActivity(loginIntent)
+                        logout()
                     }
                 }
                 true
             }
         }
-
     }
 
     // --- Bindings ---
@@ -184,51 +178,44 @@ class GameActivity : AppCompatActivity() {
 
     // New round button binding
     private fun initialiseRoundBtnBinding() {
-        binding.newRoundBtn.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+        binding.newRoundBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
 
-            val gameView: View =
-                this@GameActivity.window.decorView.findViewById(android.R.id.content)
-            initiateNewRound(gameView)
+            initiateNewRound(it)
         }
     }
 
     // Help button binding
     private fun initialiseHintBtnBinding() {
-        binding.hintBtn.setOnClickListener { view -> // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            showHelpMenu(view!!)
+        binding.hintBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            showHelpMenu(it)
         }
     }
 
     // Exchange button binding
     private fun initialiseExchangeBtnBinding() {
-        binding.exchangeBtn.setOnClickListener { view -> // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            showExchangeMenu(view!!)
+        binding.exchangeBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            showExchangeMenu(it)
         }
     }
 
     // Abandon button binding
     private fun initialiseAbandonBtnBinding() {
-        binding.abandonBtn.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+        binding.abandonBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
             showAbandonGameRound()
         }
     }
@@ -244,7 +231,14 @@ class GameActivity : AppCompatActivity() {
         Glide.with(this).load(R.drawable.waiting).into(binding.waitingPlaceholder)
     }
 
-    // --- Help menu ---
+    // --- ViewModel ---
+    //Initialises view model observables
+    private fun initViewModel() {
+        // When view model word changes, startNewRoundUi is called
+        viewModel.word.observe(this, this::validateRandomWord)
+    }
+
+    // --- Right side menus ---
     // Show help menu
     private fun showHelpMenu(view: View) {
         val layoutInflater = LayoutInflater.from(this)
@@ -295,39 +289,38 @@ class GameActivity : AppCompatActivity() {
 
         dialog.window?.setLayout(width, height)
 
-        buyLetterBtn.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            //TODO Implement
-            println("--------- Buy letter")
+        buyLetterBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            //TODO Implement buy a letter
+            //TODO Prevent this when there is no word on the screen
+
             dialog.cancel()
         }
-        buyDefinitionBtn.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            //TODO Implement
-            println("--------- Buy definition")
+        buyDefinitionBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            //TODO Implement buy a definition
+            //TODO Prevent this when there is no word on the screen
+
             dialog.cancel()
         }
-        buyBodyPartBtn.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            //TODO Implement
-            println("--------- Buy body part")
+        buyBodyPartBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            //TODO Implement buy body part
+            //TODO Prevent this when there is no word on the screen
+
             dialog.cancel()
         }
     }
 
-    // --- Exchange menu ---
     // Show exchange menu
     private fun showExchangeMenu(view: View) {
         val layoutInflater = LayoutInflater.from(this)
@@ -394,7 +387,67 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    // --- Options side menu ---
+    // Displays window where the user can abandon the current game round
+    private fun showAbandonGameRound() {
+        val dialogbuider = AlertDialog.Builder(this)
+
+        val textView = TextView(this)
+        textView.setText(R.string.abandon_round)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+
+        dialogbuider.setCustomTitle(textView)
+        dialogbuider.setView(R.layout.abandon_round_layout)
+
+        dialogbuider.setPositiveButton(R.string.yes) { dialog, _ ->
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            abandonGameRound()
+            dialog.cancel()
+        }
+        dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+            dialog.cancel()
+        }
+
+        val dialog = dialogbuider.create()
+        dialog.show()
+    }
+
+    // Abandon round
+    private fun abandonGameRound() {
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        activeRound = false
+        resetKeyboard()
+        viewModel.activeUser?.value!!.diamonds = 0
+        viewModel.activeUser?.value!!.banknotes = 0
+        viewModel.activeUser?.value!!.coins = 0
+        viewModel.activeUser?.value!!.lives = 3
+        viewModel.activeUser?.value!!.score = 0
+
+        updateAssetBar()
+        hideKeyboard()
+        hideAssetBar()
+        hideHintBtn()
+        hideExchangeBtn()
+        hideAbandonBtn()
+        hideDisplayedWord()
+        hideAllAnimations()
+        hideAvatarGraphics()
+        binding.newRoundBtn.setText(R.string.new_round)
+        showNewRoundBtn()
+
+        // Abandon game round sound
+        val soundFile = R.raw.abandon_round
+        playSound(soundFile)
+    }
+
+    // --- Left side menu ---
     // Options menu listener
     private inner class MyDrawerListener : DrawerLayout.DrawerListener {
         override fun onDrawerOpened(drawerView: View) {}
@@ -405,39 +458,92 @@ class GameActivity : AppCompatActivity() {
                 val optionsMenu: DrawerLayout = findViewById(R.id.drawer_layout)
                 if(optionsMenu.isDrawerOpen(GravityCompat.START)) {
                     // Close menu sound
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                    if (prefs.getString("sound", "on").equals("on")) {
-                        val closeMenuSound = MediaPlayer.create(applicationContext, R.raw.close_window)
-                        closeMenuSound.start()
-                        closeMenuSound.setOnCompletionListener { closeMenuSound ->
-                            closeMenuSound.stop()
-                            closeMenuSound?.release()
-                        }
-                    }
+                    val soundFile = R.raw.close_window
+                    playSound(soundFile)
                 } else {
                     // Open menu sound
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                    if (prefs.getString("sound", "on").equals("on")) {
-                        val closeMenuSound = MediaPlayer.create(applicationContext, R.raw.open_window)
-                        closeMenuSound.start()
-                        closeMenuSound.setOnCompletionListener { closeMenuSound ->
-                            closeMenuSound.stop()
-                            closeMenuSound?.release()
-                        }
-                    }
+                    val soundFile = R.raw.open_window
+                    playSound(soundFile)
                 }
             }
         }
     }
 
-    // Handles selected items
+    // Handles sandwich icon state of options menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         toggle.onOptionsItemSelected(item)
         return super.onOptionsItemSelected(item)
     }
 
-    // --- Side menu pop up windows ---
-    // Displays window where the user can choose an avatar
+    // Displays window where the user can choose a language
+    private fun chooseLanguage() {
+        if (!activeRound) {
+            val dialogbuider = AlertDialog.Builder(this)
+            dialogbuider.setCancelable(false)
+            dialogbuider.setTitle(R.string.choose_language)
+
+            val adapter: ArrayAdapter<Language> =
+                object : ArrayAdapter<Language>(this, R.layout.language_list_item_layout, viewModel.languageList.value!!) {
+                    var selectedPosition = 0
+                    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                        var v = convertView
+                        if (v == null) {
+                            val vi =
+                                getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                            v = vi.inflate(R.layout.language_list_item_layout, null)
+                        }
+
+                        val languageListImg = v!!.findViewById<ImageView>(R.id.languageListImg)
+                        languageListImg.setImageResource(resources.getIdentifier(viewModel.languageList.value!![position].src, "drawable", packageName))
+
+                        val tvLanguage: TextView = v.findViewById(R.id.tv_languageName)
+                        tvLanguage.text = viewModel.languageList.value!![position].name
+
+                        val r = v.findViewById<View>(R.id.radiobox_languageList) as RadioButton
+                        r.isChecked = position == selectedPosition
+                        r.tag = position
+                        r.setOnClickListener { view ->
+                            selectedPosition = view.tag as Int
+                            notifyDataSetChanged()
+                        }
+                        viewModel.languageLastSelectedCheckbox.value = selectedPosition
+                        return v
+                    }
+                }
+
+            dialogbuider.setAdapter(adapter) { _: DialogInterface?, _: Int -> }
+
+            dialogbuider.setPositiveButton("OK") { _: DialogInterface?, _: Int ->
+                // Button click sound
+                val soundFile = R.raw.click_button
+                playSound(soundFile)
+
+                // Update user object and db with the selected language
+                val tempUser = viewModel.activeUser!!.value
+                tempUser!!.languageId = viewModel.languageLastSelectedCheckbox.value!! + 1
+                viewModel.updateUser(this, tempUser.id, tempUser)
+
+                // Update viewModel active language
+                val tempLanguage: Language = viewModel.languageList.value!![viewModel.languageLastSelectedCheckbox.value!!]
+                viewModel._activeLanguage = MutableLiveData(tempLanguage)
+
+                // Changes the language icon on the app bar
+                if (viewModel.languageLastSelectedCheckbox.value == 0) {
+                    appBarMenu?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.france)
+                } else if (viewModel.languageLastSelectedCheckbox.value == 1) {
+                    appBarMenu?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.uk)
+                }
+                appBarMenu?.getItem(0)?.isVisible = true
+            }
+
+            val dialog = dialogbuider.create()
+            dialog.show()
+        } else {
+            Toast.makeText(this, R.string.not_available_during_round, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Displays window where the user can choose an avatar (on the first log in, it also redirects for the window where the user can choose a language)
     private fun chooseAvatars(initialCheck: Boolean) {
         if (!activeRound) {
             val dialogbuider = AlertDialog.Builder(this)
@@ -495,11 +601,8 @@ class GameActivity : AppCompatActivity() {
 
             dialogbuider.setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                 // Button click sound
-                val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-                if (prefs.getString("sound", "on").equals("on")) {
-                    val soundFile = R.raw.click_button
-                    playSound(soundFile)
-                }
+                val soundFile = R.raw.click_button
+                playSound(soundFile)
 
                 // Update user object and db with the selected avatar
                 val tempUser = viewModel.activeUser!!.value
@@ -513,80 +616,8 @@ class GameActivity : AppCompatActivity() {
 
                 // Check if user has chosen a language yet and if not, prompt for it
                 if (viewModel.activeUser?.value!!.languageId == 0 && initialCheck) { // Open window to choose language
-                    //TODO Implement
                     chooseLanguage()
                 }
-            }
-
-            val dialog = dialogbuider.create()
-            dialog.show()
-        } else {
-            Toast.makeText(this, R.string.not_available_during_round, Toast.LENGTH_LONG).show()
-        }
-    }
-
-    // Displays window where the user can choose a language
-    private fun chooseLanguage() {
-        if (!activeRound) {
-            val dialogbuider = AlertDialog.Builder(this)
-            dialogbuider.setCancelable(false)
-            dialogbuider.setTitle(R.string.choose_language)
-
-            val adapter: ArrayAdapter<Language> =
-                object : ArrayAdapter<Language>(this, R.layout.language_list_item_layout, viewModel.languageList.value!!) {
-                    var selectedPosition = 0
-                    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                        var v = convertView
-                        if (v == null) {
-                            val vi =
-                                getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                            v = vi.inflate(R.layout.language_list_item_layout, null)
-                        }
-
-                        val languageListImg = v!!.findViewById<ImageView>(R.id.languageListImg)
-                        languageListImg.setImageResource(resources.getIdentifier(viewModel.languageList.value!![position].src, "drawable", packageName))
-
-                        val tvLanguage: TextView = v.findViewById(R.id.tv_languageName)
-                        tvLanguage.text = viewModel.languageList.value!![position].name
-
-                        val r = v.findViewById<View>(R.id.radiobox_languageList) as RadioButton
-                        r.isChecked = position == selectedPosition
-                        r.tag = position
-                        r.setOnClickListener { view ->
-                            selectedPosition = view.tag as Int
-                            notifyDataSetChanged()
-                        }
-                        viewModel.languageLastSelectedCheckbox.value = selectedPosition
-                        return v
-                    }
-                }
-
-            dialogbuider.setAdapter(adapter) { _: DialogInterface?, _: Int -> }
-
-            dialogbuider.setPositiveButton("OK") { _: DialogInterface?, _: Int ->
-                // Button click sound
-                val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-                if (prefs.getString("sound", "on").equals("on")) {
-                    val soundFile = R.raw.click_button
-                    playSound(soundFile)
-                }
-
-                // Update user object and db with the selected language
-                val tempUser = viewModel.activeUser!!.value
-                tempUser!!.languageId = viewModel.languageLastSelectedCheckbox.value!! + 1
-                viewModel.updateUser(this, tempUser.id, tempUser)
-
-                // Update viewModel active language
-                val tempLanguage: Language = viewModel.languageList.value!![viewModel.languageLastSelectedCheckbox.value!!]
-                viewModel._activeLanguage = MutableLiveData(tempLanguage)
-
-                // Changes the language icon on the app bar
-                if (viewModel.languageLastSelectedCheckbox.value == 0) {
-                    appBarMenu?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.france)
-                } else if (viewModel.languageLastSelectedCheckbox.value == 1) {
-                    appBarMenu?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.uk)
-                }
-                appBarMenu?.getItem(0)?.isVisible = true
             }
 
             val dialog = dialogbuider.create()
@@ -606,11 +637,8 @@ class GameActivity : AppCompatActivity() {
 
         builder.setPositiveButton("OK") { _, _ ->
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
 
             // Update user object and db with the selected user name
             val tempUser = viewModel.activeUser!!.value
@@ -622,11 +650,8 @@ class GameActivity : AppCompatActivity() {
         }
         builder.setNegativeButton(R.string.cancel) { dialog, _ ->
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
             dialog.cancel()
         }
         builder.show()
@@ -642,11 +667,8 @@ class GameActivity : AppCompatActivity() {
 
         builder.setPositiveButton("OK") { _, _ ->
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
 
             // Update user object and db with the selected password
             val tempUser = viewModel.activeUser!!.value
@@ -655,93 +677,11 @@ class GameActivity : AppCompatActivity() {
         }
         builder.setNegativeButton(R.string.cancel) { dialog, _ ->
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
             dialog.cancel()
         }
         builder.show()
-    }
-
-    // Displays window where the user can delete their account
-    private fun deleteAccount() {
-        val dialogbuider = AlertDialog.Builder(this)
-        dialogbuider.setCancelable(false)
-        dialogbuider.setTitle(R.string.delete_account)
-        dialogbuider.setView(R.layout.delete_account_layout)
-
-        dialogbuider.setPositiveButton(R.string.yes) { _, _ ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-
-            // Delete the user's account from the database
-            viewModel.deleteUser(this, viewModel.activeUser?.value!!.id)
-
-            // Clear shared preferences
-            prefs.edit().clear().apply()
-
-
-            // Redirect to log in page
-            val loginIntent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(loginIntent)
-
-        }
-        dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            dialog.cancel()
-        }
-
-        val dialog = dialogbuider.create()
-        dialog.show()
-    }
-
-    // Displays window where the user can abandon the current game round
-    private fun showAbandonGameRound() {
-        val dialogbuider = AlertDialog.Builder(this)
-
-        val textView = TextView(this)
-        textView.setText(R.string.abandon_round)
-        textView.setPadding(20, 30, 20, 30)
-        textView.textSize = 25f
-        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
-
-        dialogbuider.setCustomTitle(textView)
-        dialogbuider.setView(R.layout.abandon_round_layout)
-
-        dialogbuider.setPositiveButton(R.string.yes) { dialog, _ ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-
-            abandonGameRound()
-            dialog.cancel()
-        }
-        dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            dialog.cancel()
-        }
-
-        val dialog = dialogbuider.create()
-        dialog.show()
     }
 
     // Displays window containing the game rules
@@ -753,31 +693,71 @@ class GameActivity : AppCompatActivity() {
 
         dialogbuider.setNegativeButton("OK") { dialog, _ ->
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
             dialog.cancel()
         }
-//TODO create this layout
+
+        //TODO create the layout for this alert dialog
+        //TODO Implement this alert dialog
+
         val dialog = dialogbuider.create()
         dialog.show()
     }
 
-    // --- Sound effects ---
-    // Sound effects
-    private fun playSound(soundFile: Int) {
-        val soundToPlay = MediaPlayer.create(applicationContext, soundFile)
-        soundToPlay.start()
-        soundToPlay.setOnCompletionListener { soundToPlay ->
-            soundToPlay.stop()
-            soundToPlay?.release()
+    // Displays window where the user can delete their account
+    private fun deleteAccount() {
+        val dialogbuider = AlertDialog.Builder(this)
+        dialogbuider.setCancelable(false)
+        dialogbuider.setTitle(R.string.delete_account)
+        dialogbuider.setView(R.layout.delete_account_layout)
+
+        dialogbuider.setPositiveButton(R.string.yes) { _, _ ->
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            // Delete the user's account from the database
+            viewModel.deleteUser(this, viewModel.activeUser?.value!!.id)
+
+            // Clear shared preferences
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            prefs.edit().clear().apply()
+
+            // Redirect to log in page
+            val loginIntent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(loginIntent)
         }
+        dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+            dialog.cancel()
+        }
+
+        val dialog = dialogbuider.create()
+        dialog.show()
     }
 
-    // App bar menu functions
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean { // Create status bar menu with sound icon
+    // Log out
+    private fun logout() {
+        // Button click sound
+        val soundFile = R.raw.click_button
+        playSound(soundFile)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val editor = prefs.edit()
+        val loginIntent = Intent(applicationContext, MainActivity::class.java)
+        editor.putString("rememberMe", "false")
+        editor.apply()
+        startActivity(loginIntent)
+    }
+
+    // --- App bar ---
+    // App bar menu and icons
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Create status bar menu with sound icon and the flag corresponding on the selected language
+
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.sound_options, menu)
 
@@ -799,14 +779,8 @@ class GameActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Button click sound
-        if (prefs.getString("sound", "on").equals("on")) {
-            val buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
-            buttonClickSound.start()
-            buttonClickSound.setOnCompletionListener { buttonClickSound ->
-                buttonClickSound.stop()
-                buttonClickSound?.release()
-            }
-        }
+        val soundFile = R.raw.click_button
+        playSound(soundFile)
 
         // Change sound preferences
         val editor = prefs.edit()
@@ -822,286 +796,42 @@ class GameActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    // --- Graphics ---
-    // Hides end animations
-    private fun hideAllAnimations() {
-        binding.endAnimLeft.isVisible = false
-        binding.endAnimRight.isVisible = false
-    }
-
-    // Hides the displayed word
-    private fun hideDisplayedWord() {
-        binding.displayedWord.visibility = View.INVISIBLE
-    }
-
-    // Show displayed word
-    private fun showDisplayedWord() {
-        binding.displayedWord.text = viewModel.word.value?.displayedWord
-        binding.displayedWord.visibility = View.VISIBLE
-    }
-
-    // Hides the keyboard
-    private fun hideKeyboard() {
-        binding.keyboard.visibility = View.INVISIBLE
-    }
-
-    // Show keyboard
-    private fun showKeyboard() {
-        binding.keyboard.visibility = View.VISIBLE
-    }
-
-    // Hides the hint button
-    private fun hideHintBtn() {
-        binding.hintBtn.visibility = View.INVISIBLE
-    }
-
-    // Show the hint button
-    private fun showHintBtn() {
-        binding.hintBtn.visibility = View.VISIBLE
-    }
-
-    // Hides the exchange button
-    private fun hideExchangeBtn() {
-        binding.exchangeBtn.visibility = View.INVISIBLE
-    }
-
-    // Show the exchange button
-    private fun showExchangeBtn() {
-        binding.exchangeBtn.visibility = View.VISIBLE
-    }
-
-    // Hides the abandon button
-    private fun hideAbandonBtn() {
-        binding.abandonBtn.visibility = View.INVISIBLE
-    }
-
-    // Show the abandon button
-    private fun showAbandonBtn() {
-        binding.abandonBtn.visibility = View.VISIBLE
-    }
-
-    // Hides the asset bar
-    private fun hideAssetBar() {
-        binding.gameAssetsBar.visibility = View.INVISIBLE
-    }
-
-    // Show the asset bar
-    private fun showAssetBar() {
-        binding.gameAssetsBar.visibility = View.VISIBLE
-    }
-
-    // Update the values on the asset bar
-    private fun updateAssetBar() {
-        binding.tvScore.text = viewModel.activeUser?.value!!.score.toString()
-        binding.tvCoins.text = viewModel.activeUser?.value!!.coins.toString()
-        binding.tvBanknotes.text = viewModel.activeUser?.value!!.banknotes.toString()
-        binding.tvDiamonds.text = viewModel.activeUser?.value!!.diamonds.toString()
-        binding.tvLives.text = viewModel.activeUser?.value!!.lives.toString()
-    }
-
-    // Hides new round button
-    private fun hideNewRoundBtn() {
-        binding.newRoundBtn.visibility = View.INVISIBLE
-    }
-
-    // Show new round button
-    private fun showNewRoundBtn() {
-        binding.newRoundBtn.visibility = View.VISIBLE
-    }
-
-    // --- ViewModel ---
-    //Initialises view model observables
-    private fun initViewModel() {
-        // When view model word changes, startNewRoundUi is called
-        viewModel.word.observe(this, this::validateRandomWord)
-    }
-
-    // --- Game round ---
-    // Reset the view model game round object
-    private fun resetGameRound() {
-        val tempGameRound = GameRound()
-        viewModel._activeGameRound = MutableLiveData(tempGameRound)
-    }
-
-    // Initiates a new round
-    private fun initiateNewRound(view: View) {
-        resetGameRound()
-        hideNewRoundBtn()
-        hideAllAnimations()
-        hideDisplayedWord()
-        hideAvatarGraphics()
-
-        binding.waitingPlaceholder.isVisible = true
-
-        if (viewModel.activeLanguage?.value?.name.equals("Français")) {
-            viewModel.getRandomWordFr(view)
-        } else if (viewModel.activeLanguage?.value?.name.equals("English")) {
-            viewModel.getRandomWordEn(view)
-        }
-    }
-
-    // Check if the word found isn't too long. If it is, find another one
-    private fun validateRandomWord(it: Word) {
-        if (viewModel.word.value!!.hiddenWord.length <= 15) {
-            startNewRound()
-        } else {
-            val gameView: View = this@GameActivity.window.decorView.findViewById(android.R.id.content)
-            initiateNewRound(gameView)
-        }
-    }
-
-    // Starts the UI for a new round after getting a new word object
-    private fun startNewRound() {
-        if (!activeRound) {
-            activeRound = true
-            resetKeyboard()
-
-            // New word sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.new_word
-                playSound(soundFile)
-            }
-        }
-        binding.waitingPlaceholder.isVisible = false
-
-        showKeyboard()
-        updateAssetBar()
-        showAssetBar()
-        showHintBtn()
-        showExchangeBtn()
-        showAbandonBtn()
-        showDisplayedWord()
-        //TODO Implement rest
-    }
-
-    // Abandon round
-    private fun abandonGameRound() {
-        viewModel.activeGameRound?.value!!.letterMisses = 0
-        activeRound = false
-        resetKeyboard()
-        viewModel.activeUser?.value!!.diamonds = 0
-        viewModel.activeUser?.value!!.banknotes = 0
-        viewModel.activeUser?.value!!.coins = 0
-        viewModel.activeUser?.value!!.lives = 3
-        viewModel.activeUser?.value!!.score = 0
-
-        updateAssetBar()
-        hideKeyboard()
-        hideAssetBar()
-        hideHintBtn()
-        hideExchangeBtn()
-        hideAbandonBtn()
-        hideDisplayedWord()
-        hideAllAnimations()
-        hideAvatarGraphics()
-        binding.newRoundBtn.setText(R.string.new_round)
-        showNewRoundBtn()
-        //TODO Implement the rest
-        // reset displayed avatar
-
-        // Abandon game sound
+    // --- Sound effects ---
+    // Sound effects
+    private fun playSound(soundFile: Int) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (prefs.getString("sound", "on").equals("on")) {
-            val soundFile = R.raw.abandon_round
-            playSound(soundFile)
-        }
-    }
-
-    // Guessed the word
-    private fun wordGuessed() {
-        viewModel.activeGameRound?.value!!.letterMisses = 0
-        activeRound = false
-        hideKeyboard()
-        resetKeyboard()
-        binding.newRoundBtn.setText(R.string.continue_)
-        showNewRoundBtn()
-        pickEndAnimation("win")
-        //TODO Implement the rest
-
-        // Win word sound
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "on").equals("on")) {
-            val soundFile = R.raw.win_word
-            playSound(soundFile)
-        }
-    }
-
-    // Failed the word
-    private fun wordFailed() {
-        // Fail word sound
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "on").equals("on")) {
-            val soundFile = R.raw.fail_word
-            playSound(soundFile)
-        }
-
-        val tempWord = viewModel.word.value
-        tempWord!!.displayedWord = tempWord.hiddenWord
-        viewModel._word.value = tempWord
-
-        binding.newRoundBtn.setText(R.string.continue_)
-        viewModel.activeGameRound?.value!!.letterMisses = 0
-        activeRound = false
-        showNewRoundBtn()
-        pickEndAnimation("lose")
-        resetKeyboard()
-        hideKeyboard()
-        //TODO Implement the rest
-    }
-
-    // Randomly picks an end animation and displays it
-    private fun pickEndAnimation(type: String) {
-
-        when ((0..1).random()) {
-            0 -> {
-                if (type == "win") {
-                    Glide.with(this).load(R.drawable.win1).into(binding.endAnimLeft)
-                    binding.endAnimLeft.isVisible = true
-                } else if (type == "lose") {
-                    Glide.with(this).load(R.drawable.lose1).into(binding.endAnimLeft)
-                    binding.endAnimLeft.isVisible = true
-                }
-            }
-            1 -> {
-                if (type == "win") {
-                    Glide.with(this).load(R.drawable.win2).into(binding.endAnimRight)
-                    binding.endAnimRight.isVisible = true
-                } else if (type == "lose") {
-                    Glide.with(this).load(R.drawable.lose2).into(binding.endAnimRight)
-                    binding.endAnimRight.isVisible = true
-                }
+            val soundToPlay = MediaPlayer.create(applicationContext, soundFile)
+            soundToPlay.start()
+            soundToPlay.setOnCompletionListener { soundToPlay ->
+                soundToPlay.stop()
+                soundToPlay?.release()
             }
         }
     }
 
-    // --- Keyboard ---
+    // --- Keyboard (game letterboard) ---
     // Handles the letters pressed on the keyboard
     private fun keyboardPressed(pressed: String, buttonPressed: Button) {
-        //TODO Implement score, coins, etc.
         if (viewModel.updateDisplayedWord(pressed)) { // Guessed letter
             viewModel._activeGameRound?.value!!.setLetterboardState(pressed, 1)
-
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.guessed_letter)
 
+            //TODO Implement what is gained by guessing a letter (coins, score)
+            //TODO Implement countdown system impacting potential prize coins & avatar reactions
+            //TODO Implement avatar's reactions methods
+
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_letter_guess
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_letter_guess
+            playSound(soundFile)
         } else { // Missed letter
             viewModel._activeGameRound?.value!!.setLetterboardState(pressed, -1)
             viewModel.activeGameRound?.value!!.letterMisses++
-
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.missed_letter)
 
             // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_letter_miss
-                playSound(soundFile)
-            }
+            val soundFile = R.raw.click_letter_miss
+            playSound(soundFile)
 
             lifecycleScope.launch {
                 updateAvatar(viewModel.activeUser!!.value!!.avatarId)
@@ -1112,7 +842,6 @@ class GameActivity : AppCompatActivity() {
             }
         }
         buttonPressed.isEnabled = false
-
         viewModel.activeGameRound?.value!!.letterGuessed(pressed)
 
         if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
@@ -1122,7 +851,6 @@ class GameActivity : AppCompatActivity() {
 
     // Reset the keyboard
     private fun resetKeyboard() {
-
         var c: Char = 'A'
         while (c <= 'Z') {
             val letterBtn: Button = findViewById(resources.getIdentifier("keyboard$c", "id", packageName))
@@ -1134,7 +862,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    // --- Displayed avatar ---
+    // --- Displayed avatar (on the gallows) ---
     // Hides all the graphics related to the avatar
     private fun hideAvatarGraphics() {
         // Gets the layer drawable
@@ -1151,7 +879,7 @@ class GameActivity : AppCompatActivity() {
         layoutlist1.setImageDrawable(layerDrawable)
     }
 
-    // Update displayed avatar
+    // Update displayed avatar (displays the relevant body parts only)
     private suspend fun updateAvatar(id: Int) {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
@@ -1302,5 +1030,210 @@ class GameActivity : AppCompatActivity() {
     // Returns the drawable id of a string (image src name)
     private fun getStringIdentifier(name: String?): Int {
         return resources.getIdentifier(name, "id", packageName)
+    }
+
+    // --- Game round ---
+    // Resets the view model game round object
+    private fun resetGameRound() {
+        val tempGameRound = GameRound()
+        viewModel._activeGameRound = MutableLiveData(tempGameRound)
+    }
+
+    // Initiates a new game round (prepares UI and fetches word and definitions)
+    private fun initiateNewRound(view: View) {
+        resetGameRound()
+        hideNewRoundBtn()
+        hideAllAnimations()
+        hideDisplayedWord()
+        hideAvatarGraphics()
+
+        binding.waitingPlaceholder.isVisible = true
+
+        if (viewModel.activeLanguage?.value?.name.equals("Français")) {
+            viewModel.getRandomWordFr(view)
+        } else if (viewModel.activeLanguage?.value?.name.equals("English")) {
+            viewModel.getRandomWordEn(view)
+        }
+    }
+
+    // Check if the word found isn't too long. If it is, find another one. Otherwise start the round
+    private fun validateRandomWord(it: Word) {
+        if (viewModel.word.value!!.hiddenWord.length <= 15) {
+            startNewRound()
+        } else {
+            val gameView: View = this@GameActivity.window.decorView.findViewById(android.R.id.content)
+            initiateNewRound(gameView)
+        }
+    }
+
+    // Starts the UI for a new round after getting a new word object
+    private fun startNewRound() {
+        if (!activeRound) {
+            activeRound = true
+            resetKeyboard()
+
+            // New word sound
+            val soundFile = R.raw.new_word
+            playSound(soundFile)
+        }
+        binding.waitingPlaceholder.isVisible = false
+
+        showKeyboard()
+        updateAssetBar()
+        showAssetBar()
+        showHintBtn()
+        showExchangeBtn()
+        showAbandonBtn()
+        showDisplayedWord()
+    }
+
+    // Guessed the word
+    private fun wordGuessed() {
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        activeRound = false
+        hideKeyboard()
+        resetKeyboard()
+        binding.newRoundBtn.setText(R.string.continue_)
+        showNewRoundBtn()
+        pickEndAnimation("win")
+
+        //TODO Implement winnings of coins, banknotes, diamonds, etc.
+
+        // Win word sound
+        val soundFile = R.raw.win_word
+        playSound(soundFile)
+    }
+
+    // Failed the word
+    private fun wordFailed() {
+        val tempWord = viewModel.word.value
+        tempWord!!.displayedWord = tempWord.hiddenWord
+        viewModel._word.value = tempWord
+
+        binding.newRoundBtn.setText(R.string.continue_)
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        activeRound = false
+        showNewRoundBtn()
+        resetKeyboard()
+        hideKeyboard()
+        pickEndAnimation("lose")
+
+        //TODO Check if user loses the game (lives = 0) and implement what follows
+
+        // Fail word sound
+        val soundFile = R.raw.fail_word
+        playSound(soundFile)
+    }
+
+    // Randomly picks an end animation and displays it
+    private fun pickEndAnimation(type: String) {
+
+        when ((0..1).random()) {
+            0 -> {
+                if (type == "win") {
+                    Glide.with(this).load(R.drawable.win1).into(binding.endAnimLeft)
+                    binding.endAnimLeft.isVisible = true
+                } else if (type == "lose") {
+                    Glide.with(this).load(R.drawable.lose1).into(binding.endAnimLeft)
+                    binding.endAnimLeft.isVisible = true
+                }
+            }
+            1 -> {
+                if (type == "win") {
+                    Glide.with(this).load(R.drawable.win2).into(binding.endAnimRight)
+                    binding.endAnimRight.isVisible = true
+                } else if (type == "lose") {
+                    Glide.with(this).load(R.drawable.lose2).into(binding.endAnimRight)
+                    binding.endAnimRight.isVisible = true
+                }
+            }
+        }
+    }
+
+    // --- Graphic related methods ---
+    // Show the asset bar
+    private fun showAssetBar() {
+        binding.gameAssetsBar.visibility = View.VISIBLE
+    }
+
+    // Hides the asset bar
+    private fun hideAssetBar() {
+        binding.gameAssetsBar.visibility = View.INVISIBLE
+    }
+
+    // Update the values on the asset bar
+    private fun updateAssetBar() {
+        binding.tvScore.text = viewModel.activeUser?.value!!.score.toString()
+        binding.tvCoins.text = viewModel.activeUser?.value!!.coins.toString()
+        binding.tvBanknotes.text = viewModel.activeUser?.value!!.banknotes.toString()
+        binding.tvDiamonds.text = viewModel.activeUser?.value!!.diamonds.toString()
+        binding.tvLives.text = viewModel.activeUser?.value!!.lives.toString()
+    }
+
+    // Show keyboard
+    private fun showKeyboard() {
+        binding.keyboard.visibility = View.VISIBLE
+    }
+
+    // Hides the keyboard
+    private fun hideKeyboard() {
+        binding.keyboard.visibility = View.INVISIBLE
+    }
+
+    // Show the displayed word
+    private fun showDisplayedWord() {
+        binding.displayedWord.text = viewModel.word.value?.displayedWord
+        binding.displayedWord.visibility = View.VISIBLE
+    }
+
+    // Hides the displayed word
+    private fun hideDisplayedWord() {
+        binding.displayedWord.visibility = View.INVISIBLE
+    }
+
+    // Show the hint button
+    private fun showHintBtn() {
+        binding.hintBtn.visibility = View.VISIBLE
+    }
+
+    // Hides the hint button
+    private fun hideHintBtn() {
+        binding.hintBtn.visibility = View.INVISIBLE
+    }
+
+    // Show the exchange button
+    private fun showExchangeBtn() {
+        binding.exchangeBtn.visibility = View.VISIBLE
+    }
+
+    // Hides the exchange button
+    private fun hideExchangeBtn() {
+        binding.exchangeBtn.visibility = View.INVISIBLE
+    }
+
+    // Show the abandon button
+    private fun showAbandonBtn() {
+        binding.abandonBtn.visibility = View.VISIBLE
+    }
+
+    // Hides the abandon button
+    private fun hideAbandonBtn() {
+        binding.abandonBtn.visibility = View.INVISIBLE
+    }
+
+    // Show new round button (Play / Continue)
+    private fun showNewRoundBtn() {
+        binding.newRoundBtn.visibility = View.VISIBLE
+    }
+
+    // Hides new round button (Play / Continue)
+    private fun hideNewRoundBtn() {
+        binding.newRoundBtn.visibility = View.INVISIBLE
+    }
+
+    // Hides end animations
+    private fun hideAllAnimations() {
+        binding.endAnimLeft.isVisible = false
+        binding.endAnimRight.isVisible = false
     }
 }
