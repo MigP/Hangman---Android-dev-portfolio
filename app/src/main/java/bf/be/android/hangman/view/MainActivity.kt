@@ -1,10 +1,8 @@
 package bf.be.android.hangman.view
 
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Intent
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
@@ -56,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         // Adds a listener to the fragments for when the user clicks to switch to another fragment
-        fm.setFragmentResultListener("requestKey", this) { key, bundle ->
+        fm.setFragmentResultListener("requestKey", this) { _, bundle ->
             val result = bundle.getString("targetFragment")
             if (result.equals("createAccount")) { // Replace the fragment
                 val transaction: FragmentTransaction = fm.beginTransaction()
@@ -72,62 +70,62 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun introAnimations(introAnimationDelayTime: Long) {
+    private fun introAnimations(introAnimationDelayTime: Long) {
         // Title blow up
         val titleBlowUp: ValueAnimator = ValueAnimator.ofFloat(0f, 110f)
-        titleBlowUp.addUpdateListener(AnimatorUpdateListener { valueAnimator ->
+        titleBlowUp.addUpdateListener { valueAnimator ->
             val animatedValue = valueAnimator.animatedValue as Float
-            binding.introTitle.setTextSize(animatedValue)
-        })
-        titleBlowUp.setDuration(350);
+            binding.introTitle.textSize = animatedValue
+        }
+        titleBlowUp.duration = 350
         titleBlowUp.startDelay = 250
-        titleBlowUp.start();
+        titleBlowUp.start()
 
         // Intro swoosh sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (prefs.getString("sound", "on").equals("on")) {
             Timer().schedule(timerTask {
-                var soundFile = R.raw.intro_swoosh
+                val soundFile = R.raw.intro_swoosh
                 playSound(soundFile)
             }, introAnimationDelayTime)
         }
 
         val titleShrink: ValueAnimator = ValueAnimator.ofFloat(110f, 80f)
-        titleShrink.addUpdateListener(AnimatorUpdateListener { valueAnimator ->
+        titleShrink.addUpdateListener { valueAnimator ->
             val animatedValue = valueAnimator.animatedValue as Float
-            binding.introTitle.setTextSize(animatedValue)
-        })
-        titleShrink.setDuration(150);
+            binding.introTitle.textSize = animatedValue
+        }
+        titleShrink.duration = 150
         titleShrink.startDelay = 600
-        titleShrink.start();
+        titleShrink.start()
 
         // Intro image fade out
         val introFadeOut: Animation = AnimationUtils.loadAnimation(this, R.anim.fadeout1s)
         introFadeOut.startOffset = 800
-        introFadeOut.setFillAfter(true);
+        introFadeOut.fillAfter = true
         binding.introGallowsTop.startAnimation(introFadeOut)
         binding.introGallowsBottom.startAnimation(introFadeOut)
 
         // Fragment fade in
         val fragmentFadeIn: Animation = AnimationUtils.loadAnimation(this, R.anim.fadein1s)
         fragmentFadeIn.startOffset = 1500
-        fragmentFadeIn.setFillAfter(true);
+        fragmentFadeIn.fillAfter = true
         binding.fragmentContainerView.startAnimation(fragmentFadeIn)
     }
 
     // Sound effects
     private fun playSound(soundFile: Int) {
-        var soundToPlay = MediaPlayer.create(applicationContext, soundFile)
+        val soundToPlay = MediaPlayer.create(applicationContext, soundFile)
         soundToPlay.start()
-        soundToPlay.setOnCompletionListener(OnCompletionListener { soundToPlay ->
+        soundToPlay.setOnCompletionListener { soundToPlay ->
             soundToPlay.stop()
             soundToPlay?.release()
-        })
+        }
     }
 
     // Sound menu functions
     override fun onCreateOptionsMenu(menu: Menu?): Boolean { // Create status bar menu with sound icon
-        val inflater: MenuInflater = getMenuInflater()
+        val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.sound_options, menu)
 
         // Change sound menu icon according to the settings in preferences
@@ -135,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         val editor = prefs.edit()
         if (prefs.getString("sound", "").equals("off")) {
             menu?.findItem(R.id.soundOptions)?.setIcon(R.drawable.sound_off)
-            menu?.findItem(R.id.soundOptions)?.setTitle("Off")
+            menu?.findItem(R.id.soundOptions)?.title = "Off"
         }
         editor.apply()
         return true
@@ -146,23 +144,23 @@ class MainActivity : AppCompatActivity() {
 
         // Button click sound
         if (prefs.getString("sound", "").equals("on")) {
-            var buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
+            val buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
             buttonClickSound.start()
-            buttonClickSound.setOnCompletionListener(MediaPlayer.OnCompletionListener { buttonClickSound ->
+            buttonClickSound.setOnCompletionListener { buttonClickSound ->
                 buttonClickSound.stop()
                 buttonClickSound?.release()
-            })
+            }
         }
 
         // Change sound preferences
         val editor = prefs.edit()
         if (item.title.equals("On")) {
             item.setIcon(R.drawable.sound_off)
-            item.setTitle("Off")
+            item.title = "Off"
             editor.putString("sound", "off")
         } else if (item.title.equals("Off")) {
             item.setIcon(R.drawable.sound_on)
-            item.setTitle("On")
+            item.title = "On"
             editor.putString("sound", "on")
         }
         editor.apply()

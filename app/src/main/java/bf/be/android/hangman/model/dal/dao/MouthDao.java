@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bf.be.android.hangman.model.dal.DbHelper;
-import bf.be.android.hangman.model.dal.entities.Extra;
 import bf.be.android.hangman.model.dal.entities.Mouth;
 
 public class MouthDao {

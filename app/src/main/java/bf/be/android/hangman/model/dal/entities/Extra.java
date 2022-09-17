@@ -53,13 +53,4 @@ public class Extra {
         this.left = left;
         return this;
     }
-
-    public int getBottom() {
-        return bottom;
-    }
-
-    public Extra setBottom(int bottom) {
-        this.bottom = bottom;
-        return this;
-    }
 }

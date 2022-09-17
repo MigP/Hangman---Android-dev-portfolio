@@ -53,13 +53,4 @@ public class Eyes {
         this.left = left;
         return this;
     }
-
-    public int getBottom() {
-        return bottom;
-    }
-
-    public Eyes setBottom(int bottom) {
-        this.bottom = bottom;
-        return this;
-    }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 
 import bf.be.android.hangman.model.dal.DbHelper;
 import bf.be.android.hangman.model.dal.entities.Language;
-import bf.be.android.hangman.model.dal.entities.User;
 
 public class LanguageDao {
     public static final String CREATE_QUERY = "CREATE TABLE languages(" +

@@ -5,19 +5,16 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
-import bf.be.android.hangman.databinding.FragmentLoginBinding
 import bf.be.android.hangman.databinding.FragmentRegisterBinding
 import bf.be.android.hangman.model.dal.entities.User
 import bf.be.android.hangman.viewModel.MainViewModel
@@ -40,12 +37,12 @@ class RegisterFragment : Fragment() {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        _binding!!.registerLoginText.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                setFragmentResult("requestKey", bundleOf("targetFragment" to "LogIn"))
-            }
-
-        })
+        _binding!!.registerLoginText.setOnClickListener {
+            setFragmentResult(
+                "requestKey",
+                bundleOf("targetFragment" to "LogIn")
+            )
+        }
 
         _binding!!.registerButton.setOnClickListener(this::register)
         val pwVisibility = binding.registerVisibleIcon
@@ -54,10 +51,10 @@ class RegisterFragment : Fragment() {
         pwVisibility.setOnClickListener {
             if(pwVisibilityState) {
                 binding.registerPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
-                pwVisibility.setImageResource(R.drawable.invisible);
+                pwVisibility.setImageResource(R.drawable.invisible)
             } else{
                 binding.registerPasswordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                pwVisibility.setImageResource(R.drawable.visible);
+                pwVisibility.setImageResource(R.drawable.visible)
             }
             pwVisibilityState = !pwVisibilityState
         }
@@ -65,10 +62,10 @@ class RegisterFragment : Fragment() {
         pwVisibility2.setOnClickListener {
             if(pw2VisibilityState) {
                 binding.registerConfirmPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
-                pwVisibility2.setImageResource(R.drawable.invisible);
+                pwVisibility2.setImageResource(R.drawable.invisible)
             } else{
                 binding.registerConfirmPasswordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                pwVisibility2.setImageResource(R.drawable.visible);
+                pwVisibility2.setImageResource(R.drawable.visible)
             }
             pw2VisibilityState = !pw2VisibilityState
         }
@@ -84,11 +81,11 @@ class RegisterFragment : Fragment() {
             }
     }
 
-    fun register (view: View) {
+    private fun register (view: View) {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (prefs.getString("sound", "on").equals("on")) {
-            var soundFile = R.raw.click_button
+            val soundFile = R.raw.click_button
             playSound(soundFile)
         }
 
@@ -96,10 +93,10 @@ class RegisterFragment : Fragment() {
         val enteredPassword = binding.registerPasswordInput.text.toString()
         val enteredConfirmation = binding.registerConfirmPasswordInput.text.toString()
 
-        if (enteredUsername.equals("") || enteredPassword.equals("") || enteredConfirmation.equals("")) { // At least one field is empty
+        if (enteredUsername == "" || enteredPassword == "" || enteredConfirmation == "") { // At least one field is empty
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
         } else {
-            if (!enteredPassword.equals(enteredConfirmation)) { // Password confirmation entered is different from password entered
+            if (enteredPassword != enteredConfirmation) { // Password confirmation entered is different from password entered
                 Toast.makeText(requireContext(), R.string.passwords_different, Toast.LENGTH_LONG).show()
             } else {
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -116,11 +113,11 @@ class RegisterFragment : Fragment() {
 
     // Sound effects
     private fun playSound(soundFile: Int) {
-        var soundToPlay = MediaPlayer.create(requireContext(), soundFile)
+        val soundToPlay = MediaPlayer.create(requireContext(), soundFile)
         soundToPlay.start()
-        soundToPlay.setOnCompletionListener(MediaPlayer.OnCompletionListener { soundToPlay ->
+        soundToPlay.setOnCompletionListener { soundToPlay ->
             soundToPlay.stop()
             soundToPlay?.release()
-        })
+        }
     }
 }

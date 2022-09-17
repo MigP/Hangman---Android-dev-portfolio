@@ -53,13 +53,4 @@ public class Mouth {
         this.left = left;
         return this;
     }
-
-    public int getBottom() {
-        return bottom;
-    }
-
-    public Mouth setBottom(int bottom) {
-        this.bottom = bottom;
-        return this;
-    }
 }

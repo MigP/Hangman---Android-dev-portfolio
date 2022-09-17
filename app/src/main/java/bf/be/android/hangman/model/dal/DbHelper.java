@@ -25,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        this.context = context;
+        DbHelper.context = context;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(ExtraDao.CREATE_QUERY);
         sqLiteDatabase.execSQL(AvatarDao.CREATE_QUERY);
 
-        prepopulateDb(this.context, sqLiteDatabase);
+        prepopulateDb(sqLiteDatabase);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    private void prepopulateDb(Context context, SQLiteDatabase sqLiteDatabase) {
+    private void prepopulateDb(SQLiteDatabase sqLiteDatabase) {
         Resources res = DbHelper.context.getResources();
 
         String[] languagesArray = res.getStringArray(R.array.languages);
@@ -69,29 +69,29 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String[] eyesArray = res.getStringArray(R.array.eyes);
         ContentValues eyesValues = new ContentValues();
-        for (int i = 0; i < eyesArray.length; i ++){
-            eyesValues.put("src", eyesArray[i]);
+        for (String s : eyesArray) {
+            eyesValues.put("src", s);
             sqLiteDatabase.insert("eyes", null, eyesValues);
         }
 
         String[] extrasArray = res.getStringArray(R.array.extras);
         ContentValues extrasValues = new ContentValues();
-        for (int i = 0; i < extrasArray.length; i ++){
-            extrasValues.put("src", extrasArray[i]);
+        for (String s : extrasArray) {
+            extrasValues.put("src", s);
             sqLiteDatabase.insert("extras", null, extrasValues);
         }
 
         String[] mouthsArray = res.getStringArray(R.array.mouths);
         ContentValues mouthsValues = new ContentValues();
-        for (int i = 0; i < mouthsArray.length; i ++){
-            mouthsValues.put("src", mouthsArray[i]);
+        for (String s : mouthsArray) {
+            mouthsValues.put("src", s);
             sqLiteDatabase.insert("mouths", null, mouthsValues);
         }
 
         String[] eyebrowsArray = res.getStringArray(R.array.eyebrows);
         ContentValues eyebrowsValues = new ContentValues();
-        for (int i = 0; i < eyebrowsArray.length; i ++){
-            eyebrowsValues.put("src", eyebrowsArray[i]);
+        for (String s : eyebrowsArray) {
+            eyebrowsValues.put("src", s);
             sqLiteDatabase.insert("eyebrows", null, eyebrowsValues);
         }
 

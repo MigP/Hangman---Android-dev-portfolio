@@ -1,7 +1,6 @@
 package bf.be.android.hangman.view
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -34,15 +33,16 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        _binding!!.loginRegisterText.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                setFragmentResult("requestKey", bundleOf("targetFragment" to "createAccount"))
-            }
-        })
+        _binding!!.loginRegisterText.setOnClickListener {
+            setFragmentResult(
+                "requestKey",
+                bundleOf("targetFragment" to "createAccount")
+            )
+        }
 
         _binding!!.loginButton.setOnClickListener(this::login)
         val pwVisibility = binding.loginVisibleIcon
@@ -50,10 +50,10 @@ class LoginFragment : Fragment() {
         pwVisibility.setOnClickListener {
             if(pwVisibilityState) {
                 binding.loginPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
-                pwVisibility.setImageResource(R.drawable.invisible);
+                pwVisibility.setImageResource(R.drawable.invisible)
             } else{
                 binding.loginPasswordInput.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                pwVisibility.setImageResource(R.drawable.visible);
+                pwVisibility.setImageResource(R.drawable.visible)
             }
             pwVisibilityState = !pwVisibilityState
         }
@@ -68,11 +68,11 @@ class LoginFragment : Fragment() {
             }
     }
 
-    fun login (view: View) {
+    private fun login (view: View) {
         // Button click sound
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (prefs.getString("sound", "on").equals("on")) {
-            var soundFile = R.raw.click_button
+            val soundFile = R.raw.click_button
             playSound(soundFile)
         }
 
@@ -80,7 +80,7 @@ class LoginFragment : Fragment() {
         val enteredPassword = binding.loginPasswordInput.text.toString()
         val rememberMe = binding.registerRememberMe
 
-        if (enteredUsername.equals("") || enteredPassword.equals("")) { // At least one field is empty
+        if (enteredUsername == "" || enteredPassword == "") { // At least one field is empty
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
         } else {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -107,11 +107,11 @@ class LoginFragment : Fragment() {
 
     // Sound effects
     private fun playSound(soundFile: Int) {
-        var soundToPlay = MediaPlayer.create(requireContext(), soundFile)
+        val soundToPlay = MediaPlayer.create(requireContext(), soundFile)
         soundToPlay.start()
-        soundToPlay.setOnCompletionListener(MediaPlayer.OnCompletionListener { soundToPlay ->
+        soundToPlay.setOnCompletionListener { soundToPlay ->
             soundToPlay.stop()
             soundToPlay?.release()
-        })
+        }
     }
 }

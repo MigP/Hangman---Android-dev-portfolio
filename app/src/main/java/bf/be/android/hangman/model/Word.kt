@@ -2,8 +2,8 @@ package bf.be.android.hangman.model
 
 class Word(
     var hiddenWord: String,
-    var definitions: ArrayList<String>?,
-    var language: String
+    private var definitions: ArrayList<String>?,
+    private var language: String
 ) {
 
     var displayedWord = generateDisplayedWord()
@@ -17,7 +17,7 @@ class Word(
                 '}'
     }
 
-    private fun generateDisplayedWord(): String? {
+    private fun generateDisplayedWord(): String {
         val word = StringBuilder()
         for (i in 0 until this.hiddenWord.length) {
             word.append("*")

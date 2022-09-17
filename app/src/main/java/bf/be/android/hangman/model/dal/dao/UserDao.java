@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bf.be.android.hangman.model.dal.DbHelper;
-import bf.be.android.hangman.model.dal.entities.Avatar;
 import bf.be.android.hangman.model.dal.entities.User;
 
 public class UserDao {

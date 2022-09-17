@@ -52,13 +52,4 @@ public class Eyebrows {
         this.left = left;
         return this;
     }
-
-    public int getBottom() {
-        return bottom;
-    }
-
-    public Eyebrows setBottom(int bottom) {
-        this.bottom = bottom;
-        return this;
-    }
 }
