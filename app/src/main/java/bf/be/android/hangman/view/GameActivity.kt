@@ -5,13 +5,11 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.text.Html
 import android.view.*
 import android.widget.*
 import androidx.activity.viewModels
@@ -39,6 +37,7 @@ class GameActivity : AppCompatActivity() {
 
     companion object {
         lateinit var gameContext: Context
+        var gameView: View? = null
         var appBarMenu: Menu? = null
         var activeRound = false
     }
@@ -162,138 +161,139 @@ class GameActivity : AppCompatActivity() {
         initialiseRoundBtnBinding()
         initialiseHintBtnBinding()
         initialiseExchangeBtnBinding()
+        initialiseAbandonBtnBinding()
     }
 
     // Keyboard binding
     private fun initialiseKeyboardBinding() {
         binding.keyboardA.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("A")
+                keyboardPressed("A", binding.keyboardA)
             }
         })
         binding.keyboardB.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("B")
+                keyboardPressed("B", binding.keyboardB)
             }
         })
         binding.keyboardC.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("C")
+                keyboardPressed("C", binding.keyboardC)
             }
         })
         binding.keyboardD.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("D")
+                keyboardPressed("D", binding.keyboardD)
             }
         })
         binding.keyboardE.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("E")
+                keyboardPressed("E", binding.keyboardE)
             }
         })
         binding.keyboardF.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("F")
+                keyboardPressed("F", binding.keyboardF)
             }
         })
         binding.keyboardG.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("G")
+                keyboardPressed("G", binding.keyboardG)
             }
         })
         binding.keyboardH.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("H")
+                keyboardPressed("H", binding.keyboardH)
             }
         })
         binding.keyboardI.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("I")
+                keyboardPressed("I", binding.keyboardI)
             }
         })
         binding.keyboardJ.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("J")
+                keyboardPressed("J", binding.keyboardJ)
             }
         })
         binding.keyboardK.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("K")
+                keyboardPressed("K", binding.keyboardK)
             }
         })
         binding.keyboardL.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("L")
+                keyboardPressed("L", binding.keyboardL)
             }
         })
         binding.keyboardM.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("M")
+                keyboardPressed("M", binding.keyboardM)
             }
         })
         binding.keyboardN.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("N")
+                keyboardPressed("N", binding.keyboardN)
             }
         })
         binding.keyboardO.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("O")
+                keyboardPressed("O", binding.keyboardO)
             }
         })
         binding.keyboardP.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("P")
+                keyboardPressed("P", binding.keyboardP)
             }
         })
         binding.keyboardQ.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("Q")
+                keyboardPressed("Q", binding.keyboardQ)
             }
         })
         binding.keyboardR.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("R")
+                keyboardPressed("R", binding.keyboardR)
             }
         })
         binding.keyboardS.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("S")
+                keyboardPressed("S", binding.keyboardS)
             }
         })
         binding.keyboardT.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("T")
+                keyboardPressed("T", binding.keyboardT)
             }
         })
         binding.keyboardU.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("U")
+                keyboardPressed("U", binding.keyboardU)
             }
         })
         binding.keyboardV.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("V")
+                keyboardPressed("V", binding.keyboardV)
             }
         })
         binding.keyboardW.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("W")
+                keyboardPressed("W", binding.keyboardW)
             }
         })
         binding.keyboardX.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("X")
+                keyboardPressed("X", binding.keyboardX)
             }
         })
         binding.keyboardY.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("Y")
+                keyboardPressed("Y", binding.keyboardY)
             }
         })
         binding.keyboardZ.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                keyboardPressed("Z")
+                keyboardPressed("Z", binding.keyboardZ)
             }
         })
     }
@@ -302,6 +302,8 @@ class GameActivity : AppCompatActivity() {
     private fun initialiseRoundBtnBinding() {
         binding.newRoundBtn.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
+                gameView = view
+
                 // Button click sound
                 val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
                 if (prefs.getString("sound", "on").equals("on")) {
@@ -309,12 +311,12 @@ class GameActivity : AppCompatActivity() {
                     playSound(soundFile)
                 }
 
-                startNewRound(view!!)
+                initiateNewRound(gameView!!)
             }
         })
     }
 
-    // Hint button binding
+    // Help button binding
     private fun initialiseHintBtnBinding() {
         binding.hintBtn.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
@@ -324,7 +326,7 @@ class GameActivity : AppCompatActivity() {
                     var soundFile = R.raw.click_button
                     playSound(soundFile)
                 }
-                showHints(view!!)
+                showHelpMenu(view!!)
             }
         })
     }
@@ -339,8 +341,22 @@ class GameActivity : AppCompatActivity() {
                     var soundFile = R.raw.click_button
                     playSound(soundFile)
                 }
-                //TODO Implement
-                //showHints(view!!)
+                showExchangeMenu(view!!)
+            }
+        })
+    }
+
+    // Abandon button binding
+    private fun initialiseAbandonBtnBinding() {
+        binding.abandonBtn.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                showAbandonGameRound()
             }
         })
     }
@@ -349,35 +365,175 @@ class GameActivity : AppCompatActivity() {
     // Initialises the UI
     private fun initialiseUi() {
         hideAvatarGraphics()
+        hideHintBtn()
+        hideExchangeBtn()
+        hideAbandonBtn()
         Glide.with(this).load(R.drawable.waiting).into(binding.waitingPlaceholder);
     }
 
-    // --- Hints menu ---
-    // Show hints menu
-    private fun showHints(view: View) {
-        val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+    // --- Help menu ---
+    // Show help menu
+    private fun showHelpMenu(view: View) {
+        val layoutInflater = LayoutInflater.from(this)
+        val helpMenuView: View = layoutInflater.inflate(R.layout.help_menu_layout, null)
+        val builder = AlertDialog.Builder(this)
 
         val textView = TextView(gameContext)
-        textView.setText(R.string.buy_hint)
+        textView.setText(R.string.buy_help)
         textView.setPadding(20, 30, 20, 30)
-        textView.textSize = 20f
-        textView.setTextColor(ContextCompat.getColor(gameContext, R.color.hint_menu_text_blue))
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(gameContext, R.color.menu_text_colour))
 
         builder.setCustomTitle(textView);
-        builder.setView(R.layout.hint_menu_layout)
 
-        builder.setNegativeButton("OK", DialogInterface.OnClickListener {dialog, which ->
-            // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            if (prefs.getString("sound", "on").equals("on")) {
-                var soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
-            dialog.cancel() })
+        val buyLetterBtn = helpMenuView.findViewById(R.id.letterBuyBtn) as Button
+        val buyDefinitionBtn = helpMenuView.findViewById(R.id.definitionBuyBtn) as Button
+        val buyBodyPartBtn = helpMenuView.findViewById(R.id.bodyPartBuyBtn) as Button
 
+        builder.setView(helpMenuView)
         val dialog = builder.create()
-        dialog.window?.decorView?.setBackgroundResource(R.drawable.hint_menu_shape)
+
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
         dialog.show()
+
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = ViewGroup.LayoutParams.WRAP_CONTENT
+
+        if (viewModel.activeUser?.value!!.coins < 5) {
+            buyLetterBtn.isEnabled = false
+            buyLetterBtn.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.inactive_state))
+        } else {
+            buyLetterBtn.isActivated = true
+        }
+
+        if (viewModel.activeUser?.value!!.banknotes < 5) {
+            buyDefinitionBtn.isEnabled = false
+            buyDefinitionBtn.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.inactive_state))
+        } else {
+            buyDefinitionBtn.isActivated = true
+        }
+
+        if (viewModel.activeUser?.value!!.diamonds < 5) {
+            buyBodyPartBtn.isEnabled = false
+            buyBodyPartBtn.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.inactive_state))
+        } else {
+            buyBodyPartBtn.isActivated = true
+        }
+
+        dialog.getWindow()?.setLayout(width, height)
+
+        buyLetterBtn.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                //TODO Implement
+                println("--------- Buy letter")
+                dialog.cancel()
+            }
+        })
+        buyDefinitionBtn.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                //TODO Implement
+                println("--------- Buy definition")
+                dialog.cancel()
+            }
+        })
+        buyBodyPartBtn.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                //TODO Implement
+                println("--------- Buy body part")
+                dialog.cancel()
+            }
+        })
+    }
+
+    // --- Exchange menu ---
+    // Show exchange menu
+    private fun showExchangeMenu(view: View) {
+        val layoutInflater = LayoutInflater.from(this)
+        val exchangeMenuView: View = layoutInflater.inflate(R.layout.exchange_menu_layout, null)
+        val builder = AlertDialog.Builder(this)
+
+        val textView = TextView(gameContext)
+        textView.setText(R.string.exchange_resources)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(gameContext, R.color.menu_text_colour))
+
+        builder.setCustomTitle(textView);
+
+        val buyBanknote = exchangeMenuView.findViewById(R.id.exchangeBuyBanknoteBtn) as Button
+        val buyDiamond = exchangeMenuView.findViewById(R.id.exchangeBuyDiamondBtn) as Button
+
+        builder.setView(exchangeMenuView)
+        val dialog = builder.create()
+
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
+        dialog.show()
+
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = ViewGroup.LayoutParams.WRAP_CONTENT
+
+        if (viewModel.activeUser?.value!!.coins < 50) {
+            buyBanknote.isEnabled = false
+            buyBanknote.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.inactive_state))
+        } else {
+            buyBanknote.isActivated = true
+        }
+
+        if (viewModel.activeUser?.value!!.banknotes < 50) {
+            buyDiamond.isEnabled = false
+            buyDiamond.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.inactive_state))
+        } else {
+            buyDiamond.isActivated = true
+        }
+
+        dialog.getWindow()?.setLayout(width, height)
+
+        buyBanknote.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                viewModel.activeUser?.value!!.coins -= 50
+                viewModel.activeUser?.value!!.banknotes += 1
+                updateAssetBar()
+                dialog.cancel()
+            }
+        })
+        buyDiamond.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                // Button click sound
+                val prefs = PreferenceManager.getDefaultSharedPreferences(gameContext)
+                if (prefs.getString("sound", "on").equals("on")) {
+                    var soundFile = R.raw.click_button
+                    playSound(soundFile)
+                }
+                viewModel.activeUser?.value!!.banknotes -= 50
+                viewModel.activeUser?.value!!.diamonds += 1
+                updateAssetBar()
+                dialog.cancel()
+            }
+        })
     }
 
     // --- Options side menu ---
@@ -703,6 +859,44 @@ class GameActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    // Displays window where the user can abandon the current game round
+    private fun showAbandonGameRound() {
+        val dialogbuider = AlertDialog.Builder(this)
+
+        val textView = TextView(gameContext)
+        textView.setText(R.string.abandon_round)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(gameContext, R.color.menu_text_colour))
+
+        dialogbuider.setCustomTitle(textView);
+        dialogbuider.setView(R.layout.abandon_round_layout)
+
+        dialogbuider.setPositiveButton(R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_button
+                playSound(soundFile)
+            }
+
+            abandonGameRound()
+            dialog.cancel()
+        })
+        dialogbuider.setNegativeButton(R.string.no, DialogInterface.OnClickListener {dialog, which ->
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_button
+                playSound(soundFile)
+            }
+            dialog.cancel() })
+
+        val dialog = dialogbuider.create()
+        val listView = dialog.listView
+        dialog.show()
+    }
+
     // Displays window containing the game rules
     private fun displayHelp() {
         val dialogbuider = AlertDialog.Builder(this)
@@ -718,7 +912,7 @@ class GameActivity : AppCompatActivity() {
                 playSound(soundFile)
             }
             dialog.cancel() })
-
+//TODO create this layout
         val dialog = dialogbuider.create()
         val listView = dialog.listView
         dialog.show()
@@ -821,6 +1015,16 @@ class GameActivity : AppCompatActivity() {
     // Show the exchange button
     fun showExchangeBtn() {
         binding.exchangeBtn.visibility = View.VISIBLE
+    }
+
+    // Hides the abandon button
+    fun hideAbandonBtn() {
+        binding.abandonBtn.visibility = View.INVISIBLE
+    }
+
+    // Show the abandon button
+    fun showAbandonBtn() {
+        binding.abandonBtn.visibility = View.VISIBLE
     }
 
     // Hides the asset bar
@@ -940,12 +1144,12 @@ class GameActivity : AppCompatActivity() {
     //Initialises view model observables
     private fun initViewModel() {
         // When view model word changes, startNewRoundUi is called
-        viewModel.word.observe(this, this::startNewRoundUi)
+        viewModel.word.observe(this, this::validateRandomWord)
     }
 
-    // --- New round ---
-    // Start new round
-    private fun startNewRound(view: View) {
+    // --- Game round ---
+    // Initiates a new round
+    private fun initiateNewRound(view: View) {
         activeRound = true
 
         hideNewRoundBtn()
@@ -958,32 +1162,105 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    // Check if the word found isn't too long. If it is, find another one
+    private fun validateRandomWord(it: Word) {
+        if (viewModel.word.value!!.hiddenWord.length <= 15) {
+            startNewRound()
+        } else {
+            initiateNewRound(gameView!!)
+        }
+    }
+
     // Starts the UI for a new round after getting a new word object
-    private fun startNewRoundUi(it: Word) {
-        //TODO Implement rest
+    private fun startNewRound() {
         binding.waitingPlaceholder.isVisible = false
         showKeyboard()
         updateAssetBar()
         showAssetBar()
         showHintBtn()
         showExchangeBtn()
+        showAbandonBtn()
         showDisplayedWord()
-
+        //TODO Implement rest
         println("################# new word: " + viewModel.word.value.toString())
+    }
+
+    // Abandon round
+    private fun abandonGameRound() {
+        activeRound = false
+        resetKeyboard()
+        viewModel.activeUser?.value!!.diamonds = 0
+        viewModel.activeUser?.value!!.banknotes = 0
+        viewModel.activeUser?.value!!.coins = 0
+        viewModel.activeUser?.value!!.lives = 3
+        viewModel.activeUser?.value!!.score = 0
+//        viewModel._activeGameRound = MutableLiveData(null)
+
+        updateAssetBar()
+        //TODO Implement the rest
+        // reset displayed avatar
+        hideKeyboard()
+        hideAssetBar()
+        hideHintBtn()
+        hideExchangeBtn()
+        hideAbandonBtn()
+        hideDisplayedWord()
+        showNewRoundBtn()
     }
 
 
 
+    // --- Keyboard ---
+    // Handles the letters pressed on the keyboard
+    fun keyboardPressed(pressed: String, buttonPressed: Button) {
+        //TODO Implement score, coins, etc.
+        if (viewModel.updateDisplayedWord(pressed)) { // Guessed letter
+            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, 1)
 
+            buttonPressed.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.guessed_letter))
 
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_letter_guess
+                playSound(soundFile)
+            }
+        } else { // Missed letter
+            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, -1)
 
-    //TODO implement this in game round object instead
-    fun keyboardPressed(pressed: String) {
-        // Button click sound
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "on").equals("on")) {
-            var soundFile = R.raw.click_letter_miss
-            playSound(soundFile)
+            buttonPressed.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.missed_letter))
+
+            // Button click sound
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            if (prefs.getString("sound", "on").equals("on")) {
+                var soundFile = R.raw.click_letter_miss
+                playSound(soundFile)
+            }
+
+            //TODO update displayed avatar
+        }
+        buttonPressed.isEnabled = false
+
+        if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
+            //TODO Implement the rest
+            // Guessed word
+        }
+
+        viewModel.activeGameRound?.value!!.letterGuessed(pressed)
+    }
+
+    // Reset the keyboard
+    private fun resetKeyboard() {
+        var c: Char
+
+        c = 'A'
+        while (c <= 'Z') {
+            var letterBtn: Button = findViewById(resources.getIdentifier("keyboard" + c.toString(), "id", packageName))
+            letterBtn.isEnabled = true
+            letterBtn.setBackgroundTintList(gameContext.getResources().getColorStateList(R.color.reset_letter))
+            viewModel._activeGameRound?.value!!.setLetterboardState(c.toString(), -1)
+
+            ++c
         }
     }
 }

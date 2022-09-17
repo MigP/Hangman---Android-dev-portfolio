@@ -74,7 +74,7 @@
 
         <TextView
             android:id="@+id/displayedWord"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:elegantTextHeight="true"
@@ -82,12 +82,13 @@
             android:shadowDx="10"
             android:shadowDy="10"
             android:shadowRadius="10"
-            android:letterSpacing="0.1"
             android:visibility="invisible"
             android:fontFamily="@font/archivo_black"
-            android:text="TextView"
+            android:text="ABCDEFGHIJKLMNOPQ"
             android:textAllCaps="true"
-            android:textSize="30sp"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            android:paddingHorizontal="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,10 +111,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/hint_button_states"
             android:clickable="true"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gameAssetsBar" />
 
@@ -122,10 +123,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="65dp"
             android:background="@drawable/exchange_button_states"
             android:clickable="true"
-            android:visibility="invisible"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gameAssetsBar" />
+
+        <ImageButton
+            android:id="@+id/abandonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="116dp"
+            android:background="@drawable/abandon_button_states"
+            android:clickable="true"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gameAssetsBar" />
 

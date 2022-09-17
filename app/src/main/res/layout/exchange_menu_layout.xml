@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="20dp"
+        android:paddingHorizontal="10dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -23,38 +24,50 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/hintMenuCoinIcon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
                 app:srcCompat="@drawable/coin" />
 
             <TextView
-                android:id="@+id/hintMenuCoinPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="15"
-                android:textColor="#2196F3"
+                android:text="50"
+                android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/hintMenuCoinDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/reveal_letter"
-                android:textColor="#2196F3"
+                android:text="@string/buys"
+                android:textColor="@color/menu_text_colour"
                 android:textSize="16sp" />
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/letterBuyBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:theme="@style/Theme.Hangman.buyHintBtn"
-            android:text="@string/buy" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                app:srcCompat="@drawable/banknote" />
+
+            <Button
+                android:id="@+id/exchangeBuyBanknoteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:theme="@style/Theme.Hangman.buyHelpBtn"
+                android:text="@string/buy" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="300dp"
@@ -62,77 +75,50 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/hintMenuBanknoteIcon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
                 app:srcCompat="@drawable/banknote" />
 
             <TextView
-                android:id="@+id/hintMenuBanknotePrice"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="15"
-                android:textColor="#2196F3"
+                android:text="50"
+                android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/hintMenuBanknoteDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/reveal_definition"
-                android:textColor="#2196F3"
+                android:text="@string/buys"
+                android:textColor="@color/menu_text_colour"
                 android:textSize="16sp" />
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/definitionBuyBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:theme="@style/Theme.Hangman.buyHintBtn"
-            android:text="@string/buy" />
-
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="24sp" />
 
             <ImageView
-                android:id="@+id/hintMenuDiamondIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/diamond" />
-
-            <TextView
-                android:id="@+id/hintMenuMenuDiamondPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
-                android:gravity="center"
-                android:text="15"
-                android:textColor="#2196F3"
-                android:textSize="24sp" />
+                app:srcCompat="@drawable/diamond" />
 
-            <TextView
-                android:id="@+id/hintMenuMenuDiamondDesc"
+            <Button
+                android:id="@+id/exchangeBuyDiamondBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/remove_body_part"
-                android:textColor="#2196F3"
-                android:textSize="16sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:theme="@style/Theme.Hangman.buyHelpBtn"
+                android:text="@string/buy" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/bodyPartBuyBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:theme="@style/Theme.Hangman.buyHintBtn"
-            android:text="@string/buy" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

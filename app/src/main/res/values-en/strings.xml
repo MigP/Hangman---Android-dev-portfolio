@@ -40,4 +40,9 @@
     <string name="reveal_definition">Reveal one definition</string>
     <string name="remove_body_part">Restore one body part</string>
     <string name="buy">Buy</string>
+    <string name="buys">" Buys  "</string>
+    <string name="exchange_resources">Exchange your resources</string>
+    <string name="buy_help">Buy help</string>
+    <string name="abandon_round_sure">Are you sure you want to abandon this game round?</string>
+    <string name="abandon_round">Abandon</string>
 </resources>

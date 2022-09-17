@@ -40,4 +40,9 @@
     <string name="reveal_definition">Dévoiler une définition</string>
     <string name="remove_body_part">Restaurer une partie du corps</string>
     <string name="buy">Acheter</string>
+    <string name="buys">" Achètes  "</string>
+    <string name="exchange_resources">Échangez vos ressources</string>
+    <string name="buy_help">Achetez de l\'aide</string>
+    <string name="abandon_round_sure">Voulez-vous vraiment abandonner cette partie de jeu ?</string>
+    <string name="abandon_round">Abandonner</string>
 </resources>

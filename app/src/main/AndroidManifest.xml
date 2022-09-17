@@ -19,7 +19,9 @@
         <activity
             android:name=".view.GameActivity"
             android:label=""
-            android:exported="false" />
+            android:configChanges="orientation"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.MainActivity"
             android:configChanges="orientation"

@@ -1,12 +1,15 @@
 package bf.be.android.hangman.model
 
 import android.os.CountDownTimer
+import android.preference.PreferenceManager
+import bf.be.android.hangman.R
 import bf.be.android.hangman.model.dal.entities.Mouth
 
 class GameRound {
 
     var letterboard = HashMap<String, Int>()
     var displayedAvatar = HashMap<String, Boolean>()
+    var guessedLetters = 0
 
     companion object {
         var timeLeft = 0L
@@ -85,5 +88,10 @@ class GameRound {
     private fun startTimer5() {
         timer5?.cancel()
         timer5?.start()
+    }
+
+    fun letterGuessed(letter: String) {
+        //TODO Implement
+        //setLetterboardState(letter, )
     }
 }

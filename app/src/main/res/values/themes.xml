@@ -22,12 +22,8 @@
         <item name="android:backgroundTint">#FF5722</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.Hangman.buyHintBtn">
-        <item name="android:backgroundTint">#FF8E85</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.Hangman.buyHintBtnInactive">
-        <item name="android:backgroundTint">#808080</item>
+    <style name="Theme.Hangman.buyHelpBtn">
+        <item name="android:backgroundTint">#6CBEFF</item>
         <item name="windowNoTitle">true</item>
     </style>
 </resources>

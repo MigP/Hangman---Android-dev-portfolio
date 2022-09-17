@@ -3,7 +3,7 @@
     android:shape="rectangle"   >
 
     <solid
-        android:color="@color/hint_menu_blue" >
+        android:color="@color/menu_bg" >
     </solid>
 
     <padding
