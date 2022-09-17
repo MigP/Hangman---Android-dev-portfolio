@@ -266,21 +266,21 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        if (viewModel.activeUser?.value!!.coins < 5) {
+        if (viewModel.activeUser?.value!!.coins < 5 || !activeRound) {
             buyLetterBtn.isEnabled = false
             buyLetterBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyLetterBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.banknotes < 5) {
+        if (viewModel.activeUser?.value!!.banknotes < 5 || !activeRound) {
             buyDefinitionBtn.isEnabled = false
             buyDefinitionBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyDefinitionBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.diamonds < 5) {
+        if (viewModel.activeUser?.value!!.diamonds < 5 || !activeRound) {
             buyBodyPartBtn.isEnabled = false
             buyBodyPartBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -295,7 +295,6 @@ class GameActivity : AppCompatActivity() {
             playSound(soundFile)
 
             //TODO Implement buy a letter
-            //TODO Prevent this when there is no word on the screen
 
             dialog.cancel()
         }
@@ -305,7 +304,6 @@ class GameActivity : AppCompatActivity() {
             playSound(soundFile)
 
             //TODO Implement buy a definition
-            //TODO Prevent this when there is no word on the screen
 
             dialog.cancel()
         }
@@ -315,7 +313,6 @@ class GameActivity : AppCompatActivity() {
             playSound(soundFile)
 
             //TODO Implement buy body part
-            //TODO Prevent this when there is no word on the screen
 
             dialog.cancel()
         }
@@ -842,7 +839,6 @@ class GameActivity : AppCompatActivity() {
             }
         }
         buttonPressed.isEnabled = false
-        viewModel.activeGameRound?.value!!.letterGuessed(pressed)
 
         if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
             wordGuessed()

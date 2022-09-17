@@ -172,7 +172,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         } else {
             character.uppercase()
         }
-
     }
 
     //Database related methods

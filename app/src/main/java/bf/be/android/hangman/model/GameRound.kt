@@ -86,12 +86,8 @@ class GameRound {
     }
 
     private fun startTimer5() {
+        //TODO Implement timer system link to avatar and game
         timer5?.cancel()
         timer5?.start()
-    }
-
-    fun letterGuessed(letter: String) {
-        //TODO Implement
-        //setLetterboardState(letter, )
     }
 }
