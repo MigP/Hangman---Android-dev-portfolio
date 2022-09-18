@@ -1541,7 +1541,7 @@ class GameActivity : AppCompatActivity() {
                 binding.potentialPrize.alpha = 1F
                 val prizeFadeOut: Animation = AnimationUtils.loadAnimation(this@GameActivity, R.anim.fadeout1s)
                 prizeFadeOut.startOffset = 0
-                prizeFadeOut.fillAfter = false
+                prizeFadeOut.fillAfter = true
                 binding.potentialPrize.startAnimation(prizeFadeOut)
 
                 binding.potentialPrizeAmount.setText((binding.potentialPrizeAmount.text.toString().toInt() - 1).toString())
