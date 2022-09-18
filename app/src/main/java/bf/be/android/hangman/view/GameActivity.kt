@@ -3,6 +3,7 @@ package bf.be.android.hangman.view
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.DialogInterface.OnShowListener
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
@@ -29,6 +30,7 @@ import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
+
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
@@ -476,9 +478,14 @@ class GameActivity : AppCompatActivity() {
     private fun chooseLanguage() {
         if (!activeRound) {
             val dialogbuider = AlertDialog.Builder(this)
-            dialogbuider.setCancelable(false)
-            dialogbuider.setTitle(R.string.choose_language)
 
+            val textView = TextView(this)
+            textView.setText(R.string.choose_language)
+            textView.setPadding(20, 30, 20, 30)
+            textView.textSize = 25f
+            textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+
+            dialogbuider.setCustomTitle(textView)
             val adapter: ArrayAdapter<Language> =
                 object : ArrayAdapter<Language>(this, R.layout.language_list_item_layout, viewModel.languageList.value!!) {
                     var selectedPosition = 0
@@ -532,8 +539,8 @@ class GameActivity : AppCompatActivity() {
                 }
                 appBarMenu?.getItem(0)?.isVisible = true
             }
-
             val dialog = dialogbuider.create()
+
             dialog.show()
         } else {
             Toast.makeText(this, R.string.not_available_during_round, Toast.LENGTH_LONG).show()
@@ -544,8 +551,14 @@ class GameActivity : AppCompatActivity() {
     private fun chooseAvatars(initialCheck: Boolean) {
         if (!activeRound) {
             val dialogbuider = AlertDialog.Builder(this)
-            dialogbuider.setCancelable(false)
-            dialogbuider.setTitle(R.string.choose_avatar)
+
+            val textView = TextView(this)
+            textView.setText(R.string.choose_avatar)
+            textView.setPadding(20, 30, 20, 30)
+            textView.textSize = 25f
+            textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+
+            dialogbuider.setCustomTitle(textView)
 
             val adapter: ArrayAdapter<Avatar> =
                 object : ArrayAdapter<Avatar>(
@@ -595,7 +608,6 @@ class GameActivity : AppCompatActivity() {
                 }
 
             dialogbuider.setAdapter(adapter) { _: DialogInterface?, _: Int -> }
-
             dialogbuider.setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                 // Button click sound
                 val soundFile = R.raw.click_button
@@ -626,66 +638,129 @@ class GameActivity : AppCompatActivity() {
 
     // Displays window where the user can change their user name
     private fun chooseUsername() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.choose_username)
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-        builder.setView(R.layout.edit_username_layout)
-        val input = findViewById<EditText>(R.id.et_editPassword)
+        val textView = TextView(this)
+        textView.setText(R.string.choose_username)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
 
-        builder.setPositiveButton("OK") { _, _ ->
-            // Button click sound
-            val soundFile = R.raw.click_button
-            playSound(soundFile)
-
-            // Update user object and db with the selected user name
-            val tempUser = viewModel.activeUser!!.value
-            tempUser!!.username = input.text.toString()
-            viewModel.updateUser(this, tempUser.id, tempUser)
-
-            actionBar?.title = viewModel.activeUser?.value!!.username
-            supportActionBar?.title = viewModel.activeUser?.value!!.username
-        }
-        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+        dialogBuilder.setCustomTitle(textView)
+        dialogBuilder.setView(R.layout.edit_username_layout)
+        dialogBuilder.setPositiveButton("OK", null)
+        dialogBuilder.setNegativeButton(R.string.cancel) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
             playSound(soundFile)
             dialog.cancel()
         }
-        builder.show()
+
+        val mAlertDialog: AlertDialog = dialogBuilder.create();
+        mAlertDialog.setOnShowListener(OnShowListener {
+            val b: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            b.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(view: View?) {
+                    // Button click sound
+                    val soundFile = R.raw.click_button
+                    playSound(soundFile)
+
+                    val input = mAlertDialog.findViewById<View>(R.id.et_editUsername) as EditText
+
+                    if (input.text.toString() == "") {
+                        Toast.makeText(this@GameActivity, R.string.username_is_empty, Toast.LENGTH_LONG).show()
+                    } else {
+                        lifecycleScope.launch {
+                            if (viewModel.usernameExists(this@GameActivity, input.text.toString())) { // Chosen user name already exists
+                                Toast.makeText(this@GameActivity, R.string.username_exists, Toast.LENGTH_LONG).show()
+                            } else {
+                                // Update user object and db with the selected user name
+                                val tempUser = viewModel.activeUser!!.value
+                                tempUser!!.username = input.text.toString()
+                                viewModel.updateUser(this@GameActivity, tempUser.id, tempUser)
+
+                                actionBar?.title = viewModel.activeUser?.value!!.username
+                                supportActionBar?.title = viewModel.activeUser?.value!!.username
+
+                                mAlertDialog.cancel()
+                            }
+                        }
+                    }
+                }
+            })
+        })
+        mAlertDialog.show()
     }
 
     // Displays window where the user can change their password
     private fun choosePassword() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.choose_password)
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-        builder.setView(R.layout.edit_password_layout)
-        val input = findViewById<EditText>(R.id.et_editPassword)
+        val textView = TextView(this)
+        textView.setText(R.string.choose_password)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
 
-        builder.setPositiveButton("OK") { _, _ ->
-            // Button click sound
-            val soundFile = R.raw.click_button
-            playSound(soundFile)
-
-            // Update user object and db with the selected password
-            val tempUser = viewModel.activeUser!!.value
-            tempUser!!.password = input.text.toString()
-            viewModel.updateUser(this, tempUser.id, tempUser)
-        }
-        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+        dialogBuilder.setCustomTitle(textView)
+        dialogBuilder.setView(R.layout.edit_password_layout)
+        dialogBuilder.setPositiveButton("OK", null)
+        dialogBuilder.setNegativeButton(R.string.cancel) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
             playSound(soundFile)
             dialog.cancel()
         }
-        builder.show()
+
+        val mAlertDialog: AlertDialog = dialogBuilder.create();
+        mAlertDialog.setOnShowListener(OnShowListener {
+            val b: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            b.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(view: View?) {
+                    // Button click sound
+                    val soundFile = R.raw.click_button
+                    playSound(soundFile)
+
+                    val inputPassword = mAlertDialog.findViewById<View>(R.id.et_editPassword) as EditText
+                    val inputConfirmation = mAlertDialog.findViewById<View>(R.id.et_confirmPassword) as EditText
+
+                    if (inputPassword.text.toString() == "" || inputConfirmation.text.toString() == "") {
+                        Toast.makeText(this@GameActivity, R.string.fill_all_fields, Toast.LENGTH_LONG).show()
+                    } else {
+                        if (inputPassword != inputConfirmation) { // Password confirmation entered is different from password entered
+                            Toast.makeText(this@GameActivity, R.string.passwords_different, Toast.LENGTH_LONG).show()
+                        } else {
+                            lifecycleScope.launch {
+                                // Button click sound
+                                val soundFile = R.raw.click_button
+                                playSound(soundFile)
+
+                                // Update user object and db with the selected password
+                                val tempUser = viewModel.activeUser!!.value
+                                tempUser!!.password = inputPassword.text.toString()
+                                viewModel.updateUser(this@GameActivity, tempUser.id, tempUser)
+
+                                mAlertDialog.cancel()
+                            }
+                        }
+                    }
+                }
+            })
+        })
+        mAlertDialog.show()
     }
 
     // Displays window containing the game rules
     private fun displayHelp() {
         val dialogbuider = AlertDialog.Builder(this)
-        dialogbuider.setCancelable(false)
-        dialogbuider.setTitle(R.string.game_help)
+
+        val textView = TextView(this)
+        textView.setText(R.string.game_help)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+
+        dialogbuider.setCustomTitle(textView)
         dialogbuider.setView(R.layout.game_help_layout)
 
         dialogbuider.setNegativeButton("OK") { dialog, _ ->
@@ -705,9 +780,15 @@ class GameActivity : AppCompatActivity() {
     // Displays window where the user can delete their account
     private fun deleteAccount() {
         val dialogbuider = AlertDialog.Builder(this)
-        dialogbuider.setCancelable(false)
-        dialogbuider.setTitle(R.string.delete_account)
-        dialogbuider.setView(R.layout.delete_account_layout)
+
+        val textView = TextView(this)
+        textView.setText(R.string.delete_account)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+
+        dialogbuider.setCustomTitle(textView)
+        dialogbuider.setView(R.layout.confirm_action_layout)
 
         dialogbuider.setPositiveButton(R.string.yes) { _, _ ->
             // Button click sound
@@ -736,18 +817,40 @@ class GameActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Log out
+    // Displays window where the user can log out
     private fun logout() {
-        // Button click sound
-        val soundFile = R.raw.click_button
-        playSound(soundFile)
+        val dialogbuider = AlertDialog.Builder(this)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val editor = prefs.edit()
-        val loginIntent = Intent(applicationContext, MainActivity::class.java)
-        editor.putString("rememberMe", "false")
-        editor.apply()
-        startActivity(loginIntent)
+        val textView = TextView(this)
+        textView.setText(R.string.logout)
+        textView.setPadding(20, 30, 20, 30)
+        textView.textSize = 25f
+        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+
+        dialogbuider.setCustomTitle(textView)
+        dialogbuider.setView(R.layout.confirm_action_layout)
+
+        dialogbuider.setPositiveButton(R.string.yes) { _, _ ->
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            val editor = prefs.edit()
+            val loginIntent = Intent(applicationContext, MainActivity::class.java)
+            editor.putString("rememberMe", "false")
+            editor.apply()
+            startActivity(loginIntent)
+        }
+        dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+            dialog.cancel()
+        }
+
+        val dialog = dialogbuider.create()
+        dialog.show()
     }
 
     // --- App bar ---

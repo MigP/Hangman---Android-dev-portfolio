@@ -46,4 +46,5 @@
     <string name="abandon_round_sure">Voulez-vous vraiment abandonner cette partie de jeu ?</string>
     <string name="abandon_round">Abandonner</string>
     <string name="continue_">Continuer</string>
+    <string name="username_is_empty">Veuillez choisir un nom d\'utilisateur</string>
 </resources>
