@@ -6,14 +6,14 @@ public class User {
     private long id;
     private String username;
     private String password;
-    private Integer languageId;
-    private Integer avatarId;
-    private Integer highscoreId;
-    private Integer coins;
-    private Integer banknotes;
-    private Integer diamonds;
-    private Integer lives;
-    private Integer score;
+    private Integer languageId = 0;
+    private Integer avatarId = 0;
+    private Integer highscoreId = 0;
+    private Integer coins = 0;
+    private Integer banknotes = 0;
+    private Integer diamonds = 0;
+    private Integer lives = 5;
+    private Integer score = 0;
 
     public User() {
     }
@@ -21,27 +21,14 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.languageId = 0;
-        this.avatarId = 0;
-        this.highscoreId = 0;
-        this.coins = 0;
-        this.banknotes = 0;
-        this.diamonds = 0;
-        this.lives = 3;
-        this.score = 0;
     }
 
-    public User(String username, String password, Integer languageId, Integer avatarId, Integer highscoreId, Integer coins, Integer banknotes, Integer diamonds, Integer lives, Integer score) {
+    public User(String username, String password, Integer languageId, Integer avatarId, Integer highscoreId) {
         this.username = username;
         this.password = password;
         this.languageId = languageId;
         this.avatarId = avatarId;
         this.highscoreId = highscoreId;
-        this.coins = coins;
-        this.banknotes = banknotes;
-        this.diamonds = diamonds;
-        this.lives = lives;
-        this.score = score;
     }
 
     @NonNull

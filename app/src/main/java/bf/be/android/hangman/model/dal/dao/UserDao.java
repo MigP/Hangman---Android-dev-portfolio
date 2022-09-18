@@ -20,11 +20,6 @@ public class UserDao {
             "languageId INTEGER NOT NULL DEFAULT 0, " +
             "avatarId INTEGER NOT NULL DEFAULT 0, " +
             "highscoreId INTEGER NOT NULL DEFAULT 0, " +
-            "coins INTEGER NOT NULL DEFAULT 0, " +
-            "banknotes INTEGER NOT NULL DEFAULT 0, " +
-            "diamonds INTEGER NOT NULL DEFAULT 0, " +
-            "lives INTEGER NOT NULL DEFAULT 3, " +
-            "score INTEGER NOT NULL DEFAULT 0, " +
             "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
             "CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id), " +
             "CONSTRAINT fk_highscores FOREIGN KEY (highscoreId) REFERENCES highscores(id))";
@@ -55,11 +50,6 @@ public class UserDao {
         user.setLanguageId(cursor.getInt(cursor.getColumnIndex("languageId")));
         user.setAvatarId(cursor.getInt(cursor.getColumnIndex("avatarId")));
         user.setHighscoreId(cursor.getInt(cursor.getColumnIndex("highscoreId")));
-        user.setCoins(cursor.getInt(cursor.getColumnIndex("coins")));
-        user.setBanknotes(cursor.getInt(cursor.getColumnIndex("banknotes")));
-        user.setDiamonds(cursor.getInt(cursor.getColumnIndex("diamonds")));
-        user.setLives(cursor.getInt(cursor.getColumnIndex("lives")));
-        user.setScore(cursor.getInt(cursor.getColumnIndex("score")));
         return user;
     }
 
@@ -124,11 +114,6 @@ public class UserDao {
         cv.put("languageId", user.getLanguageId());
         cv.put("avatarId", user.getAvatarId());
         cv.put("highscoreId", user.getHighscoreId());
-        cv.put("coins", user.getCoins());
-        cv.put("banknotes", user.getBanknotes());
-        cv.put("diamonds", user.getDiamonds());
-        cv.put("lives", user.getLives());
-        cv.put("score", user.getScore());
 
         return this.database.insert("users", null, cv);
     }
@@ -140,11 +125,6 @@ public class UserDao {
         cv.put("languageId", user.getLanguageId());
         cv.put("avatarId", user.getAvatarId());
         cv.put("highscoreId", user.getHighscoreId());
-        cv.put("coins", user.getCoins());
-        cv.put("banknotes", user.getBanknotes());
-        cv.put("diamonds", user.getDiamonds());
-        cv.put("lives", user.getLives());
-        cv.put("score", user.getScore());
 
         return this.database.update("users", cv, "id = ?", new String[]{String.valueOf(id)});
     }

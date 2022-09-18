@@ -445,7 +445,7 @@ class GameActivity : AppCompatActivity() {
         viewModel.activeUser?.value!!.diamonds = 0
         viewModel.activeUser?.value!!.banknotes = 0
         viewModel.activeUser?.value!!.coins = 0
-        viewModel.activeUser?.value!!.lives = 3
+        viewModel.activeUser?.value!!.lives = 5
         viewModel.activeUser?.value!!.score = 0
 
         (timer10 as CountDownTimer).cancel()
@@ -1362,11 +1362,53 @@ class GameActivity : AppCompatActivity() {
         hideKeyboard()
         pickEndAnimation("lose")
 
-        //TODO Check if user loses the game (lives = 0) and implement what follows
+        if (viewModel.activeUser?.value!!.lives == 0) {
+            loseGameRound()
+        } else {
+            // Fail word sound
+            val soundFile = R.raw.fail_word
+            playSound(soundFile)
+        }
+    }
 
-        // Fail word sound
-        val soundFile = R.raw.fail_word
+    // Lose game round
+    private fun loseGameRound() {
+        viewModel.activeGameRound?.value!!.letterMisses = 0
+        viewModel.activeGameRound?.value!!.guessedLetters = 0
+        viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
+        viewModel.activeGameRound?.value!!.wordsGuessedConsecutively = 0
+        activeRound = false
+        resetKeyboard()
+        viewModel.activeUser?.value!!.diamonds = 0
+        viewModel.activeUser?.value!!.banknotes = 0
+        viewModel.activeUser?.value!!.coins = 0
+        viewModel.activeUser?.value!!.lives = 5
+
+        (timer10 as CountDownTimer).cancel()
+        binding.potentialPrize.alpha = 0F
+
+        //TODO uncomment these two
+        //updateAssetBar()
+        hideKeyboard()
+        //hideAssetBar()
+        hideHintBtn()
+        hideExchangeBtn()
+        hideAbandonBtn()
+        hideDisplayedWord()
+        hideAllAnimations()
+        hideAvatarGraphics()
+        binding.newRoundBtn.setText(R.string.new_round)
+        showNewRoundBtn()
+
+        // Lose game round sound
+        val soundFile = R.raw.fail_round
         playSound(soundFile)
+
+        //TODO Create alert telling the score
+        //TODO Write score to user db if it exceeds current user highscore
+        //TODO Write score to highscores db if it exceeds lowest recorded highscore
+
+        viewModel.activeUser?.value!!.score = 0
     }
 
     // Randomly picks an end animation and displays it
@@ -1499,7 +1541,7 @@ class GameActivity : AppCompatActivity() {
                 binding.potentialPrize.alpha = 1F
                 val prizeFadeOut: Animation = AnimationUtils.loadAnimation(this@GameActivity, R.anim.fadeout1s)
                 prizeFadeOut.startOffset = 0
-                prizeFadeOut.fillAfter = true
+                prizeFadeOut.fillAfter = false
                 binding.potentialPrize.startAnimation(prizeFadeOut)
 
                 binding.potentialPrizeAmount.setText((binding.potentialPrizeAmount.text.toString().toInt() - 1).toString())

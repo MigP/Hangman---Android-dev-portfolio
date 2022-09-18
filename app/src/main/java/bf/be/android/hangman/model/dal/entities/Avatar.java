@@ -60,27 +60,21 @@ public class Avatar {
         this.head_src = head_src;
         this.head_left = head_left;
         this.head_bottom = head_bottom;
-
         this.torso_src = torso_src;
         this.torso_left = torso_left;
         this.torso_bottom = torso_bottom;
-
         this.left_arm_src = left_arm_src;
         this.left_arm_left = left_arm_left;
         this.left_arm_bottom = left_arm_bottom;
-
         this.right_arm_src = right_arm_src;
         this.right_arm_left = right_arm_left;
         this.right_arm_bottom = right_arm_bottom;
-
         this.left_leg_src = left_leg_src;
         this.left_leg_left = left_leg_left;
         this.left_leg_bottom = left_leg_bottom;
-
         this.right_leg_src = right_leg_src;
         this.right_leg_left = right_leg_left;
         this.right_leg_bottom = right_leg_bottom;
-
         this.eyesId = eyesId;
         this.mouthId = mouthId;
         this.eyebrowsId = eyebrowsId;
