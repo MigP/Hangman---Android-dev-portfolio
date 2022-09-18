@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="5"
+                android:text="50"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 
@@ -113,7 +113,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="5"
+                android:text="1"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 

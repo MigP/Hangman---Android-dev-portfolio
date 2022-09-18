@@ -9,8 +9,13 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -39,6 +44,7 @@ class GameActivity : AppCompatActivity() {
     companion object {
         var appBarMenu: Menu? = null
         var activeRound = false
+        var timer10: CountDownTimer? = null
     }
 
     //Create a ViewModel
@@ -268,7 +274,7 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        if (viewModel.activeUser?.value!!.coins < 5 || !activeRound) {
+        if (viewModel.activeUser?.value!!.coins < 50 || !activeRound) {
             buyLetterBtn.isEnabled = false
             buyLetterBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -282,7 +288,7 @@ class GameActivity : AppCompatActivity() {
             buyDefinitionBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.diamonds < 5 || !activeRound) {
+        if (viewModel.activeUser?.value!!.diamonds < 1 || !activeRound) {
             buyBodyPartBtn.isEnabled = false
             buyBodyPartBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -346,14 +352,14 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        if (viewModel.activeUser?.value!!.coins < 50) {
+        if (viewModel.activeUser?.value!!.coins < 25) {
             buyBanknote.isEnabled = false
             buyBanknote.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyBanknote.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.banknotes < 50) {
+        if (viewModel.activeUser?.value!!.banknotes < 10) {
             buyDiamond.isEnabled = false
             buyDiamond.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -368,8 +374,13 @@ class GameActivity : AppCompatActivity() {
                 val soundFile = R.raw.click_button
                 playSound(soundFile)
             }
-            viewModel.activeUser?.value!!.coins -= 50
+            viewModel.activeUser?.value!!.coins -= 25
             viewModel.activeUser?.value!!.banknotes += 1
+
+            // Banknotes sound
+            val soundFile = R.raw.banknotes
+            playSound(soundFile)
+
             updateAssetBar()
             dialog.cancel()
         }
@@ -379,8 +390,13 @@ class GameActivity : AppCompatActivity() {
                 val soundFile = R.raw.click_button
                 playSound(soundFile)
             }
-            viewModel.activeUser?.value!!.banknotes -= 50
+            viewModel.activeUser?.value!!.banknotes -= 10
             viewModel.activeUser?.value!!.diamonds += 1
+
+            // Diamonds sound
+            val soundFile = R.raw.diamonds
+            playSound(soundFile)
+
             updateAssetBar()
             dialog.cancel()
         }
@@ -421,6 +437,9 @@ class GameActivity : AppCompatActivity() {
     // Abandon round
     private fun abandonGameRound() {
         viewModel.activeGameRound?.value!!.letterMisses = 0
+        viewModel.activeGameRound?.value!!.guessedLetters = 0
+        viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
+        viewModel.activeGameRound?.value!!.wordsGuessedConsecutively = 0
         activeRound = false
         resetKeyboard()
         viewModel.activeUser?.value!!.diamonds = 0
@@ -428,6 +447,9 @@ class GameActivity : AppCompatActivity() {
         viewModel.activeUser?.value!!.coins = 0
         viewModel.activeUser?.value!!.lives = 3
         viewModel.activeUser?.value!!.score = 0
+
+        (timer10 as CountDownTimer).cancel()
+        binding.potentialPrize.alpha = 0F
 
         updateAssetBar()
         hideKeyboard()
@@ -856,12 +878,13 @@ class GameActivity : AppCompatActivity() {
     // --- App bar ---
     // App bar menu and icons
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Create status bar menu with sound icon and the flag corresponding on the selected language
-
+        // Create status bar menu with sound, highscores, and flag icons corresponding on the selected language
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.sound_options, menu)
 
         appBarMenu = menu
+        appBarMenu?.getItem(1)?.isVisible = true
+        appBarMenu?.getItem(1)?.isEnabled = true
 
         // Change sound menu icon according to the settings in preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -874,8 +897,25 @@ class GameActivity : AppCompatActivity() {
         return true
     }
 
+    // Handles highscores icon click listener
+    fun onHighscoresItemClick(item: MenuItem) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+        // Button click sound
+        if (prefs.getString("sound", "").equals("on")) {
+            val buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
+            buttonClickSound.start()
+            buttonClickSound.setOnCompletionListener { buttonClickSound ->
+                buttonClickSound.stop()
+                buttonClickSound?.release()
+            }
+        }
+
+        //TODO Show highscores
+    }
+
     // Handles sound icon click listener
-    fun onItemClick(item: MenuItem) {
+    fun onSoundItemClick(item: MenuItem) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Button click sound
@@ -913,9 +953,37 @@ class GameActivity : AppCompatActivity() {
     // --- Keyboard (game letterboard) ---
     // Handles the letters pressed on the keyboard
     private fun keyboardPressed(pressed: String, buttonPressed: Button) {
+        var prizeCoins = 1
+
         if (viewModel.updateDisplayedWord(pressed)) { // Guessed letter
             viewModel._activeGameRound?.value!!.setLetterboardState(pressed, 1)
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.guessed_letter)
+
+            // Updates number of consecutive guessed letters
+            viewModel.activeGameRound?.value!!.lettersGuessedConsecutively++
+
+            if (viewModel.activeGameRound?.value!!.lettersGuessedConsecutively == 5) { // Adds bonus coins for guessing 5 letters consecutively
+                prizeCoins = 5
+            } else if (viewModel.activeGameRound?.value!!.lettersGuessedConsecutively == 10) { // Adds bonus coins for guessing 10 letters consecutively and resets counter
+                prizeCoins = 10
+
+                // Resets number of consecutive guessed letters
+                viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
+            }
+
+            // Adds prize to the assets bar
+            if (viewModel.activeGameRound?.value!!.potentialPrize > 0) {
+                viewModel.activeUser?.value!!.coins += viewModel.activeGameRound?.value!!.potentialPrize + 1 + prizeCoins
+
+                // Coins sound
+                val soundFile = R.raw.coins
+                playSound(soundFile)
+            }
+
+            // Adds score to the assets bar
+            viewModel.activeUser?.value!!.score += prizeCoins
+
+            updateAssetBar()
 
             //TODO Implement what is gained by guessing a letter (coins, score)
             //TODO Implement countdown system impacting potential prize coins & avatar reactions
@@ -927,6 +995,9 @@ class GameActivity : AppCompatActivity() {
         } else { // Missed letter
             viewModel._activeGameRound?.value!!.setLetterboardState(pressed, -1)
             viewModel.activeGameRound?.value!!.letterMisses++
+            viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
+            viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults = 0
+
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.missed_letter)
 
             // Button click sound
@@ -936,15 +1007,17 @@ class GameActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 updateAvatar(viewModel.activeUser!!.value!!.avatarId)
             }
-
-            if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
-                wordFailed()
-            }
         }
         buttonPressed.isEnabled = false
 
+        prizeFadeOutCountdown()
+
         if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
             wordGuessed()
+        }
+
+        if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
+            wordFailed()
         }
     }
 
@@ -1169,7 +1242,15 @@ class GameActivity : AppCompatActivity() {
     private fun startNewRound() {
         if (!activeRound) {
             activeRound = true
+
+            viewModel.activeGameRound?.value!!.letterMisses = 0
+            viewModel.activeGameRound?.value!!.guessedLetters = 0
+            viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
+            viewModel.activeGameRound?.value!!.wordsGuessedConsecutively = 0
+            viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults = 0
+
             resetKeyboard()
+            prizeFadeOutCountdown()
 
             // New word sound
             val soundFile = R.raw.new_word
@@ -1188,6 +1269,62 @@ class GameActivity : AppCompatActivity() {
 
     // Guessed the word
     private fun wordGuessed() {
+        (timer10 as CountDownTimer).cancel()
+        binding.potentialPrize.alpha = 0F
+
+        // Resets number of consecutive guessed letters
+        viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
+
+        // Adds bonus coins if no letters missed on this word
+        if (viewModel.activeGameRound?.value!!.letterMisses == 0) {
+            viewModel.activeUser?.value!!.coins += 50
+
+            // Coins sound
+            val soundFile = R.raw.coins
+            playSound(soundFile)
+        }
+
+        // Adds bonus banknotes if consecutive words with no faults
+        if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults == 10) {
+            viewModel.activeUser?.value!!.banknotes += 10
+
+            // Banknotes sound
+            val soundFile = R.raw.banknotes
+            playSound(soundFile)
+        } else if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults == 5) {
+            viewModel.activeUser?.value!!.banknotes += 5
+
+            // Banknotes sound
+            val soundFile = R.raw.banknotes
+            playSound(soundFile)
+        } else if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults > 0) {
+            viewModel.activeUser?.value!!.banknotes += 1
+
+            // Banknotes sound
+            val soundFile = R.raw.banknotes
+            playSound(soundFile)
+        }
+
+        // Adds bonus diamonds if consecutive words with no faults
+        if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults == 10) {
+            viewModel.activeUser?.value!!.diamonds += 1
+
+            // Diamonds sound
+            val soundFile = R.raw.diamonds
+            playSound(soundFile)
+        }
+
+        // Adds bonus score if consecutive words with no faults
+        if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults == 10) {
+            viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults = 0
+            viewModel.activeUser?.value!!.score += 25
+        } else if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults == 5) {
+            viewModel.activeUser?.value!!.score += 50
+        } else if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults > 0) {
+            viewModel.activeUser?.value!!.score += 100
+        }
+        updateAssetBar()
+
         viewModel.activeGameRound?.value!!.letterMisses = 0
         activeRound = false
         hideKeyboard()
@@ -1205,6 +1342,14 @@ class GameActivity : AppCompatActivity() {
 
     // Failed the word
     private fun wordFailed() {
+        viewModel.activeUser?.value!!.lives--
+        viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults = 0
+
+        updateAssetBar()
+
+        timer10?.cancel()
+        binding.potentialPrize.alpha = 0F
+
         val tempWord = viewModel.word.value
         tempWord!!.displayedWord = tempWord.hiddenWord
         viewModel._word.value = tempWord
@@ -1334,5 +1479,40 @@ class GameActivity : AppCompatActivity() {
     private fun hideAllAnimations() {
         binding.endAnimLeft.isVisible = false
         binding.endAnimRight.isVisible = false
+    }
+
+    // --- Animations ---
+    // Potential prize countdown animation
+    private fun prizeFadeOutCountdown() {
+        // Cancels the timer if it already exists and is running
+        if (timer10 != null) {
+            (timer10 as CountDownTimer).cancel()
+        }
+
+        // Sets the initial values
+        binding.potentialPrizeAmount.setText("11")
+        viewModel.activeGameRound?.value!!.potentialPrize = 10
+
+        // Defines the timer
+        timer10 = object: CountDownTimer(11000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding.potentialPrize.alpha = 1F
+                val prizeFadeOut: Animation = AnimationUtils.loadAnimation(this@GameActivity, R.anim.fadeout1s)
+                prizeFadeOut.startOffset = 0
+                prizeFadeOut.fillAfter = true
+                binding.potentialPrize.startAnimation(prizeFadeOut)
+
+                binding.potentialPrizeAmount.setText((binding.potentialPrizeAmount.text.toString().toInt() - 1).toString())
+                viewModel.activeGameRound?.value!!.potentialPrize --
+            }
+
+            override fun onFinish() {
+                //TODO Implement what happens on finish
+                binding.potentialPrize.alpha = 1F
+            }
+        }
+
+        // Starts the timer
+        (timer10 as CountDownTimer).start()
     }
 }

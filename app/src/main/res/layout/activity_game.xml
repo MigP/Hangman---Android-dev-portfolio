@@ -56,6 +56,33 @@
             app:layout_constraintTop_toTopOf="@id/grass"
             app:srcCompat="@drawable/gallows_bottom" />
 
+        <LinearLayout
+            android:id="@+id/potentialPrize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:alpha="0"
+            app:layout_constraintTop_toBottomOf="@id/gameAssetsBar"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/potentialPrizeAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/aldrich"
+                android:text="11"
+                android:textSize="70sp" />
+
+            <ImageView
+                android:id="@+id/prizeCurrency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/coin64" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/newRoundBtn"
             android:layout_width="wrap_content"
@@ -224,7 +251,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="500"
+                    android:text="50000"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold" />

@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         titleShrink.start()
 
         // Intro image fade out
-        val introFadeOut: Animation = AnimationUtils.loadAnimation(this, R.anim.fadeout1s)
+        val introFadeOut: Animation = AnimationUtils.loadAnimation(this, R.anim.partial_fadeout1s)
         introFadeOut.startOffset = 800
         introFadeOut.fillAfter = true
         binding.introGallowsTop.startAnimation(introFadeOut)
@@ -139,7 +139,13 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    fun onItemClick(item: MenuItem) {
+    // Handles highscores icon click listener
+    fun onHighscoresItemClick(item: MenuItem) {
+
+    }
+
+    // Handles sound icon click listener
+    fun onSoundItemClick(item: MenuItem) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Button click sound

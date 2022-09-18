@@ -9,9 +9,17 @@
         android:title="On"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/highscores"
+        android:enabled="false"
+        android:visible="false"
+        android:icon="@drawable/highscore"
+        android:onClick="onHighscoresItemClick"
+        android:title="On"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/soundOptions"
         android:icon="@drawable/sound_on"
-        android:onClick="onItemClick"
+        android:onClick="onSoundItemClick"
         android:title="On"
         app:showAsAction="ifRoom" />
 </menu>

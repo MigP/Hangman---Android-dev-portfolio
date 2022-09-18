@@ -1,6 +1,9 @@
 package bf.be.android.hangman.model
 
 import android.os.CountDownTimer
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import bf.be.android.hangman.R
 
 class GameRound {
 
@@ -8,25 +11,14 @@ class GameRound {
     var displayedAvatar = ArrayList<String>()
     var letterMisses = 0
     var guessedLetters = 0
-
-    companion object {
-        var timeLeft = 0L
-        var timer5: CountDownTimer? = null
-    }
+    var lettersGuessedConsecutively = 0
+    var wordsGuessedConsecutively = 0
+    var wordsGuessedConsecutivelyNoFaults = 0
+    var potentialPrize = 10
 
     init {
         initialiseLetterboard()
         initialiseDisplayedAvatar()
-
-        timer5 = object: CountDownTimer(5000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timeLeft = millisUntilFinished / 1000
-            }
-
-            override fun onFinish() {
-                // Do something
-            }
-        }
     }
 
     override fun toString(): String {
@@ -35,6 +27,9 @@ class GameRound {
                 ", displayedAvatar='" + displayedAvatar + '\'' +
                 ", letterMisses='" + letterMisses + '\'' +
                 ", guessedLetters='" + guessedLetters + '\'' +
+                ", lettersGuessedConsecutively='" + lettersGuessedConsecutively + '\'' +
+                ", wordsGuessedConsecutively='" + wordsGuessedConsecutively + '\'' +
+                ", potentialPrize='" + potentialPrize + '\'' +
                 '}'
     }
 
@@ -83,11 +78,5 @@ class GameRound {
         this.displayedAvatar.add("right arm")
         this.displayedAvatar.add("left leg")
         this.displayedAvatar.add("right leg")
-    }
-
-    private fun startTimer5() {
-        //TODO Implement timer system link to avatar and game
-        timer5?.cancel()
-        timer5?.start()
     }
 }
