@@ -5,8 +5,6 @@ import androidx.annotation.NonNull;
 public class Extra {
     private long id;
     private String src;
-    private int left;
-    private int bottom;
 
     public Extra() {
     }
@@ -21,8 +19,6 @@ public class Extra {
         return "Extras{" +
                 "id='" + id + '\'' +
                 ", src='" + src + '\'' +
-                ", left='" + left + '\'' +
-                ", bottom='" + bottom + '\'' +
                 '}';
     }
 
@@ -42,15 +38,6 @@ public class Extra {
 
     public Extra setSrc(String src) {
         this.src = src;
-        return this;
-    }
-
-    public int getLeft() {
-        return left;
-    }
-
-    public Extra setLeft(int left) {
-        this.left = left;
         return this;
     }
 }

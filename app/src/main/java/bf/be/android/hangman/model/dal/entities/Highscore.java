@@ -6,13 +6,13 @@ public class Highscore {
     private long id;
     private int score;
     private String date;
-    private Integer languageId;
-    private Integer userId;
+    private int languageId;
+    private int userId;
 
     public Highscore() {
     }
 
-    public Highscore(int score, String date, Integer languageId, Integer userId) {
+    public Highscore(int score, String date, int languageId, int userId) {
         this.score = score;
         this.date = date;
         this.languageId = languageId;
@@ -58,20 +58,20 @@ public class Highscore {
         return this;
     }
 
-    public Integer getLanguageId() {
+    public int getLanguageId() {
         return languageId;
     }
 
-    public Highscore setLanguageId(Integer languageId) {
+    public Highscore setLanguageId(int languageId) {
         this.languageId = languageId;
         return this;
     }
 
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public Highscore setUserId(Integer userId) {
+    public Highscore setUserId(int userId) {
         this.userId = userId;
         return this;
     }

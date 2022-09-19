@@ -6,14 +6,14 @@ public class User {
     private long id;
     private String username;
     private String password;
-    private Integer languageId = 0;
-    private Integer avatarId = 0;
-    private Integer highscoreId = 0;
-    private Integer coins = 0;
-    private Integer banknotes = 0;
-    private Integer diamonds = 0;
-    private Integer lives = 5;
-    private Integer score = 0;
+    private int languageId = 0;
+    private int avatarId = 0;
+    private int highscoreId = 0;
+    private int coins = 0;
+    private int banknotes = 0;
+    private int diamonds = 0;
+    private int lives = 5;
+    private int score = 0;
 
     public User() {
     }
@@ -23,7 +23,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, Integer languageId, Integer avatarId, Integer highscoreId) {
+    public User(String username, String password, int languageId, int avatarId, int highscoreId) {
         this.username = username;
         this.password = password;
         this.languageId = languageId;
@@ -76,74 +76,74 @@ public class User {
         return this;
     }
 
-    public Integer getLanguageId() {
+    public int getLanguageId() {
         return languageId;
     }
 
-    public User setLanguageId(Integer languageId) {
+    public User setLanguageId(int languageId) {
         this.languageId = languageId;
         return this;
     }
 
-    public Integer getAvatarId() {
+    public int getAvatarId() {
         return avatarId;
     }
 
-    public User setAvatarId(Integer avatarId) {
+    public User setAvatarId(int avatarId) {
         this.avatarId = avatarId;
         return this;
     }
 
-    public Integer getHighscoreId() {
+    public int getHighscoreId() {
         return highscoreId;
     }
 
-    public User setHighscoreId(Integer highscoreId) {
+    public User setHighscoreId(int highscoreId) {
         this.highscoreId = highscoreId;
         return this;
     }
 
-    public Integer getCoins() {
+    public int getCoins() {
         return coins;
     }
 
-    public User setCoins(Integer coins) {
+    public User setCoins(int coins) {
         this.coins = coins;
         return this;
     }
 
-    public Integer getBanknotes() {
+    public int getBanknotes() {
         return banknotes;
     }
 
-    public User setBanknotes(Integer banknotes) {
+    public User setBanknotes(int banknotes) {
         this.banknotes = banknotes;
         return this;
     }
 
-    public Integer getDiamonds() {
+    public int getDiamonds() {
         return diamonds;
     }
 
-    public User setDiamonds(Integer diamonds) {
+    public User setDiamonds(int diamonds) {
         this.diamonds = diamonds;
         return this;
     }
 
-    public Integer getLives() {
+    public int getLives() {
         return lives;
     }
 
-    public User setLives(Integer lives) {
+    public User setLives(int lives) {
         this.lives = lives;
         return this;
     }
 
-    public Integer getScore() {
+    public int getScore() {
         return score;
     }
 
-    public User setScore(Integer score) {
+    public User setScore(int score) {
         this.score = score;
         return this;
     }
