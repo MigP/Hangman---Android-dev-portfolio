@@ -47,4 +47,8 @@
     <string name="abandon_round">Abandon</string>
     <string name="continue_">Continue</string>
     <string name="username_is_empty">Please choose a user name</string>
+    <string name="well_done">Well done!</string>
+    <string name="your_final_score_is">Your final score is</string>
+    <string name="personal_highscore">This is your highest score</string>
+    <string name="made_the_highscores">You made it to the leaderboard!</string>
 </resources>

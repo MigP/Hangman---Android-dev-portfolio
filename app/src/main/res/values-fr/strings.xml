@@ -47,4 +47,8 @@
     <string name="abandon_round">Abandonner</string>
     <string name="continue_">Continuer</string>
     <string name="username_is_empty">Veuillez choisir un nom d\'utilisateur</string>
+    <string name="well_done">Bien joué !</string>
+    <string name="your_final_score_is">Votre score final est</string>
+    <string name="personal_highscore">Ceci est votre meilleur score</string>
+    <string name="made_the_highscores">Vous avez réussi a vous classer dans le tableau de classements !</string>
 </resources>

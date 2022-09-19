@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/endGameTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/well_done"
+        android:textColor="@color/menu_text_colour"
+        android:layout_marginVertical="50dp"
+        android:gravity="center"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/endGameSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/your_final_score_is"
+        android:textColor="@color/menu_text_colour"
+        android:textSize="25sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="67dp" />
+
+    <LinearLayout
+        android:id="@+id/endGameScoreLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="148dp">
+
+        <TextView
+            android:id="@+id/endGameScore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAlignment="textEnd"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="230"
+            android:textColor="@color/menu_text_colour"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="107dp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/score" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/endGamePersonalHighscore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40"
+        android:text="@string/personal_highscore"
+        android:textColor="@color/menu_text_colour"
+        android:textSize="25sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="107dp" />
+
+    <TextView
+        android:id="@+id/endGameHighscoreMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/made_the_highscores"
+        android:textColor="@color/menu_text_colour"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="107dp" />
+
+    <ImageView
+        android:id="@+id/endGameHighscoresIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/highscore" />
+</LinearLayout>
