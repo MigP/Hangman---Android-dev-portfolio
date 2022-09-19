@@ -50,5 +50,5 @@
     <string name="well_done">Bien joué !</string>
     <string name="your_final_score_is">Votre score final est</string>
     <string name="personal_highscore">Ceci est votre meilleur score</string>
-    <string name="made_the_highscores">Vous avez réussi a vous classer dans le tableau de classements !</string>
+    <string name="made_the_highscores">Vous avez réussi a entrer dans le tableau de classements !</string>
 </resources>
