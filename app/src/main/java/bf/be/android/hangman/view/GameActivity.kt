@@ -348,6 +348,7 @@ class GameActivity : AppCompatActivity() {
 
         val buyBanknote = exchangeMenuView.findViewById(R.id.exchangeBuyBanknoteBtn) as Button
         val buyDiamond = exchangeMenuView.findViewById(R.id.exchangeBuyDiamondBtn) as Button
+        val buyLife = exchangeMenuView.findViewById(R.id.exchangeBuyLifeBtn) as Button
 
         builder.setView(exchangeMenuView)
         val dialog = builder.create()
@@ -370,6 +371,13 @@ class GameActivity : AppCompatActivity() {
             buyDiamond.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyDiamond.isActivated = true
+        }
+
+        if (viewModel.activeUser?.value!!.banknotes < 3) {
+            buyLife.isEnabled = false
+            buyLife.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
+        } else {
+            buyLife.isActivated = true
         }
 
         dialog.window?.setLayout(width, height)
@@ -398,6 +406,20 @@ class GameActivity : AppCompatActivity() {
 
             // Diamonds sound
             val soundFile2 = R.raw.diamonds
+            playSound(soundFile2)
+
+            updateAssetBar()
+            dialog.cancel()
+        }
+        buyLife.setOnClickListener {
+            // Button click sound
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
+            viewModel.activeUser?.value!!.diamonds -= 3
+            viewModel.activeUser?.value!!.lives += 1
+
+            // Lives sound
+            val soundFile2 = R.raw.buy_lives
             playSound(soundFile2)
 
             updateAssetBar()
@@ -779,29 +801,30 @@ class GameActivity : AppCompatActivity() {
 
     // Displays window containing the game rules
     private fun displayHelp() {
-        val dialogbuider = AlertDialog.Builder(this)
+        val layoutInflater = LayoutInflater.from(this)
+        val gameHelpView: View = layoutInflater.inflate(R.layout.game_help_layout, null) //TODO Fill out this layout
+        val builder = AlertDialog.Builder(this)
 
-        val textView = TextView(this)
-        textView.setText(R.string.game_help)
-        textView.setPadding(20, 30, 20, 30)
-        textView.textSize = 25f
-        textView.setTextColor(ContextCompat.getColor(this, R.color.menu_text_colour))
+        val gameHelpBtn = gameHelpView.findViewById(R.id.gameHelpBtn) as Button
 
-        dialogbuider.setCustomTitle(textView)
-        dialogbuider.setView(R.layout.game_help_layout)
+        builder.setView(gameHelpView)
+        val dialog = builder.create()
 
-        dialogbuider.setNegativeButton("OK") { dialog, _ ->
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
+        dialog.show()
+
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.90).toInt()
+
+        dialog.window?.setLayout(width, height)
+
+        gameHelpBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
             playSound(soundFile)
+
             dialog.cancel()
         }
-
-        //TODO create the layout for this alert dialog
-        //TODO Implement this alert dialog
-
-        val dialog = dialogbuider.create()
-        dialog.show()
     }
 
     // Displays window where the user can delete their account
@@ -1074,7 +1097,11 @@ class GameActivity : AppCompatActivity() {
             playSound(soundFile)
 
             lifecycleScope.launch {
-                updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+                if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
+                    displayDeadAvatar()
+                } else {
+                    updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+                }
             }
         }
         buttonPressed.isEnabled = false
@@ -1273,6 +1300,42 @@ class GameActivity : AppCompatActivity() {
         return resources.getIdentifier(name, "id", packageName)
     }
 
+    // Display dead avatar
+    private fun displayDeadAvatar() {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 6 // Sad light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 5 // Sad dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        lifecycleScope.launch {
+            updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+        }
+    }
+
+    // Display happy avatar
+    private fun displayHappyAvatar() {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 7 // Smiling light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 3 // Smiling dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        lifecycleScope.launch {
+            updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+        }
+    }
+
     // --- Game round ---
     // Resets the view model game round object
     private fun resetGameRound() {
@@ -1286,6 +1349,7 @@ class GameActivity : AppCompatActivity() {
         hideNewRoundBtn()
         hideAllAnimations()
         hideDisplayedWord()
+        displayHappyAvatar()
         hideAvatarGraphics()
 
         binding.waitingPlaceholder.isVisible = true
@@ -1424,14 +1488,13 @@ class GameActivity : AppCompatActivity() {
         viewModel._word.value = tempWord
 
         binding.newRoundBtn.setText(R.string.continue_)
-        viewModel.activeGameRound?.value!!.letterMisses = 0
         activeRound = false
         showNewRoundBtn()
         resetKeyboard()
         hideKeyboard()
         pickEndAnimation("lose")
-
         showEndDefinitions()
+        viewModel.activeGameRound?.value!!.letterMisses = 0
 
         if (viewModel.activeUser?.value!!.lives == 0) {
             // Lose game round sound
