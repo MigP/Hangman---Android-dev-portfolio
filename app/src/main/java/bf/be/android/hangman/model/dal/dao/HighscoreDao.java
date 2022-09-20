@@ -19,8 +19,10 @@ public class HighscoreDao {
             "date VARCHAR(25) NOT NULL, " +
             "languageId INTEGER NOT NULL, " +
             "userId INTEGER NOT NULL, " +
+            "avatarId INTEGER NOT NULL, " +
             "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
-            "CONSTRAINT fk_users FOREIGN KEY (userId) REFERENCES users(id))";
+            "CONSTRAINT fk_users FOREIGN KEY (userId) REFERENCES users(id), " +
+            "CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id))";
 
     public static final String UPGRADE_QUERY = "DROP TABLE highscores;";
 
@@ -47,11 +49,12 @@ public class HighscoreDao {
         highscore.setDate(cursor.getString(cursor.getColumnIndex("date")));
         highscore.setLanguageId(cursor.getInt(cursor.getColumnIndex("languageId")));
         highscore.setUserId(cursor.getInt(cursor.getColumnIndex("userId")));
+        highscore.setAvatarId(cursor.getInt(cursor.getColumnIndex("avatarId")));
         return highscore;
     }
 
-    public List<Highscore> findAll() {
-        List<Highscore> listOfHighscores = new ArrayList<>();
+    public ArrayList<Highscore> findAll() {
+        ArrayList<Highscore> listOfHighscores = new ArrayList<>();
         Cursor cursor = this.database.query("highscores", null, null, null, null, null, null);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -84,6 +87,7 @@ public class HighscoreDao {
         cv.put("date", highscore.getDate());
         cv.put("languageId", highscore.getLanguageId());
         cv.put("userId", highscore.getUserId());
+        cv.put("avatarId", highscore.getAvatarId());
 
         return this.database.insert("highscores", null, cv);
     }
@@ -94,6 +98,7 @@ public class HighscoreDao {
         cv.put("date", highscore.getDate());
         cv.put("languageId", highscore.getLanguageId());
         cv.put("userId", highscore.getUserId());
+        cv.put("avatarId", highscore.getAvatarId());
 
         return this.database.update("highscores", cv, "id = ?", new String[]{String.valueOf(id)});
     }

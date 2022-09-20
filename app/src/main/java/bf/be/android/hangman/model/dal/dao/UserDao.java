@@ -17,12 +17,11 @@ public class UserDao {
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "username VARCHAR(25) NOT NULL UNIQUE, " +
             "password VARCHAR(25) NOT NULL, " +
+            "highscore INTEGER NOT NULL DEFAULT 0, " +
             "languageId INTEGER NOT NULL DEFAULT 0, " +
             "avatarId INTEGER NOT NULL DEFAULT 0, " +
-            "highscoreId INTEGER NOT NULL DEFAULT 0, " +
             "CONSTRAINT fk_languages FOREIGN KEY (languageId) REFERENCES languages(id), " +
-            "CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id), " +
-            "CONSTRAINT fk_highscores FOREIGN KEY (highscoreId) REFERENCES highscores(id))";
+            "CONSTRAINT fk_avatars FOREIGN KEY (avatarId) REFERENCES avatars(id))";
 
     public static final String UPGRADE_QUERY = "DROP TABLE users;";
 
@@ -47,9 +46,9 @@ public class UserDao {
         user.setId(cursor.getLong(cursor.getColumnIndex("id")));
         user.setUsername(cursor.getString(cursor.getColumnIndex("username")));
         user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
+        user.setHighscore(cursor.getInt(cursor.getColumnIndex("highscore")));
         user.setLanguageId(cursor.getInt(cursor.getColumnIndex("languageId")));
         user.setAvatarId(cursor.getInt(cursor.getColumnIndex("avatarId")));
-        user.setHighscoreId(cursor.getInt(cursor.getColumnIndex("highscoreId")));
         return user;
     }
 
@@ -111,9 +110,9 @@ public class UserDao {
         ContentValues cv = new ContentValues();
         cv.put("username", user.getUsername());
         cv.put("password", user.getPassword());
+        cv.put("highscore", user.getHighscore());
         cv.put("languageId", user.getLanguageId());
         cv.put("avatarId", user.getAvatarId());
-        cv.put("highscoreId", user.getHighscoreId());
 
         return this.database.insert("users", null, cv);
     }
@@ -122,9 +121,9 @@ public class UserDao {
         ContentValues cv = new ContentValues();
         cv.put("username", user.getUsername());
         cv.put("password", user.getPassword());
+        cv.put("highscore", user.getHighscore());
         cv.put("languageId", user.getLanguageId());
         cv.put("avatarId", user.getAvatarId());
-        cv.put("highscoreId", user.getHighscoreId());
 
         return this.database.update("users", cv, "id = ?", new String[]{String.valueOf(id)});
     }

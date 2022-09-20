@@ -6,6 +6,7 @@
         android:enabled="false"
         android:visible="false"
         android:icon="@drawable/uk"
+        android:onClick="onLanguageItemClick"
         android:title="On"
         app:showAsAction="ifRoom" />
     <item

@@ -8,15 +8,17 @@ public class Highscore {
     private String date;
     private int languageId;
     private int userId;
+    private int avatarId;
 
     public Highscore() {
     }
 
-    public Highscore(int score, String date, int languageId, int userId) {
+    public Highscore(int score, String date, int languageId, int userId, int avatarId) {
         this.score = score;
         this.date = date;
         this.languageId = languageId;
         this.userId = userId;
+        this.avatarId = avatarId;
     }
 
     @NonNull
@@ -28,6 +30,7 @@ public class Highscore {
                 ", date='" + date + '\'' +
                 ", languageId='" + languageId + '\'' +
                 ", userId='" + userId + '\'' +
+                ", avatarId='" + avatarId + '\'' +
                 '}';
     }
 
@@ -73,6 +76,15 @@ public class Highscore {
 
     public Highscore setUserId(int userId) {
         this.userId = userId;
+        return this;
+    }
+
+    public int getAvatarId() {
+        return avatarId;
+    }
+
+    public Highscore setAvatarId(int avatarId) {
+        this.avatarId = avatarId;
         return this;
     }
 }

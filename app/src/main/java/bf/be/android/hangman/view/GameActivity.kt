@@ -10,8 +10,6 @@ import android.graphics.drawable.LayerDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
 import android.preference.PreferenceManager
 import android.view.*
 import android.view.animation.Animation
@@ -26,15 +24,23 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityGameBinding
 import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.Word
+import bf.be.android.hangman.model.adapters.DefinitionsAdapter
+import bf.be.android.hangman.model.adapters.HighscoresAdapter
 import bf.be.android.hangman.model.dal.entities.Avatar
+import bf.be.android.hangman.model.dal.entities.Highscore
 import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GameActivity : AppCompatActivity() {
@@ -368,34 +374,31 @@ class GameActivity : AppCompatActivity() {
 
         dialog.window?.setLayout(width, height)
 
-        buyBanknote.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+        buyBanknote.setOnClickListener {
+            // Button click sound
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
+
             viewModel.activeUser?.value!!.coins -= 25
             viewModel.activeUser?.value!!.banknotes += 1
 
             // Banknotes sound
-            val soundFile = R.raw.banknotes
-            playSound(soundFile)
+            val soundFile2 = R.raw.banknotes
+            playSound(soundFile2)
 
             updateAssetBar()
             dialog.cancel()
         }
-        buyDiamond.setOnClickListener { // Button click sound
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@GameActivity)
-            if (prefs.getString("sound", "on").equals("on")) {
-                val soundFile = R.raw.click_button
-                playSound(soundFile)
-            }
+        buyDiamond.setOnClickListener {
+            // Button click sound
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
             viewModel.activeUser?.value!!.banknotes -= 10
             viewModel.activeUser?.value!!.diamonds += 1
 
             // Diamonds sound
-            val soundFile = R.raw.diamonds
-            playSound(soundFile)
+            val soundFile2 = R.raw.diamonds
+            playSound(soundFile2)
 
             updateAssetBar()
             dialog.cancel()
@@ -500,6 +503,7 @@ class GameActivity : AppCompatActivity() {
     private fun chooseLanguage() {
         if (!activeRound) {
             val dialogbuider = AlertDialog.Builder(this)
+            dialogbuider.setCancelable(false)
 
             val textView = TextView(this)
             textView.setText(R.string.choose_language)
@@ -573,6 +577,7 @@ class GameActivity : AppCompatActivity() {
     private fun chooseAvatars(initialCheck: Boolean) {
         if (!activeRound) {
             val dialogbuider = AlertDialog.Builder(this)
+            dialogbuider.setCancelable(false)
 
             val textView = TextView(this)
             textView.setText(R.string.choose_avatar)
@@ -880,9 +885,11 @@ class GameActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Create status bar menu with sound, highscores, and flag icons corresponding on the selected language
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.sound_options, menu)
+        inflater.inflate(R.menu.appbar_options, menu)
 
         appBarMenu = menu
+        appBarMenu?.getItem(0)?.isVisible = true
+        appBarMenu?.getItem(0)?.isEnabled = true
         appBarMenu?.getItem(1)?.isVisible = true
         appBarMenu?.getItem(1)?.isEnabled = true
 
@@ -897,21 +904,26 @@ class GameActivity : AppCompatActivity() {
         return true
     }
 
+    // Handles language icon click listener
+    fun onLanguageItemClick(item: MenuItem) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+        // Button click sound
+        val soundFile = R.raw.click_button
+        playSound(soundFile)
+
+        chooseLanguage()
+    }
+
     // Handles highscores icon click listener
     fun onHighscoresItemClick(item: MenuItem) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Button click sound
-        if (prefs.getString("sound", "").equals("on")) {
-            val buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
-            buttonClickSound.start()
-            buttonClickSound.setOnCompletionListener { buttonClickSound ->
-                buttonClickSound.stop()
-                buttonClickSound?.release()
-            }
-        }
+        val soundFile = R.raw.click_button
+        playSound(soundFile)
 
-        //TODO Show highscores
+        showHighscores()
     }
 
     // Handles sound icon click listener
@@ -934,6 +946,65 @@ class GameActivity : AppCompatActivity() {
             editor.putString("sound", "on")
         }
         editor.apply()
+    }
+
+    // Shows the highscores window
+    private fun showHighscores() {
+        val layoutInflater = LayoutInflater.from(this)
+        val highscoresView: View = layoutInflater.inflate(R.layout.highscores_layout, null)
+        val builder = AlertDialog.Builder(this)
+
+        val highscoresBtn = highscoresView.findViewById<Button>(R.id.highscoresBtn)
+        var listOfHighscores = ArrayList<Highscore>()
+        lifecycleScope.launch {
+            // Gets list of top scores
+            listOfHighscores = viewModel.findAllHighscores(this@GameActivity)
+
+            val sortedList = listOfHighscores.sortedWith(compareByDescending({ it.score }))
+
+            var listOfAvatars = ArrayList<String>()
+            var listOfLanguages = ArrayList<String>()
+            var listOfUsers = ArrayList<String>()
+            for (item in sortedList) {
+                // Gets list of the avatars of the highscores
+                listOfAvatars.add(viewModel.findAvatarById(this@GameActivity, item.avatarId.toLong())!![0].headShot)
+
+                // Gets list of the languages of the highscores
+                listOfLanguages.add(viewModel.findLanguageById(this@GameActivity, item.languageId.toLong())!![0].src!!.toString())
+
+                // Gets list of the users of the highscores
+                listOfUsers.add(viewModel.findUserById(this@GameActivity, item.userId.toLong())!![0].username)
+            }
+
+            // Passes the highscores onto the recyclerview
+            var highscoresAdapterLayoutManager: RecyclerView.LayoutManager? = null
+            var highscoresAdapter: RecyclerView.Adapter<HighscoresAdapter.ViewHolder>? = null
+            highscoresAdapterLayoutManager = LinearLayoutManager(this@GameActivity)
+            val recyclerView = highscoresView.findViewById<RecyclerView>(R.id.listOfHighscores)
+            recyclerView.layoutManager = highscoresAdapterLayoutManager
+            highscoresAdapter = HighscoresAdapter(listOfAvatars, listOfLanguages, listOfUsers, sortedList, this@GameActivity)
+            recyclerView.adapter = highscoresAdapter
+        }
+
+
+        builder.setView(highscoresView)
+        val dialog = builder.create()
+
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
+        dialog.show()
+
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.90).toInt()//ViewGroup.LayoutParams.WRAP_CONTENT
+        dialog.window?.setLayout(width, height)
+
+
+        highscoresBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_letter_guess
+            playSound(soundFile)
+
+            dialog.cancel()
+        }
     }
 
     // --- Sound effects ---
@@ -985,9 +1056,7 @@ class GameActivity : AppCompatActivity() {
 
             updateAssetBar()
 
-            //TODO Implement what is gained by guessing a letter (coins, score)
-            //TODO Implement countdown system impacting potential prize coins & avatar reactions
-            //TODO Implement avatar's reactions methods
+            //TODO Implement avatar's reactions methods (timer, etc.)
 
             // Button click sound
             val soundFile = R.raw.click_letter_guess
@@ -1333,7 +1402,7 @@ class GameActivity : AppCompatActivity() {
         showNewRoundBtn()
         pickEndAnimation("win")
 
-        //TODO Implement winnings of coins, banknotes, diamonds, etc.
+        showEndDefinitions()
 
         // Win word sound
         val soundFile = R.raw.win_word
@@ -1362,8 +1431,12 @@ class GameActivity : AppCompatActivity() {
         hideKeyboard()
         pickEndAnimation("lose")
 
+        showEndDefinitions()
+
         if (viewModel.activeUser?.value!!.lives == 0) {
-            loseGameRound()
+            // Lose game round sound
+            val soundFile = R.raw.fail_round
+            playSound(soundFile)
         } else {
             // Fail word sound
             val soundFile = R.raw.fail_word
@@ -1387,10 +1460,9 @@ class GameActivity : AppCompatActivity() {
         (timer10 as CountDownTimer).cancel()
         binding.potentialPrize.alpha = 0F
 
-        //TODO uncomment these two
-        //updateAssetBar()
+        updateAssetBar()
         hideKeyboard()
-        //hideAssetBar()
+        hideAssetBar()
         hideHintBtn()
         hideExchangeBtn()
         hideAbandonBtn()
@@ -1400,15 +1472,143 @@ class GameActivity : AppCompatActivity() {
         binding.newRoundBtn.setText(R.string.new_round)
         showNewRoundBtn()
 
-        // Lose game round sound
-        val soundFile = R.raw.fail_round
-        playSound(soundFile)
+        val layoutInflater = LayoutInflater.from(this)
+        val finalScoreView: View = layoutInflater.inflate(R.layout.end_game_layout, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
 
-        //TODO Create alert telling the score
-        //TODO Write score to user db if it exceeds current user highscore
-        //TODO Write score to highscores db if it exceeds lowest recorded highscore
+        val finalScore = finalScoreView.findViewById(R.id.endGameScore) as TextView
+        finalScore.text = viewModel.activeUser?.value!!.score.toString()
+        val finalScoreBtn = finalScoreView.findViewById(R.id.endGameHighscoresBtn) as Button
 
-        viewModel.activeUser?.value!!.score = 0
+        builder.setView(finalScoreView)
+        val dialog = builder.create()
+
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
+        dialog.show()
+
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = ViewGroup.LayoutParams.WRAP_CONTENT
+
+        // Get personal highscore
+        val personalHighscore = viewModel.activeUser!!.value?.highscore!!
+
+        // Compare game score to personal highscore
+        if (viewModel.activeUser?.value!!.score > personalHighscore) {
+            // Updates active user object in viewModel and active user db
+            val tempUser = viewModel.activeUser?.value!!
+            tempUser.highscore = viewModel.activeUser?.value!!.score
+            viewModel.updateUser(this, viewModel.activeUser!!.value!!.id, tempUser)
+
+            // Sets the relevant layout elements to visible
+            finalScoreView.findViewById<TextView>(R.id.endGamePersonalHighscore).isVisible = true
+        }
+
+        // Compare game score to top scores and replaces the lowest top score if it's lower than the game score
+        var listOfHighscores = ArrayList<Highscore>()
+        lifecycleScope.launch {
+            // Gets list of top scores
+            listOfHighscores = viewModel.findAllHighscores(this@GameActivity)
+             if (listOfHighscores.size == 5) {
+                 var lowestTopscore = listOfHighscores[0].score
+                 var lowestTopScoreId = 0L
+
+                 // Gets the lowest top score
+                 for (item in listOfHighscores) {
+                     if (item.score < lowestTopscore) {
+                         lowestTopScoreId = item.id
+                         lowestTopscore = item.score
+                     }
+                 }
+
+                 // Compare it to game score and replace it if necessary
+                 if (viewModel.activeUser?.value!!.score > lowestTopscore) {
+                     viewModel.updateHighscore(this@GameActivity, lowestTopScoreId, Highscore(
+                         viewModel.activeUser?.value!!.score,
+                         SimpleDateFormat("dd/MM/yyyy").format(Date()).toString(),
+                         viewModel.activeUser?.value!!.languageId,
+                         viewModel.activeUser?.value!!.id.toInt(),
+                         viewModel.activeUser?.value!!.avatarId))
+
+                     // Sets the relevant layout elements to visible
+                     finalScoreView.findViewById<TextView>(R.id.endGameHighscoreMessage).isVisible = true
+                     finalScoreView.findViewById<TextView>(R.id.endGameHighscoreIcon).isVisible = true
+                 }
+             } else {
+                 viewModel.insertHighscore(viewModel.activeUser?.value!!.score, this@GameActivity)
+
+                 // Sets the relevant layout elements to visible
+                 finalScoreView.findViewById<TextView>(R.id.endGameHighscoreMessage).isVisible = true
+                 finalScoreView.findViewById<TextView>(R.id.endGameHighscoreIcon).isVisible = true
+             }
+        }
+
+        dialog.window?.setLayout(width, height)
+
+        finalScoreBtn.setOnClickListener {
+            // Button click sound
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
+
+            viewModel.activeUser?.value!!.score = 0
+            dialog.cancel()
+        }
+    }
+
+    // Show definitions at the end
+    private fun showEndDefinitions() {
+        val layoutInflater = LayoutInflater.from(this)
+        val definitionsView: View = layoutInflater.inflate(R.layout.reveal_all_definitions_layout, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+
+        val endDefinitionsTitle = definitionsView.findViewById<TextView>(R.id.allDefinitions_title)
+        endDefinitionsTitle.setText(viewModel.word.value!!.hiddenWord)
+
+        val endDefinitionsBtn = definitionsView.findViewById<Button>(R.id.allDefinitionsBtn)
+        val definitionsList = viewModel.word.value!!.definitions!!
+
+        // Passes the definitions onto the recyclerview
+        var definitionsAdapterLayoutManager: RecyclerView.LayoutManager? = null
+        var definitionsAdapter: RecyclerView.Adapter<DefinitionsAdapter.ViewHolder>? = null
+        definitionsAdapterLayoutManager = LinearLayoutManager(this)
+        val recyclerView = definitionsView.findViewById<RecyclerView>(R.id.listOfDefinitions)
+        recyclerView.layoutManager = definitionsAdapterLayoutManager
+        definitionsAdapter = DefinitionsAdapter(definitionsList, this)
+        recyclerView.adapter = definitionsAdapter
+
+        if (definitionsList.isEmpty()) {
+            definitionsView.findViewById<TextView>(R.id.allDefinitions_noDefinitions).isVisible = true
+        }
+
+        builder.setView(definitionsView)
+        val dialog = builder.create()
+
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
+        dialog.show()
+
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.6).toInt()
+
+        dialog.window?.setLayout(width, height)
+
+        var window: Window? = dialog.getWindow()
+        var wlp: WindowManager.LayoutParams? = window?.getAttributes()
+        wlp?.gravity = Gravity.TOP
+        wlp?.verticalMargin = 0.05F
+        window?.setAttributes(wlp)
+
+        endDefinitionsBtn.setOnClickListener {
+            // Button click sound
+            val soundFile = R.raw.click_button
+            playSound(soundFile)
+
+            if (viewModel.activeUser?.value!!.lives == 0) {
+                loseGameRound()
+            }
+
+            dialog.cancel()
+        }
     }
 
     // Randomly picks an end animation and displays it
@@ -1549,7 +1749,6 @@ class GameActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                //TODO Implement what happens on finish
                 binding.potentialPrize.alpha = 1F
             }
         }

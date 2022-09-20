@@ -51,4 +51,7 @@
     <string name="your_final_score_is">Your final score is</string>
     <string name="personal_highscore">This is your highest score</string>
     <string name="made_the_highscores">You made it to the leaderboard!</string>
+    <string name="definitions">Definitions:</string>
+    <string name="no_definitions_message">Unfortunately you will have to google this one...</string>
+    <string name="leaderboard">Winners</string>
 </resources>

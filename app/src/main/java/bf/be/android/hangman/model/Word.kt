@@ -2,8 +2,8 @@ package bf.be.android.hangman.model
 
 class Word(
     var hiddenWord: String,
-    private var definitions: ArrayList<String>?,
-    private var language: String
+    var definitions: ArrayList<String>?,
+    var language: String
 ) {
 
     var displayedWord = generateDisplayedWord()

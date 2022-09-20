@@ -23,10 +23,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
 
-    // User object
+    // Active user object
     private var _activeUser: MutableLiveData<User>? = null
     val activeUser: LiveData<User>?
         get() = _activeUser
@@ -137,7 +140,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             _activeGameRound = MutableLiveData(tempGameRound)
     }
 
-    //Word object related methods
+    // Word object related methods
     private fun generateNewWord(language: String) {
         val newWord = Word(_randomWord.value.toString(), _definitions.value, language)
         _word.value = newWord
@@ -174,7 +177,39 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    //Database related methods
+    // Database related methods
+    suspend fun findAllHighscores(context: Context): ArrayList<Highscore> = coroutineScope {
+        var allHighscores: ArrayList<Highscore>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val highscoreDao = HighscoreDao(context)
+            highscoreDao.openReadable()
+            allHighscores = highscoreDao.findAll()
+            return@async allHighscores
+        }
+        waitFor.await()
+        return@coroutineScope allHighscores!!
+    }
+
+    suspend fun insertHighscore(highscore: Int, context: Context) = coroutineScope {
+        val newHighscore = Highscore(
+            highscore,
+            SimpleDateFormat("dd/MM/yyyy").format(Date()).toString(),
+            activeUser?.value!!.languageId,
+            activeUser?.value!!.id.toInt(),
+            activeUser?.value!!.avatarId
+        )
+        val highscoreDao = HighscoreDao(context)
+        highscoreDao.openWritable()
+        highscoreDao.insert(newHighscore)
+    }
+
+    fun updateHighscore(context: Context, id: Long, highscore: Highscore) {
+        val highscoreDao = HighscoreDao(context)
+        highscoreDao.openWritable()
+        highscoreDao.update(id, highscore)
+    }
+
     suspend fun getAvatarsHeadshots(context: Context): ArrayList<String> = coroutineScope {
         lateinit var avatars: MutableList<Avatar>
         val avatarsHeadshots = ArrayList<String>()
@@ -210,6 +245,32 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
         waitFor.await()
         return@coroutineScope usernameFound
+    }
+
+    suspend fun findAvatarById(context: Context, id: Long): List<Avatar>? = coroutineScope {
+        var avatarFound: List<Avatar>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val avatarDao = AvatarDao(context)
+            avatarDao.openReadable()
+            avatarFound = avatarDao.findById(id)
+            return@async avatarDao
+        }
+        waitFor.await()
+        return@coroutineScope avatarFound
+    }
+
+    suspend fun findLanguageById(context: Context, id: Long): List<Language>? = coroutineScope {
+        var languageFound: List<Language>? = null
+
+        val waitFor = CoroutineScope(Dispatchers.IO).async {
+            val languageDao = LanguageDao(context)
+            languageDao.openReadable()
+            languageFound = languageDao.findById(id)
+            return@async languageFound
+        }
+        waitFor.await()
+        return@coroutineScope languageFound
     }
 
     suspend fun findUserId(context: Context, username: String, password: String): Long = coroutineScope {
@@ -336,7 +397,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<RandomFrenchWord>>, t: Throwable) {
-                println("Error") //TODO Handle error
+                println("Error") //TODO Handle this
             }
         })
     }
@@ -358,7 +419,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                println("Error") //TODO Handle error
+                println("Error") //TODO Handle this
             }
         })
     }
@@ -383,7 +444,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<French?>, t: Throwable) {
-                println("Error") //TODO Handle error
+                println("Error") //TODO Handle this
             }
         })
     }
@@ -398,7 +459,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         val call = api.getDefinitions(word)
         call.enqueue(object : Callback<List<English>?> {
             override fun onResponse(call: Call<List<English>?>, response: Response<List<English>?>) {
-                var error = false
                 var englishDefinitions = ArrayList<String>()
                 val dictionaryResponse = response.body()
 
@@ -412,14 +472,14 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
                                     englishDefinitions.add(element?.getDefinition().toString()) // English definitions here
                                 }
                             } else {
-                                error = true //TODO Alert the user: no definitions found
+                                println("Error") //TODO Handle this
                             }
                         }
                     } else {
-                        error = true //TODO Alert the user: no definitions found
+                        println("Error") //TODO Handle this
                     }
                 } else {
-                    error = true //TODO Alert the user: no definitions found
+                    println("Error") //TODO Handle this
                 }
                 if (englishDefinitions != null) {
                     _definitions.value = englishDefinitions
@@ -430,7 +490,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<English>?>, t: Throwable) {
-                println("Error") //TODO Handle error
+                println("Error") //TODO Handle this
             }
         })
     }

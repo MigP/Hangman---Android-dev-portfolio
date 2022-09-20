@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
     // Sound menu functions
     override fun onCreateOptionsMenu(menu: Menu?): Boolean { // Create status bar menu with sound icon
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.sound_options, menu)
+        inflater.inflate(R.menu.appbar_options, menu)
 
         // Change sound menu icon according to the settings in preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -137,6 +137,11 @@ class MainActivity : AppCompatActivity() {
         }
         editor.apply()
         return true
+    }
+
+    // Handles language icon click listener
+    fun onLanguageItemClick(item: MenuItem) {
+
     }
 
     // Handles highscores icon click listener

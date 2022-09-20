@@ -6,9 +6,9 @@ public class User {
     private long id;
     private String username;
     private String password;
+    private int highscore;
     private int languageId = 0;
     private int avatarId = 0;
-    private int highscoreId = 0;
     private int coins = 0;
     private int banknotes = 0;
     private int diamonds = 0;
@@ -23,12 +23,12 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, int languageId, int avatarId, int highscoreId) {
+    public User(String username, String password, int highscore, int languageId, int avatarId) {
         this.username = username;
         this.password = password;
+        this.highscore = highscore;
         this.languageId = languageId;
         this.avatarId = avatarId;
-        this.highscoreId = highscoreId;
     }
 
     @NonNull
@@ -38,9 +38,9 @@ public class User {
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", highscore='" + highscore + '\'' +
                 ", languageId='" + languageId + '\'' +
                 ", avatarId='" + avatarId + '\'' +
-                ", highscoreId='" + highscoreId + '\'' +
                 ", coins='" + coins + '\'' +
                 ", banknotes='" + banknotes + '\'' +
                 ", diamonds='" + diamonds + '\'' +
@@ -76,6 +76,15 @@ public class User {
         return this;
     }
 
+    public int getHighscore() {
+        return highscore;
+    }
+
+    public User setHighscore(int highscore) {
+        this.highscore = highscore;
+        return this;
+    }
+
     public int getLanguageId() {
         return languageId;
     }
@@ -91,15 +100,6 @@ public class User {
 
     public User setAvatarId(int avatarId) {
         this.avatarId = avatarId;
-        return this;
-    }
-
-    public int getHighscoreId() {
-        return highscoreId;
-    }
-
-    public User setHighscoreId(int highscoreId) {
-        this.highscoreId = highscoreId;
         return this;
     }
 
