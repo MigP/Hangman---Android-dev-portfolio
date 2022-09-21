@@ -3,7 +3,7 @@ package bf.be.android.hangman.model
 class Word(
     var hiddenWord: String,
     var definitions: ArrayList<String>?,
-    var language: String
+    private var language: String
 ) {
 
     var displayedWord = generateDisplayedWord()

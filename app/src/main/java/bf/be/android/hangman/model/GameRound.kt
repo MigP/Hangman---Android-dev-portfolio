@@ -1,13 +1,8 @@
 package bf.be.android.hangman.model
 
-import android.os.CountDownTimer
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import bf.be.android.hangman.R
-
 class GameRound {
 
-    var letterboard = HashMap<String, Int>()
+    private var letterboard = HashMap<String, Int>()
     var letterMisses = 0
     var guessedLetters = 0
     var lettersGuessedConsecutively = 0

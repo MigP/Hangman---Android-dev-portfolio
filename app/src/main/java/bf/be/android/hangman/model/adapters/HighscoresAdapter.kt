@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import bf.be.android.hangman.R
 import bf.be.android.hangman.model.dal.entities.Highscore
@@ -14,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HighscoresAdapter (val avatarsArray: ArrayList<String>, val languagesArray: ArrayList<String>, val usersArray: ArrayList<String>, val highscoresArray: List<Highscore>, val passedContext: Context): RecyclerView.Adapter<HighscoresAdapter.ViewHolder>() {
+class HighscoresAdapter (private val avatarsArray: ArrayList<String>, private val languagesArray: ArrayList<String>, private val usersArray: ArrayList<String>, private val highscoresArray: List<Highscore>, private val passedContext: Context): RecyclerView.Adapter<HighscoresAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HighscoresAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.highscores_list_item, parent, false)

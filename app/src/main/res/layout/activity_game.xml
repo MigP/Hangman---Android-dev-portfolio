@@ -47,6 +47,16 @@
             app:srcCompat="@drawable/layers_gallows" />
 
         <ImageView
+            android:id="@+id/game_face"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@id/game_gallows_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/layers_face" />
+
+        <ImageView
             android:id="@+id/game_gallows_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

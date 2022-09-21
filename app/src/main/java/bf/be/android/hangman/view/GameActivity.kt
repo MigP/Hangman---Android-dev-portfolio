@@ -3,7 +3,6 @@ package bf.be.android.hangman.view
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.DialogInterface.OnShowListener
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
@@ -38,11 +37,8 @@ import bf.be.android.hangman.model.dal.entities.Language
 import bf.be.android.hangman.viewModel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class GameActivity : AppCompatActivity() {
@@ -53,6 +49,8 @@ class GameActivity : AppCompatActivity() {
         var appBarMenu: Menu? = null
         var activeRound = false
         var timer10: CountDownTimer? = null
+        var blinkTimerEnd: CountDownTimer? = null
+        var blinkTimerInit: CountDownTimer? = null
     }
 
     //Create a ViewModel
@@ -210,7 +208,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile = R.raw.click_button
             playSound(soundFile)
 
-            showHelpMenu(it)
+            showHelpMenu()
         }
     }
 
@@ -221,7 +219,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile = R.raw.click_button
             playSound(soundFile)
 
-            showExchangeMenu(it)
+            showExchangeMenu()
         }
     }
 
@@ -256,7 +254,7 @@ class GameActivity : AppCompatActivity() {
 
     // --- Right side menus ---
     // Show help menu
-    private fun showHelpMenu(view: View) {
+    private fun showHelpMenu() {
         val layoutInflater = LayoutInflater.from(this)
         val helpMenuView: View = layoutInflater.inflate(R.layout.help_menu_layout, null)
         val builder = AlertDialog.Builder(this)
@@ -312,17 +310,17 @@ class GameActivity : AppCompatActivity() {
 
             // Chooses a random letter missing from the displayed word
             val missingLetters = ArrayList<String>()
-            for (i in 0..viewModel.word.value!!.displayedWord.length - 1) {
-                if (viewModel.word.value!!.displayedWord[i].toString().equals("*")) {
+            for (i in 0 until viewModel.word.value!!.displayedWord.length) {
+                if (viewModel.word.value!!.displayedWord[i].toString() == "*") {
                     missingLetters.add(viewModel.word.value!!.hiddenWord[i].toString())
                 }
             }
 
             // Formats the letter correctly
-            val randomMissingLetter = viewModel.prepareCharacter(missingLetters[(0..(missingLetters.size - 1)).random()].uppercase())
+            val randomMissingLetter = viewModel.prepareCharacter(missingLetters[(0 until missingLetters.size).random()].uppercase())
 
             // Get correct keyboard key and simulate a key press
-            val keyboardKey: Button = findViewById(resources.getIdentifier("keyboard" + randomMissingLetter, "id", packageName))
+            val keyboardKey: Button = findViewById(resources.getIdentifier("keyboard$randomMissingLetter", "id", packageName))
             keyboardPressed(randomMissingLetter, keyboardKey)
 
             // Reveal hint sound
@@ -340,12 +338,12 @@ class GameActivity : AppCompatActivity() {
             playSound(soundFile1)
 
             // Gets a random index position in the revealed definitions array
-            val revealedDefinitionsNr = viewModel.word.value!!.revealedDefinitions?.size!!
-            val i = (0..(revealedDefinitionsNr - 1)).random()
-            val revealedDefinition = viewModel.word.value!!.revealedDefinitions?.get(i)
-            viewModel.word.value!!.revealedDefinitions?.removeAt(i)
+            val revealedDefinitionsNr = viewModel.word.value!!.revealedDefinitions.size
+            val i = (0 until revealedDefinitionsNr).random()
+            val revealedDefinition = viewModel.word.value!!.revealedDefinitions[i]
+            viewModel.word.value!!.revealedDefinitions.removeAt(i)
 
-            revealDefinition(revealedDefinition!!)
+            revealDefinition(revealedDefinition)
 
             // Reveal hint sound
             val soundFile2 = R.raw.reveal_hint
@@ -387,7 +385,7 @@ class GameActivity : AppCompatActivity() {
         val singleDefinitionDefinition = singleDefinitionView.findViewById(R.id.singleDefinition_definition) as TextView
         val singleDefinitionBtn = singleDefinitionView.findViewById(R.id.singleDefinitionBtn) as Button
 
-        singleDefinitionDefinition.setText(definition)
+        singleDefinitionDefinition.text = definition
 
         builder.setView(singleDefinitionView)
         val dialog = builder.create()
@@ -405,7 +403,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // Show exchange menu
-    private fun showExchangeMenu(view: View) {
+    private fun showExchangeMenu() {
         val layoutInflater = LayoutInflater.from(this)
         val exchangeMenuView: View = layoutInflater.inflate(R.layout.exchange_menu_layout, null)
         val builder = AlertDialog.Builder(this)
@@ -545,6 +543,8 @@ class GameActivity : AppCompatActivity() {
         viewModel.activeUser?.value!!.lives = 5
         viewModel.activeUser?.value!!.score = 0
 
+        (blinkTimerInit as CountDownTimer).cancel()//TODO
+        (blinkTimerEnd as CountDownTimer).cancel()//TODO
         (timer10 as CountDownTimer).cancel()
         binding.potentialPrize.alpha = 0F
 
@@ -777,39 +777,49 @@ class GameActivity : AppCompatActivity() {
             dialog.cancel()
         }
 
-        val mAlertDialog: AlertDialog = dialogBuilder.create();
-        mAlertDialog.setOnShowListener(OnShowListener {
+        val mAlertDialog: AlertDialog = dialogBuilder.create()
+        mAlertDialog.setOnShowListener {
             val b: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            b.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(view: View?) {
-                    // Button click sound
-                    val soundFile = R.raw.click_button
-                    playSound(soundFile)
+            b.setOnClickListener {
+                // Button click sound
+                val soundFile = R.raw.click_button
+                playSound(soundFile)
 
-                    val input = mAlertDialog.findViewById<View>(R.id.et_editUsername) as EditText
+                val input = mAlertDialog.findViewById<View>(R.id.et_editUsername) as EditText
 
-                    if (input.text.toString() == "") {
-                        Toast.makeText(this@GameActivity, R.string.username_is_empty, Toast.LENGTH_LONG).show()
-                    } else {
-                        lifecycleScope.launch {
-                            if (viewModel.usernameExists(this@GameActivity, input.text.toString())) { // Chosen user name already exists
-                                Toast.makeText(this@GameActivity, R.string.username_exists, Toast.LENGTH_LONG).show()
-                            } else {
-                                // Update user object and db with the selected user name
-                                val tempUser = viewModel.activeUser!!.value
-                                tempUser!!.username = input.text.toString()
-                                viewModel.updateUser(this@GameActivity, tempUser.id, tempUser)
+                if (input.text.toString() == "") {
+                    Toast.makeText(
+                        this@GameActivity,
+                        R.string.username_is_empty,
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    lifecycleScope.launch {
+                        if (viewModel.usernameExists(
+                                this@GameActivity,
+                                input.text.toString()
+                            )
+                        ) { // Chosen user name already exists
+                            Toast.makeText(
+                                this@GameActivity,
+                                R.string.username_exists,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            // Update user object and db with the selected user name
+                            val tempUser = viewModel.activeUser!!.value
+                            tempUser!!.username = input.text.toString()
+                            viewModel.updateUser(this@GameActivity, tempUser.id, tempUser)
 
-                                actionBar?.title = viewModel.activeUser?.value!!.username
-                                supportActionBar?.title = viewModel.activeUser?.value!!.username
+                            actionBar?.title = viewModel.activeUser?.value!!.username
+                            supportActionBar?.title = viewModel.activeUser?.value!!.username
 
-                                mAlertDialog.cancel()
-                            }
+                            mAlertDialog.cancel()
                         }
                     }
                 }
-            })
-        })
+            }
+        }
         mAlertDialog.show()
     }
 
@@ -833,41 +843,49 @@ class GameActivity : AppCompatActivity() {
             dialog.cancel()
         }
 
-        val mAlertDialog: AlertDialog = dialogBuilder.create();
-        mAlertDialog.setOnShowListener(OnShowListener {
+        val mAlertDialog: AlertDialog = dialogBuilder.create()
+        mAlertDialog.setOnShowListener {
             val b: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            b.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(view: View?) {
-                    // Button click sound
-                    val soundFile = R.raw.click_button
-                    playSound(soundFile)
+            b.setOnClickListener {
+                // Button click sound
+                val soundFile = R.raw.click_button
+                playSound(soundFile)
 
-                    val inputPassword = mAlertDialog.findViewById<View>(R.id.et_editPassword) as EditText
-                    val inputConfirmation = mAlertDialog.findViewById<View>(R.id.et_confirmPassword) as EditText
+                val inputPassword =
+                    mAlertDialog.findViewById<View>(R.id.et_editPassword) as EditText
+                val inputConfirmation =
+                    mAlertDialog.findViewById<View>(R.id.et_confirmPassword) as EditText
 
-                    if (inputPassword.text.toString() == "" || inputConfirmation.text.toString() == "") {
-                        Toast.makeText(this@GameActivity, R.string.fill_all_fields, Toast.LENGTH_LONG).show()
+                if (inputPassword.text.toString() == "" || inputConfirmation.text.toString() == "") {
+                    Toast.makeText(
+                        this@GameActivity,
+                        R.string.fill_all_fields,
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    if (inputPassword != inputConfirmation) { // Password confirmation entered is different from password entered
+                        Toast.makeText(
+                            this@GameActivity,
+                            R.string.passwords_different,
+                            Toast.LENGTH_LONG
+                        ).show()
                     } else {
-                        if (inputPassword != inputConfirmation) { // Password confirmation entered is different from password entered
-                            Toast.makeText(this@GameActivity, R.string.passwords_different, Toast.LENGTH_LONG).show()
-                        } else {
-                            lifecycleScope.launch {
-                                // Button click sound
-                                val soundFile = R.raw.click_button
-                                playSound(soundFile)
+                        lifecycleScope.launch {
+                            // Button click sound
+                            val soundFile = R.raw.click_button
+                            playSound(soundFile)
 
-                                // Update user object and db with the selected password
-                                val tempUser = viewModel.activeUser!!.value
-                                tempUser!!.password = inputPassword.text.toString()
-                                viewModel.updateUser(this@GameActivity, tempUser.id, tempUser)
+                            // Update user object and db with the selected password
+                            val tempUser = viewModel.activeUser!!.value
+                            tempUser!!.password = inputPassword.text.toString()
+                            viewModel.updateUser(this@GameActivity, tempUser.id, tempUser)
 
-                                mAlertDialog.cancel()
-                            }
+                            mAlertDialog.cancel()
                         }
                     }
                 }
-            })
-        })
+            }
+        }
         mAlertDialog.show()
     }
 
@@ -1001,8 +1019,6 @@ class GameActivity : AppCompatActivity() {
 
     // Handles language icon click listener
     fun onLanguageItemClick(item: MenuItem) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
         // Button click sound
         val soundFile = R.raw.click_button
         playSound(soundFile)
@@ -1012,8 +1028,6 @@ class GameActivity : AppCompatActivity() {
 
     // Handles highscores icon click listener
     fun onHighscoresItemClick(item: MenuItem) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
         // Button click sound
         val soundFile = R.raw.click_button
         playSound(soundFile)
@@ -1050,16 +1064,16 @@ class GameActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
 
         val highscoresBtn = highscoresView.findViewById<Button>(R.id.highscoresBtn)
-        var listOfHighscores = ArrayList<Highscore>()
+        var listOfHighscores: ArrayList<Highscore>
         lifecycleScope.launch {
             // Gets list of top scores
             listOfHighscores = viewModel.findAllHighscores(this@GameActivity)
 
-            val sortedList = listOfHighscores.sortedWith(compareByDescending({ it.score }))
+            val sortedList = listOfHighscores.sortedWith(compareByDescending { it.score })
 
-            var listOfAvatars = ArrayList<String>()
-            var listOfLanguages = ArrayList<String>()
-            var listOfUsers = ArrayList<String>()
+            val listOfAvatars = ArrayList<String>()
+            val listOfLanguages = ArrayList<String>()
+            val listOfUsers = ArrayList<String>()
             for (item in sortedList) {
                 // Gets list of the avatars of the highscores
                 listOfAvatars.add(viewModel.findAvatarById(this@GameActivity, item.avatarId.toLong())!![0].headShot)
@@ -1072,8 +1086,8 @@ class GameActivity : AppCompatActivity() {
             }
 
             // Passes the highscores onto the recyclerview
-            var highscoresAdapterLayoutManager: RecyclerView.LayoutManager? = null
-            var highscoresAdapter: RecyclerView.Adapter<HighscoresAdapter.ViewHolder>? = null
+            var highscoresAdapterLayoutManager: RecyclerView.LayoutManager?
+            var highscoresAdapter: RecyclerView.Adapter<HighscoresAdapter.ViewHolder>?
             highscoresAdapterLayoutManager = LinearLayoutManager(this@GameActivity)
             val recyclerView = highscoresView.findViewById<RecyclerView>(R.id.listOfHighscores)
             recyclerView.layoutManager = highscoresAdapterLayoutManager
@@ -1170,6 +1184,14 @@ class GameActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
+                    // Cancels the timers if they already exist and are running
+                    if (blinkTimerInit != null) {
+                        (blinkTimerInit as CountDownTimer).cancel()
+                    }
+                    if (blinkTimerEnd != null) {
+                        (blinkTimerEnd as CountDownTimer).cancel()
+                    }
+
                     displayDeadAvatar()
                 } else {
                     updateAvatar()
@@ -1191,7 +1213,7 @@ class GameActivity : AppCompatActivity() {
 
     // Reset the keyboard
     private fun resetKeyboard() {
-        var c: Char = 'A'
+        var c = 'A'
         while (c <= 'Z') {
             val letterBtn: Button = findViewById(resources.getIdentifier("keyboard$c", "id", packageName))
             letterBtn.isEnabled = true
@@ -1205,18 +1227,42 @@ class GameActivity : AppCompatActivity() {
     // --- Displayed avatar (on the gallows) ---
     // Hides all the graphics related to the avatar
     private fun hideAvatarGraphics() {
-        // Gets the layer drawable
+        // Gets the layers drawable
         val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
+        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
 
         //Hides them all
         for (i in 1 until layerDrawable.numberOfLayers) { // starts with 1 because 0 is the gallows
             layerDrawable.getDrawable(i).alpha = 0
         }
+        for (i in 0 until layerDrawableFace.numberOfLayers) {
+            layerDrawableFace.getDrawable(i).alpha = 0
+        }
 
         // Gets the ImageView where the layer drawable is by its id
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
+        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+
         // Sets its src to the new updated layer drawable
         layoutlist1.setImageDrawable(layerDrawable)
+        layoutlistFace.setImageDrawable(layerDrawableFace)
+    }
+
+    // Hides all the graphics related to the avatar's face
+    private fun hideAvatarFaceGraphics() {
+        // Gets the layer drawable
+        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
+
+        //Hides them all
+        for (i in 0 until layerDrawableFace.numberOfLayers) {
+            layerDrawableFace.getDrawable(i).alpha = 0
+        }
+
+        // Gets the ImageView where the layer drawable is by its id
+        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+
+        // Sets its src to the new updated layer drawable
+        layoutlistFace.setImageDrawable(layerDrawableFace)
     }
 
     // Update displayed avatar (displays the relevant body parts only)
@@ -1232,27 +1278,28 @@ class GameActivity : AppCompatActivity() {
         val avatarEyebrows = viewModel.activeAvatar!!.value!!.eyebrowsId
         val avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
 
-        // Gets the layer drawable
+        // Gets the layers drawable
         val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
+        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
 
         // Extra: Gets the resource id, then gets the item drawable by its id
         var extra: Drawable? = null
         if (avatarExtra > 0) {
             val extraResourceName = viewModel.findExtraById(this, avatarExtra.toLong())?.get(0)?.src
-            extra = layerDrawable.findDrawableByLayerId(getStringIdentifier(extraResourceName))
+            extra = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(extraResourceName))
         }
 
         // Eyes: Gets the resource id, then gets the item drawable by its id
         val eyesResourceName = viewModel.findEyesById(this, avatarEyes.toLong())?.get(0)?.src
-        val eyes = layerDrawable.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
+        val eyes = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
 
         // Eyebrows: Gets the resource id, then gets the item drawable by its id
         val eyebrowsResourceName = viewModel.findEyebrowsById(this, avatarEyebrows.toLong())?.get(0)?.src
-        val eyebrows = layerDrawable.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
+        val eyebrows = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
 
         // Mouth: Gets the resource id, then gets the item drawable by its id
         val mouthResourceName = viewModel.findMouthById(this, avatarMouth.toLong())?.get(0)?.src
-        val mouth = layerDrawable.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
+        val mouth = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
 
         // Body parts: Gets the item drawable by its id
         val head = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.headSrc))
@@ -1361,10 +1408,106 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
-        // Gets the ImageView where the layer drawable is by its id
+        // Gets the ImageViews where the layers drawable are by their id
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
-        // Sets its src to the new updated layer drawable
+        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+
+        // Sets their src to the new updated layers drawable
         layoutlist1.setImageDrawable(layerDrawable)
+        layoutlistFace.setImageDrawable(layerDrawableFace)
+    }
+
+    // Update displayed avatar's face (displays the relevant face parts only)
+    private suspend fun updateAvatarFace() {
+        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+
+        // Hides all displayed avatar's face graphics
+        hideAvatarFaceGraphics()
+
+        // Gets relevant Ids from avatar object
+        val avatarExtra = viewModel.activeAvatar!!.value!!.extrasId
+        val avatarEyes = viewModel.activeAvatar!!.value!!.eyesId
+        val avatarEyebrows = viewModel.activeAvatar!!.value!!.eyebrowsId
+        val avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
+
+        // Gets the layer drawable
+        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
+
+        // Extra: Gets the resource id, then gets the item drawable by its id
+        var extra: Drawable? = null
+        if (avatarExtra > 0) {
+            val extraResourceName = viewModel.findExtraById(this, avatarExtra.toLong())?.get(0)?.src
+            extra = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(extraResourceName))
+        }
+
+        // Eyes: Gets the resource id, then gets the item drawable by its id
+        val eyesResourceName = viewModel.findEyesById(this, avatarEyes.toLong())?.get(0)?.src
+        val eyes = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
+
+        // Eyebrows: Gets the resource id, then gets the item drawable by its id
+        val eyebrowsResourceName = viewModel.findEyebrowsById(this, avatarEyebrows.toLong())?.get(0)?.src
+        val eyebrows = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
+
+        // Mouth: Gets the resource id, then gets the item drawable by its id
+        val mouthResourceName = viewModel.findMouthById(this, avatarMouth.toLong())?.get(0)?.src
+        val mouth = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
+
+        when(nrOfMisses) {
+            1 -> {
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            2 -> {
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            3 -> {
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            4 -> {
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            5 -> {
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+            6 -> {
+                if (avatarExtra > 0) {
+                    extra!!.alpha = 255
+                }
+                eyes.alpha = 255
+                eyebrows.alpha = 255
+                mouth.alpha = 255
+            }
+        }
+
+        // Gets the ImageViews where the layers drawable are by their id
+        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+
+        // Sets their src to the new updated layers drawable
+        layoutlistFace.setImageDrawable(layerDrawableFace)
     }
 
     // Returns the drawable id of a string (image src name)
@@ -1390,6 +1533,17 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    // Display blink avatar
+    private fun displayBlinkAvatar() {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
+
+        viewModel._activeAvatar?.value = tempAvatar
+        lifecycleScope.launch {
+            updateAvatarFace()
+        }
+    }
+
     // Display happy avatar
     private fun displayHappyAvatar() {
         val tempAvatar = viewModel.activeAvatar!!.value
@@ -1404,7 +1558,7 @@ class GameActivity : AppCompatActivity() {
 
         viewModel._activeAvatar?.value = tempAvatar
         lifecycleScope.launch {
-            updateAvatar()
+            updateAvatarFace()
         }
     }
 
@@ -1427,9 +1581,9 @@ class GameActivity : AppCompatActivity() {
         binding.waitingPlaceholder.isVisible = true
 
         if (viewModel.activeLanguage?.value?.name.equals("Français")) {
-            viewModel.getRandomWordFr(view)
+            viewModel.getRandomWordFr()
         } else if (viewModel.activeLanguage?.value?.name.equals("English")) {
-            viewModel.getRandomWordEn(view)
+            viewModel.getRandomWordEn()
         }
     }
 
@@ -1457,12 +1611,11 @@ class GameActivity : AppCompatActivity() {
             resetKeyboard()
             prizeFadeOutCountdown()
 
-            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            val currentDate = LocalDateTime.now().format(formatter).toString()
-
             // New word sound
             val soundFile = R.raw.new_word
             playSound(soundFile)
+
+            avatarBlink() //TODO
         }
         binding.waitingPlaceholder.isVisible = false
 
@@ -1643,7 +1796,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // Compare game score to top scores and replaces the lowest top score if it's lower than the game score
-        var listOfHighscores = ArrayList<Highscore>()
+        var listOfHighscores: ArrayList<Highscore>
         lifecycleScope.launch {
             // Gets list of top scores
             listOfHighscores = viewModel.findAllHighscores(this@GameActivity)
@@ -1704,18 +1857,18 @@ class GameActivity : AppCompatActivity() {
         builder.setCancelable(false)
 
         val endDefinitionsTitle = definitionsView.findViewById<TextView>(R.id.allDefinitions_title)
-        endDefinitionsTitle.setText(viewModel.word.value!!.hiddenWord)
+        endDefinitionsTitle.text = viewModel.word.value!!.hiddenWord
 
         val endDefinitionsBtn = definitionsView.findViewById<Button>(R.id.allDefinitionsBtn)
         val definitionsList = viewModel.word.value!!.definitions!!
 
         // Passes the definitions onto the recyclerview
-        var definitionsAdapterLayoutManager: RecyclerView.LayoutManager? = null
-        var definitionsAdapter: RecyclerView.Adapter<DefinitionsAdapter.ViewHolder>? = null
+        val definitionsAdapterLayoutManager: RecyclerView.LayoutManager?
+        val definitionsAdapter: RecyclerView.Adapter<DefinitionsAdapter.ViewHolder>?
         definitionsAdapterLayoutManager = LinearLayoutManager(this)
         val recyclerView = definitionsView.findViewById<RecyclerView>(R.id.listOfDefinitions)
         recyclerView.layoutManager = definitionsAdapterLayoutManager
-        definitionsAdapter = DefinitionsAdapter(definitionsList, this)
+        definitionsAdapter = DefinitionsAdapter(definitionsList)
         recyclerView.adapter = definitionsAdapter
 
         if (definitionsList.isEmpty()) {
@@ -1733,11 +1886,11 @@ class GameActivity : AppCompatActivity() {
 
         dialog.window?.setLayout(width, height)
 
-        var window: Window? = dialog.getWindow()
-        var wlp: WindowManager.LayoutParams? = window?.getAttributes()
+        val window: Window? = dialog.window
+        val wlp: WindowManager.LayoutParams? = window?.attributes
         wlp?.gravity = Gravity.TOP
         wlp?.verticalMargin = 0.05F
-        window?.setAttributes(wlp)
+        window?.attributes = wlp
 
         endDefinitionsBtn.setOnClickListener {
             // Button click sound
@@ -1873,7 +2026,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // Sets the initial values
-        binding.potentialPrizeAmount.setText("11")
+        binding.potentialPrizeAmount.text = "11"
         viewModel.activeGameRound?.value!!.potentialPrize = 10
 
         // Defines the timer
@@ -1885,7 +2038,7 @@ class GameActivity : AppCompatActivity() {
                 prizeFadeOut.fillAfter = true
                 binding.potentialPrize.startAnimation(prizeFadeOut)
 
-                binding.potentialPrizeAmount.setText((binding.potentialPrizeAmount.text.toString().toInt() - 1).toString())
+                binding.potentialPrizeAmount.text = (binding.potentialPrizeAmount.text.toString().toInt() - 1).toString()
                 viewModel.activeGameRound?.value!!.potentialPrize --
             }
 
@@ -1896,5 +2049,47 @@ class GameActivity : AppCompatActivity() {
 
         // Starts the timer
         (timer10 as CountDownTimer).start()
+    }
+
+    // Avatar blink
+    private fun avatarBlink() { //TODO
+        // Cancels the timers if they already exist and are running
+        if (blinkTimerInit != null) {
+            (blinkTimerInit as CountDownTimer).cancel()
+        }
+        if (blinkTimerEnd != null) {
+            (blinkTimerEnd as CountDownTimer).cancel()
+        }
+
+        displayHappyAvatar()
+
+        // Sets a random duration
+        val blinkTimerDuration = (1000 until 5000).random().toLong()
+
+        // Defines the blinkTimerInit timer (avatar with open eyes)
+        blinkTimerInit = object: CountDownTimer(blinkTimerDuration, blinkTimerDuration) {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            override fun onFinish() {
+                displayBlinkAvatar()
+
+                // Starts the timer
+                (blinkTimerEnd as CountDownTimer).start()
+            }
+        }
+
+        // Defines the blinkTimerEnd timer (avatar with blinked eyes)
+        blinkTimerEnd = object: CountDownTimer(150, 150) {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            override fun onFinish() {
+                avatarBlink()
+            }
+        }
+
+        // Starts the timer
+        (blinkTimerInit as CountDownTimer).start()
     }
 }

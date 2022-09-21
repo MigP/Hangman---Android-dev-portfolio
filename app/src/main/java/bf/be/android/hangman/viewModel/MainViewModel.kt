@@ -380,7 +380,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     }
 
     //Api related methods
-    fun getRandomWordFr(view: View) {
+    fun getRandomWordFr() {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://frenchwordsapi.herokuapp.com/api/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -390,7 +390,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         val call = api.getRandomWord()
         call.enqueue(object : Callback<List<RandomFrenchWord>> {
             override fun onResponse(call: Call<List<RandomFrenchWord>>, response: Response<List<RandomFrenchWord>>) {
-                var fetchedWord = response.body()?.get(0)?.getResult()!! // Random French word here
+                val fetchedWord = response.body()?.get(0)?.getResult()!! // Random French word here
                 _randomWord.value = fetchedWord
 
                 getFrenchDefinition(fetchedWord)
@@ -402,7 +402,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         })
     }
 
-    fun getRandomWordEn(view: View) {
+    fun getRandomWordEn() {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://random-word-api.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -459,7 +459,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         val call = api.getDefinitions(word)
         call.enqueue(object : Callback<List<English>?> {
             override fun onResponse(call: Call<List<English>?>, response: Response<List<English>?>) {
-                var englishDefinitions = ArrayList<String>()
+                val englishDefinitions = ArrayList<String>()
                 val dictionaryResponse = response.body()
 
                 if (dictionaryResponse != null) {
@@ -481,11 +481,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
                 } else {
                     println("Error") //TODO Handle this
                 }
-                if (englishDefinitions != null) {
-                    _definitions.value = englishDefinitions
-                } else {
-                    _definitions.value = ArrayList()
-                }
+                _definitions.value = englishDefinitions
                 generateNewWord("English")
             }
 

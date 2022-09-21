@@ -1,16 +1,13 @@
 package bf.be.android.hangman.model.adapters
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import bf.be.android.hangman.R
 
-class DefinitionsAdapter(val definitionsArray: ArrayList<String>, val passedContext: Context): RecyclerView.Adapter<DefinitionsAdapter.ViewHolder>() {
+class DefinitionsAdapter(private val definitionsArray: ArrayList<String>): RecyclerView.Adapter<DefinitionsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefinitionsAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.definitions_list_item, parent, false)
