@@ -874,7 +874,7 @@ class GameActivity : AppCompatActivity() {
     // Displays window containing the game rules
     private fun displayHelp() {
         val layoutInflater = LayoutInflater.from(this)
-        val gameHelpView: View = layoutInflater.inflate(R.layout.game_help_layout, null) //TODO Fill out this layout
+        val gameHelpView: View = layoutInflater.inflate(R.layout.game_help_layout, null)
         val builder = AlertDialog.Builder(this)
 
         val gameHelpBtn = gameHelpView.findViewById(R.id.gameHelpBtn) as Button

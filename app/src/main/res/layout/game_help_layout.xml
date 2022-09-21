@@ -10,7 +10,7 @@
         android:id="@+id/gameHelpTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game rules"
+        android:text="@string/game_help_title"
         android:textColor="@color/menu_text_colour"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginVertical="70dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toTopOf="@id/gameHelpBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -38,7 +39,7 @@
                 android:id="@+id/gameHelp_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Part 1"
+                android:text="@string/game_help_title_1"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="30sp" />
 
@@ -46,7 +47,7 @@
                 android:id="@+id/gameHelp_section1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text "
+                android:text="@string/game_help_1"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="20sp" />
 
@@ -54,7 +55,8 @@
                 android:id="@+id/gameHelp_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Part 2"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_2"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="30sp" />
 
@@ -62,7 +64,7 @@
                 android:id="@+id/gameHelp_section2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text "
+                android:text="@string/game_help_2"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="20sp" />
 
@@ -70,7 +72,8 @@
                 android:id="@+id/gameHelp_title3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Part 3"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_3"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="30sp" />
 
@@ -78,10 +81,94 @@
                 android:id="@+id/gameHelp_section3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text lots of text "
+                android:text="@string/game_help_3"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/gameHelp_title4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_4"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_section4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_help_4"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_title5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_5"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_section5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_help_5"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_title6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_6"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_section6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_help_6"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_title7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_7"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_section7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_help_7"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_title8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/game_help_title_8"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/gameHelp_section8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_help_8"
+                android:textColor="@color/menu_text_colour"
+                android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
 
