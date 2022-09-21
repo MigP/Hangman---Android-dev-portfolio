@@ -24,7 +24,7 @@
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/fragment_register.xml" value="0.33" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/game_help_layout.xml" value="0.22239583333333332" />
-        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/help_menu_layout.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/help_menu_layout.xml" value="0.5" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/highscores_layout.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/highscores_list_item.xml" value="0.22239583333333332" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/highscores_list_layout.xml" value="0.22135416666666666" />
@@ -32,6 +32,7 @@
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/nav_header.xml" value="0.25" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/options_menu_header.xml" value="0.22239583333333332" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/reveal_all_definitions_layout.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/single_definition_layout.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/menu/options_menu.xml" value="0.22291666666666668" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/menu/settings_menu.xml" value="0.215625" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/menu/sound_options.xml" value="0.21458333333333332" />

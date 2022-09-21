@@ -54,4 +54,5 @@
     <string name="definitions">Definitions:</string>
     <string name="no_definitions_message">Unfortunately you will have to google this one...</string>
     <string name="leaderboard">Winners</string>
+    <string name="hint_definition">Hint definition:</string>
 </resources>

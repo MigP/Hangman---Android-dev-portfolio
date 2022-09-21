@@ -54,4 +54,5 @@
     <string name="definitions">Définitions:</string>
     <string name="no_definitions_message">Malheureusement, vous devrez googler celui-ci...</string>
     <string name="leaderboard">Vainqueurs</string>
+    <string name="hint_definition">Définition indice :</string>
 </resources>

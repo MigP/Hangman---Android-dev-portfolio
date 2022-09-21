@@ -8,7 +8,6 @@ import bf.be.android.hangman.R
 class GameRound {
 
     var letterboard = HashMap<String, Int>()
-    var displayedAvatar = ArrayList<String>()
     var letterMisses = 0
     var guessedLetters = 0
     var lettersGuessedConsecutively = 0
@@ -18,13 +17,11 @@ class GameRound {
 
     init {
         initialiseLetterboard()
-        initialiseDisplayedAvatar()
     }
 
     override fun toString(): String {
         return "Word{" +
                 "letterboard='" + letterboard + '\'' +
-                ", displayedAvatar='" + displayedAvatar + '\'' +
                 ", letterMisses='" + letterMisses + '\'' +
                 ", guessedLetters='" + guessedLetters + '\'' +
                 ", lettersGuessedConsecutively='" + lettersGuessedConsecutively + '\'' +
@@ -69,14 +66,5 @@ class GameRound {
         this.letterboard["X"] = 0
         this.letterboard["Y"] = 0
         this.letterboard["Z"] = 0
-    }
-
-    private fun initialiseDisplayedAvatar() {
-        this.displayedAvatar.add("head")
-        this.displayedAvatar.add("torso")
-        this.displayedAvatar.add("left arm")
-        this.displayedAvatar.add("right arm")
-        this.displayedAvatar.add("left leg")
-        this.displayedAvatar.add("right leg")
     }
 }

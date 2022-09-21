@@ -39,6 +39,8 @@ import bf.be.android.hangman.viewModel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -280,21 +282,21 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        if (viewModel.activeUser?.value!!.coins < 50 || !activeRound) {
+        if (viewModel.activeUser?.value!!.coins < 150 || !activeRound) {
             buyLetterBtn.isEnabled = false
             buyLetterBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyLetterBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.banknotes < 5 || !activeRound) {
+        if (viewModel.activeUser?.value!!.banknotes < 10 || !activeRound || viewModel.word.value?.revealedDefinitions!!.isEmpty()) {
             buyDefinitionBtn.isEnabled = false
             buyDefinitionBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyDefinitionBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.diamonds < 1 || !activeRound) {
+        if (viewModel.activeUser?.value!!.diamonds < 2 || !activeRound || viewModel.activeGameRound?.value!!.letterMisses == 0) {
             buyBodyPartBtn.isEnabled = false
             buyBodyPartBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -305,28 +307,98 @@ class GameActivity : AppCompatActivity() {
 
         buyLetterBtn.setOnClickListener {
             // Button click sound
-            val soundFile = R.raw.click_button
-            playSound(soundFile)
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
 
-            //TODO Implement buy a letter
+            // Chooses a random letter missing from the displayed word
+            val missingLetters = ArrayList<String>()
+            for (i in 0..viewModel.word.value!!.displayedWord.length - 1) {
+                if (viewModel.word.value!!.displayedWord[i].toString().equals("*")) {
+                    missingLetters.add(viewModel.word.value!!.hiddenWord[i].toString())
+                }
+            }
+
+            // Formats the letter correctly
+            val randomMissingLetter = viewModel.prepareCharacter(missingLetters[(0..(missingLetters.size - 1)).random()].uppercase())
+
+            // Get correct keyboard key and simulate a key press
+            val keyboardKey: Button = findViewById(resources.getIdentifier("keyboard" + randomMissingLetter, "id", packageName))
+            keyboardPressed(randomMissingLetter, keyboardKey)
+
+            // Reveal hint sound
+            val soundFile2 = R.raw.reveal_hint
+            playSound(soundFile2)
+
+            viewModel.activeUser?.value!!.coins -= 150
+            updateAssetBar()
 
             dialog.cancel()
         }
         buyDefinitionBtn.setOnClickListener {
             // Button click sound
-            val soundFile = R.raw.click_button
-            playSound(soundFile)
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
 
-            //TODO Implement buy a definition
+            // Gets a random index position in the revealed definitions array
+            val revealedDefinitionsNr = viewModel.word.value!!.revealedDefinitions?.size!!
+            val i = (0..(revealedDefinitionsNr - 1)).random()
+            val revealedDefinition = viewModel.word.value!!.revealedDefinitions?.get(i)
+            viewModel.word.value!!.revealedDefinitions?.removeAt(i)
+
+            revealDefinition(revealedDefinition!!)
+
+            // Reveal hint sound
+            val soundFile2 = R.raw.reveal_hint
+            playSound(soundFile2)
+
+            viewModel.activeUser?.value!!.banknotes -= 10
+            updateAssetBar()
 
             dialog.cancel()
         }
         buyBodyPartBtn.setOnClickListener {
             // Button click sound
+            val soundFile1 = R.raw.click_button
+            playSound(soundFile1)
+
+            viewModel.activeGameRound?.value!!.letterMisses--
+            lifecycleScope.launch {
+                updateAvatar()
+            }
+
+            // Reveal hint sound
+            val soundFile2 = R.raw.reveal_hint
+            playSound(soundFile2)
+
+            viewModel.activeUser?.value!!.diamonds -= 2
+            updateAssetBar()
+            updateAssetBar()
+
+            dialog.cancel()
+        }
+    }
+
+    // Reveals one definition
+    private fun revealDefinition(definition: String) {
+        val layoutInflater = LayoutInflater.from(this)
+        val singleDefinitionView: View = layoutInflater.inflate(R.layout.single_definition_layout, null)
+        val builder = AlertDialog.Builder(this)
+
+        val singleDefinitionDefinition = singleDefinitionView.findViewById(R.id.singleDefinition_definition) as TextView
+        val singleDefinitionBtn = singleDefinitionView.findViewById(R.id.singleDefinitionBtn) as Button
+
+        singleDefinitionDefinition.setText(definition)
+
+        builder.setView(singleDefinitionView)
+        val dialog = builder.create()
+
+        dialog.window?.decorView?.setBackgroundResource(R.drawable.menu_shape)
+        dialog.show()
+
+        singleDefinitionBtn.setOnClickListener {
+            // Button click sound
             val soundFile = R.raw.click_button
             playSound(soundFile)
-
-            //TODO Implement buy body part
 
             dialog.cancel()
         }
@@ -373,7 +445,7 @@ class GameActivity : AppCompatActivity() {
             buyDiamond.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.banknotes < 3) {
+        if (viewModel.activeUser?.value!!.diamonds < 3) {
             buyLife.isEnabled = false
             buyLife.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -1100,7 +1172,7 @@ class GameActivity : AppCompatActivity() {
                 if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
                     displayDeadAvatar()
                 } else {
-                    updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+                    updateAvatar()
                 }
             }
         }
@@ -1148,7 +1220,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // Update displayed avatar (displays the relevant body parts only)
-    private suspend fun updateAvatar(id: Int) {
+    private suspend fun updateAvatar() {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar graphics
@@ -1314,7 +1386,7 @@ class GameActivity : AppCompatActivity() {
 
         viewModel._activeAvatar?.value = tempAvatar
         lifecycleScope.launch {
-            updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+            updateAvatar()
         }
     }
 
@@ -1332,7 +1404,7 @@ class GameActivity : AppCompatActivity() {
 
         viewModel._activeAvatar?.value = tempAvatar
         lifecycleScope.launch {
-            updateAvatar(viewModel.activeUser!!.value!!.avatarId)
+            updateAvatar()
         }
     }
 
@@ -1384,6 +1456,9 @@ class GameActivity : AppCompatActivity() {
 
             resetKeyboard()
             prizeFadeOutCountdown()
+
+            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            val currentDate = LocalDateTime.now().format(formatter).toString()
 
             // New word sound
             val soundFile = R.raw.new_word
@@ -1586,9 +1661,12 @@ class GameActivity : AppCompatActivity() {
 
                  // Compare it to game score and replace it if necessary
                  if (viewModel.activeUser?.value!!.score > lowestTopscore) {
+                     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                     val currentDate = LocalDateTime.now().format(formatter).toString()
+
                      viewModel.updateHighscore(this@GameActivity, lowestTopScoreId, Highscore(
                          viewModel.activeUser?.value!!.score,
-                         SimpleDateFormat("dd/MM/yyyy").format(Date()).toString(),
+                         currentDate,
                          viewModel.activeUser?.value!!.languageId,
                          viewModel.activeUser?.value!!.id.toInt(),
                          viewModel.activeUser?.value!!.avatarId))

@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="50"
+                android:text="150"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 
@@ -74,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="5"
+                android:text="10"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 
@@ -113,7 +113,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="1"
+                android:text="2"
                 android:textColor="@color/menu_text_colour"
                 android:textSize="24sp" />
 

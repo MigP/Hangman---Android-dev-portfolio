@@ -43,6 +43,7 @@ class HighscoresAdapter (val avatarsArray: ArrayList<String>, val languagesArray
             "drawable",
             passedContext.packageName
         ))
+        holder.highscoreDate.text = highscoresArray[position].date
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
