@@ -30,12 +30,21 @@
         android:textStyle="italic"
         app:layout_constraintTop_toBottomOf="@id/allDefinitions_title" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listOfDefinitions"
+    <LinearLayout
+        android:id="@+id/recyclerViewBorder"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/allDefinitions_subtitle"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/border_line"
+        app:layout_constraintTop_toBottomOf="@id/allDefinitions_subtitle">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listOfDefinitions"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="5dp"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/allDefinitions_noDefinitions"
@@ -61,5 +70,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listOfDefinitions" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewBorder" />
 </androidx.constraintlayout.widget.ConstraintLayout>
