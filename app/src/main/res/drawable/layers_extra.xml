@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background top -->
+    <item>
+        <bitmap android:src="@drawable/gallows_top"
+            android:alpha="0"/>
+    </item>
+
+    <!-- Extra -->
+    <item
+        android:id="@+id/glasses1"
+        android:left="0dp"
+        android:bottom="208dp">
+        <bitmap
+            android:src="@drawable/glasses1"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/glasses2"
+        android:left="0dp"
+        android:bottom="206dp">
+        <bitmap
+            android:src="@drawable/glasses2"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/glasses3"
+        android:left="0dp"
+        android:bottom="206dp">
+        <bitmap
+            android:src="@drawable/glasses3"
+            android:gravity="bottom" />
+    </item>
+</layer-list>

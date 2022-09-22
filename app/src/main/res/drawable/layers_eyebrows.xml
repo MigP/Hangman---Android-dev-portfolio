@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background top -->
+    <item>
+        <bitmap android:src="@drawable/gallows_top"
+            android:alpha="0"/>
+    </item>
+
+    <!-- Eyebrows -->
+    <item
+        android:id="@+id/eyebrows_angry_dark"
+        android:left="0dp"
+        android:bottom="218dp">
+        <bitmap
+            android:src="@drawable/eyebrows_angry_dark"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/eyebrows_angry_light"
+        android:left="0dp"
+        android:bottom="218dp">
+        <bitmap
+            android:src="@drawable/eyebrows_angry_light"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/eyebrows_neutral_dark"
+        android:left="0dp"
+        android:bottom="222dp">
+        <bitmap
+            android:src="@drawable/eyebrows_neutral_dark"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/eyebrows_neutral_light"
+        android:left="0dp"
+        android:bottom="222dp">
+        <bitmap
+            android:src="@drawable/eyebrows_neutral_light"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/eyebrows_sad_dark"
+        android:left="0dp"
+        android:bottom="220dp">
+        <bitmap
+            android:src="@drawable/eyebrows_sad_dark"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/eyebrows_sad_light"
+        android:left="0dp"
+        android:bottom="220dp">
+        <bitmap
+            android:src="@drawable/eyebrows_sad_light"
+            android:gravity="bottom" />
+    </item>
+</layer-list>

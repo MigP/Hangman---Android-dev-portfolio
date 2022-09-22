@@ -1229,40 +1229,109 @@ class GameActivity : AppCompatActivity() {
     private fun hideAvatarGraphics() {
         // Gets the layers drawable
         val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
-        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
+        val layerDrawableEyes = resources.getDrawable(R.drawable.layers_eyes) as LayerDrawable
+        val layerDrawableEyebrows = resources.getDrawable(R.drawable.layers_eyebrows) as LayerDrawable
+        val layerDrawableExtra = resources.getDrawable(R.drawable.layers_extra) as LayerDrawable
+        val layerDrawableMouth = resources.getDrawable(R.drawable.layers_mouth) as LayerDrawable
 
         //Hides them all
         for (i in 1 until layerDrawable.numberOfLayers) { // starts with 1 because 0 is the gallows
             layerDrawable.getDrawable(i).alpha = 0
         }
-        for (i in 0 until layerDrawableFace.numberOfLayers) {
-            layerDrawableFace.getDrawable(i).alpha = 0
+        for (i in 0 until layerDrawableEyes.numberOfLayers) {
+            layerDrawableEyes.getDrawable(i).alpha = 0
+        }
+        for (i in 0 until layerDrawableEyebrows.numberOfLayers) {
+            layerDrawableEyebrows.getDrawable(i).alpha = 0
+        }
+        for (i in 0 until layerDrawableExtra.numberOfLayers) {
+            layerDrawableExtra.getDrawable(i).alpha = 0
+        }
+        for (i in 0 until layerDrawableMouth.numberOfLayers) {
+            layerDrawableMouth.getDrawable(i).alpha = 0
         }
 
-        // Gets the ImageView where the layer drawable is by its id
+        // Gets the ImageView where the layers drawable are by their id
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
-        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+        val layoutlistEyes = findViewById<View>(R.id.game_eyes) as ImageView
+        val layoutlistEyebrows = findViewById<View>(R.id.game_eyebrows) as ImageView
+        val layoutlistExtra = findViewById<View>(R.id.game_extra) as ImageView
+        val layoutlistMouth = findViewById<View>(R.id.game_mouth) as ImageView
 
-        // Sets its src to the new updated layer drawable
+        // Sets their src to the new updated layers drawable
         layoutlist1.setImageDrawable(layerDrawable)
-        layoutlistFace.setImageDrawable(layerDrawableFace)
+        layoutlistEyes.setImageDrawable(layerDrawableEyes)
+        layoutlistEyebrows.setImageDrawable(layerDrawableEyebrows)
+        layoutlistExtra.setImageDrawable(layerDrawableExtra)
+        layoutlistMouth.setImageDrawable(layerDrawableMouth)
     }
 
-    // Hides all the graphics related to the avatar's face
-    private fun hideAvatarFaceGraphics() {
+    // Hides all the graphics related to the avatar's eyes
+    private fun hideAvatarEyesGraphics() {
         // Gets the layer drawable
-        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
+        val layerDrawableEyes = resources.getDrawable(R.drawable.layers_eyes) as LayerDrawable
 
         //Hides them all
-        for (i in 0 until layerDrawableFace.numberOfLayers) {
-            layerDrawableFace.getDrawable(i).alpha = 0
+        for (i in 0 until layerDrawableEyes.numberOfLayers) {
+            layerDrawableEyes.getDrawable(i).alpha = 0
         }
 
         // Gets the ImageView where the layer drawable is by its id
-        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+        val layoutlistEyes = findViewById<View>(R.id.game_eyes) as ImageView
 
         // Sets its src to the new updated layer drawable
-        layoutlistFace.setImageDrawable(layerDrawableFace)
+        layoutlistEyes.setImageDrawable(layerDrawableEyes)
+    }
+
+    // Hides all the graphics related to the avatar's eyebrows
+    private fun hideAvatarEyebrowsGraphics() {
+        // Gets the layer drawable
+        val layerDrawableEyebrows = resources.getDrawable(R.drawable.layers_eyebrows) as LayerDrawable
+
+        //Hides them all
+        for (i in 0 until layerDrawableEyebrows.numberOfLayers) {
+            layerDrawableEyebrows.getDrawable(i).alpha = 0
+        }
+
+        // Gets the ImageView where the layer drawable is by its id
+        val layoutlistEyebrows = findViewById<View>(R.id.game_eyebrows) as ImageView
+
+        // Sets its src to the new updated layer drawable
+        layoutlistEyebrows.setImageDrawable(layerDrawableEyebrows)
+    }
+
+    // Hides all the graphics related to the avatar's extra
+    private fun hideAvatarExtraGraphics() {
+        // Gets the layer drawable
+        val layerDrawableExtra = resources.getDrawable(R.drawable.layers_extra) as LayerDrawable
+
+        //Hides them all
+        for (i in 0 until layerDrawableExtra.numberOfLayers) {
+            layerDrawableExtra.getDrawable(i).alpha = 0
+        }
+
+        // Gets the ImageView where the layer drawable is by its id
+        val layoutlistExtra = findViewById<View>(R.id.game_extra) as ImageView
+
+        // Sets its src to the new updated layer drawable
+        layoutlistExtra.setImageDrawable(layerDrawableExtra)
+    }
+
+    // Hides all the graphics related to the avatar's mouth
+    private fun hideAvatarMouthGraphics() {
+        // Gets the layer drawable
+        val layerDrawableMouth = resources.getDrawable(R.drawable.layers_mouth) as LayerDrawable
+
+        //Hides them all
+        for (i in 0 until layerDrawableMouth.numberOfLayers) {
+            layerDrawableMouth.getDrawable(i).alpha = 0
+        }
+
+        // Gets the ImageView where the layer drawable is by its id
+        val layoutlistMouth = findViewById<View>(R.id.game_mouth) as ImageView
+
+        // Sets its src to the new updated layer drawable
+        layoutlistMouth.setImageDrawable(layerDrawableMouth)
     }
 
     // Update displayed avatar (displays the relevant body parts only)
@@ -1279,35 +1348,38 @@ class GameActivity : AppCompatActivity() {
         val avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
 
         // Gets the layers drawable
-        val layerDrawable = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
-        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
+        val layerDrawable1 = resources.getDrawable(R.drawable.layers_gallows) as LayerDrawable
+        val layerDrawableEyes = resources.getDrawable(R.drawable.layers_eyes) as LayerDrawable
+        val layerDrawableEyebrows = resources.getDrawable(R.drawable.layers_eyebrows) as LayerDrawable
+        val layerDrawableExtra = resources.getDrawable(R.drawable.layers_extra) as LayerDrawable
+        val layerDrawableMouth = resources.getDrawable(R.drawable.layers_mouth) as LayerDrawable
 
         // Extra: Gets the resource id, then gets the item drawable by its id
         var extra: Drawable? = null
         if (avatarExtra > 0) {
             val extraResourceName = viewModel.findExtraById(this, avatarExtra.toLong())?.get(0)?.src
-            extra = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(extraResourceName))
+            extra = layerDrawableExtra.findDrawableByLayerId(getStringIdentifier(extraResourceName))
         }
 
         // Eyes: Gets the resource id, then gets the item drawable by its id
         val eyesResourceName = viewModel.findEyesById(this, avatarEyes.toLong())?.get(0)?.src
-        val eyes = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
+        val eyes = layerDrawableEyes.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
 
         // Eyebrows: Gets the resource id, then gets the item drawable by its id
         val eyebrowsResourceName = viewModel.findEyebrowsById(this, avatarEyebrows.toLong())?.get(0)?.src
-        val eyebrows = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
+        val eyebrows = layerDrawableEyebrows.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
 
         // Mouth: Gets the resource id, then gets the item drawable by its id
         val mouthResourceName = viewModel.findMouthById(this, avatarMouth.toLong())?.get(0)?.src
-        val mouth = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
+        val mouth = layerDrawableMouth.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
 
         // Body parts: Gets the item drawable by its id
-        val head = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.headSrc))
-        val leftArm = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.leftArmSrc))
-        val rightArm = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.rightArmSrc))
-        val leftLeg = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.leftLegSrc))
-        val rightLeg = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.rightLegSrc))
-        val torso = layerDrawable.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.torsoSrc))
+        val head = layerDrawable1.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.headSrc))
+        val leftArm = layerDrawable1.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.leftArmSrc))
+        val rightArm = layerDrawable1.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.rightArmSrc))
+        val leftLeg = layerDrawable1.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.leftLegSrc))
+        val rightLeg = layerDrawable1.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.rightLegSrc))
+        val torso = layerDrawable1.findDrawableByLayerId(getStringIdentifier(viewModel.activeAvatar!!.value!!.torsoSrc))
 
         when(nrOfMisses) {
             1 -> { // Show head
@@ -1410,104 +1482,197 @@ class GameActivity : AppCompatActivity() {
 
         // Gets the ImageViews where the layers drawable are by their id
         val layoutlist1 = findViewById<View>(R.id.game_gallows_top) as ImageView
-        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+        val layoutlistEyes = findViewById<View>(R.id.game_eyes) as ImageView
+        val layoutlistEyebrows = findViewById<View>(R.id.game_eyebrows) as ImageView
+        val layoutlistExtra = findViewById<View>(R.id.game_extra) as ImageView
+        val layoutlistMouth = findViewById<View>(R.id.game_mouth) as ImageView
 
         // Sets their src to the new updated layers drawable
-        layoutlist1.setImageDrawable(layerDrawable)
-        layoutlistFace.setImageDrawable(layerDrawableFace)
+        layoutlist1.setImageDrawable(layerDrawable1)
+        layoutlistEyes.setImageDrawable(layerDrawableEyes)
+        layoutlistEyebrows.setImageDrawable(layerDrawableEyebrows)
+        layoutlistExtra.setImageDrawable(layerDrawableExtra)
+        layoutlistMouth.setImageDrawable(layerDrawableMouth)
     }
 
-    // Update displayed avatar's face (displays the relevant face parts only)
-    private suspend fun updateAvatarFace() {
+    // Update displayed avatar's eyes (displays the relevant eyes only)
+    private suspend fun updateAvatarEyes() {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
-        // Hides all displayed avatar's face graphics
-        hideAvatarFaceGraphics()
+        // Hides all displayed avatar's eyes graphics
+        hideAvatarEyesGraphics()
 
         // Gets relevant Ids from avatar object
-        val avatarExtra = viewModel.activeAvatar!!.value!!.extrasId
         val avatarEyes = viewModel.activeAvatar!!.value!!.eyesId
-        val avatarEyebrows = viewModel.activeAvatar!!.value!!.eyebrowsId
-        val avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
 
         // Gets the layer drawable
-        val layerDrawableFace = resources.getDrawable(R.drawable.layers_face) as LayerDrawable
-
-        // Extra: Gets the resource id, then gets the item drawable by its id
-        var extra: Drawable? = null
-        if (avatarExtra > 0) {
-            val extraResourceName = viewModel.findExtraById(this, avatarExtra.toLong())?.get(0)?.src
-            extra = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(extraResourceName))
-        }
+        val layerDrawableEyes = resources.getDrawable(R.drawable.layers_eyes) as LayerDrawable
 
         // Eyes: Gets the resource id, then gets the item drawable by its id
         val eyesResourceName = viewModel.findEyesById(this, avatarEyes.toLong())?.get(0)?.src
-        val eyes = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
-
-        // Eyebrows: Gets the resource id, then gets the item drawable by its id
-        val eyebrowsResourceName = viewModel.findEyebrowsById(this, avatarEyebrows.toLong())?.get(0)?.src
-        val eyebrows = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
-
-        // Mouth: Gets the resource id, then gets the item drawable by its id
-        val mouthResourceName = viewModel.findMouthById(this, avatarMouth.toLong())?.get(0)?.src
-        val mouth = layerDrawableFace.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
+        val eyes = layerDrawableEyes.findDrawableByLayerId(getStringIdentifier(eyesResourceName))
 
         when(nrOfMisses) {
             1 -> {
-                if (avatarExtra > 0) {
-                    extra!!.alpha = 255
-                }
                 eyes.alpha = 255
+            }
+            2 -> {
+                eyes.alpha = 255
+            }
+            3 -> {
+                eyes.alpha = 255
+            }
+            4 -> {
+                eyes.alpha = 255
+            }
+            5 -> {
+                eyes.alpha = 255
+            }
+            6 -> {
+                eyes.alpha = 255
+            }
+        }
+
+        // Gets the ImageViews where the layers drawable are by their id
+        val layoutlistEyes = findViewById<View>(R.id.game_eyes) as ImageView
+
+        // Sets their src to the new updated layers drawable
+        layoutlistEyes.setImageDrawable(layerDrawableEyes)
+    }
+
+    // Update displayed avatar's eyebrows (displays the relevant eyebrows only)
+    private suspend fun updateAvatarEyebrows() {
+        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+
+        // Hides all displayed avatar's eyebrows graphics
+        hideAvatarEyebrowsGraphics()
+
+        // Gets relevant Ids from avatar object
+        val avatarEyebrows = viewModel.activeAvatar!!.value!!.eyebrowsId
+
+        // Gets the layer drawable
+        val layerDrawableEyebrows = resources.getDrawable(R.drawable.layers_eyebrows) as LayerDrawable
+
+        // Eyes: Gets the resource id, then gets the item drawable by its id
+        val eyebrowsResourceName = viewModel.findEyebrowsById(this, avatarEyebrows.toLong())?.get(0)?.src
+        val eyebrows = layerDrawableEyebrows.findDrawableByLayerId(getStringIdentifier(eyebrowsResourceName))
+
+        when(nrOfMisses) {
+            1 -> {
                 eyebrows.alpha = 255
+            }
+            2 -> {
+                eyebrows.alpha = 255
+            }
+            3 -> {
+                eyebrows.alpha = 255
+            }
+            4 -> {
+                eyebrows.alpha = 255
+            }
+            5 -> {
+                eyebrows.alpha = 255
+            }
+            6 -> {
+                eyebrows.alpha = 255
+            }
+        }
+
+        // Gets the ImageViews where the layers drawable are by their id
+        val layoutlistEyebrows = findViewById<View>(R.id.game_eyebrows) as ImageView
+
+        // Sets their src to the new updated layers drawable
+        layoutlistEyebrows.setImageDrawable(layerDrawableEyebrows)
+    }
+
+    // Update displayed avatar's extras (displays the relevant extras only)
+    private suspend fun updateAvatarExtra() {
+        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+
+        // Hides all displayed avatar's extras graphics
+        hideAvatarExtraGraphics()
+
+        // Gets relevant Ids from avatar object
+        val avatarExtra = viewModel.activeAvatar!!.value!!.extrasId
+
+        // Gets the layer drawable
+        val layerDrawableExtra = resources.getDrawable(R.drawable.layers_extra) as LayerDrawable
+
+        // Eyes: Gets the resource id, then gets the item drawable by its id
+        val extraResourceName = viewModel.findExtraById(this, avatarExtra.toLong())?.get(0)?.src
+        val extras = layerDrawableExtra.findDrawableByLayerId(getStringIdentifier(extraResourceName))
+
+        when(nrOfMisses) {
+            1 -> {
+                extras.alpha = 255
+            }
+            2 -> {
+                extras.alpha = 255
+            }
+            3 -> {
+                extras.alpha = 255
+            }
+            4 -> {
+                extras.alpha = 255
+            }
+            5 -> {
+                extras.alpha = 255
+            }
+            6 -> {
+                extras.alpha = 255
+            }
+        }
+
+        // Gets the ImageViews where the layers drawable are by their id
+        val layoutlistExtra = findViewById<View>(R.id.game_extra) as ImageView
+
+        // Sets their src to the new updated layers drawable
+        layoutlistExtra.setImageDrawable(layerDrawableExtra)
+    }
+
+    // Update displayed avatar's mouth (displays the relevant mouth only)
+    private suspend fun updateAvatarMouth() {
+        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+
+        // Hides all displayed avatar's mouth graphics
+        hideAvatarMouthGraphics()
+
+        // Gets relevant Ids from avatar object
+        val avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
+
+        // Gets the layer drawable
+        val layerDrawableMouth = resources.getDrawable(R.drawable.layers_mouth) as LayerDrawable
+
+        // Eyes: Gets the resource id, then gets the item drawable by its id
+        val mouthResourceName = viewModel.findMouthById(this, avatarMouth.toLong())?.get(0)?.src
+        val mouth = layerDrawableMouth.findDrawableByLayerId(getStringIdentifier(mouthResourceName))
+
+        when(nrOfMisses) {
+            1 -> {
                 mouth.alpha = 255
             }
             2 -> {
-                if (avatarExtra > 0) {
-                    extra!!.alpha = 255
-                }
-                eyes.alpha = 255
-                eyebrows.alpha = 255
                 mouth.alpha = 255
             }
             3 -> {
-                if (avatarExtra > 0) {
-                    extra!!.alpha = 255
-                }
-                eyes.alpha = 255
-                eyebrows.alpha = 255
                 mouth.alpha = 255
             }
             4 -> {
-                if (avatarExtra > 0) {
-                    extra!!.alpha = 255
-                }
-                eyes.alpha = 255
-                eyebrows.alpha = 255
                 mouth.alpha = 255
             }
             5 -> {
-                if (avatarExtra > 0) {
-                    extra!!.alpha = 255
-                }
-                eyes.alpha = 255
-                eyebrows.alpha = 255
                 mouth.alpha = 255
             }
             6 -> {
-                if (avatarExtra > 0) {
-                    extra!!.alpha = 255
-                }
-                eyes.alpha = 255
-                eyebrows.alpha = 255
                 mouth.alpha = 255
             }
         }
 
         // Gets the ImageViews where the layers drawable are by their id
-        val layoutlistFace = findViewById<View>(R.id.game_face) as ImageView
+        val layoutlistMouth = findViewById<View>(R.id.game_mouth) as ImageView
 
         // Sets their src to the new updated layers drawable
-        layoutlistFace.setImageDrawable(layerDrawableFace)
+        layoutlistMouth.setImageDrawable(layerDrawableMouth)
     }
 
     // Returns the drawable id of a string (image src name)
@@ -1540,12 +1705,23 @@ class GameActivity : AppCompatActivity() {
 
         viewModel._activeAvatar?.value = tempAvatar
         lifecycleScope.launch {
-            updateAvatarFace()
+            updateAvatarEyes()
+        }
+    }
+
+    // Display happy eyes avatar
+    private fun displayHappyEyesAvatar() {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
+
+        viewModel._activeAvatar?.value = tempAvatar
+        lifecycleScope.launch {
+            updateAvatarEyes()
         }
     }
 
     // Display happy avatar
-    private fun displayHappyAvatar() {
+    private fun displayHappyAvatar() {//TODO
         val tempAvatar = viewModel.activeAvatar!!.value
         viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
         if (viewModel.activeAvatar!!.value?.complexion  == "light") {
@@ -1558,7 +1734,9 @@ class GameActivity : AppCompatActivity() {
 
         viewModel._activeAvatar?.value = tempAvatar
         lifecycleScope.launch {
-            updateAvatarFace()
+            updateAvatarEyes()
+            updateAvatarEyebrows()
+            updateAvatarMouth()
         }
     }
 
@@ -1760,8 +1938,6 @@ class GameActivity : AppCompatActivity() {
         hideDisplayedWord()
         hideAllAnimations()
         hideAvatarGraphics()
-        binding.newRoundBtn.setText(R.string.new_round)
-        showNewRoundBtn()
 
         val layoutInflater = LayoutInflater.from(this)
         val finalScoreView: View = layoutInflater.inflate(R.layout.end_game_layout, null)
@@ -1900,6 +2076,9 @@ class GameActivity : AppCompatActivity() {
             if (viewModel.activeUser?.value!!.lives == 0) {
                 loseGameRound()
             }
+
+            binding.newRoundBtn.setText(R.string.new_round)
+            showNewRoundBtn()
 
             dialog.cancel()
         }
@@ -2061,7 +2240,7 @@ class GameActivity : AppCompatActivity() {
             (blinkTimerEnd as CountDownTimer).cancel()
         }
 
-        displayHappyAvatar()
+        displayHappyEyesAvatar()
 
         // Sets a random duration
         val blinkTimerDuration = (1000 until 5000).random().toLong()

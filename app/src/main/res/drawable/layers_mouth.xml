@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background top -->
+    <item>
+        <bitmap android:src="@drawable/gallows_top"
+            android:alpha="0"/>
+    </item>
+
+    <!-- Mouth -->
+    <item
+        android:id="@+id/mouth_dark_sad"
+        android:left="0dp"
+        android:bottom="191dp">
+        <bitmap
+            android:src="@drawable/mouth_dark_sad"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_dark_side"
+        android:left="0dp"
+        android:bottom="189dp">
+        <bitmap
+            android:src="@drawable/mouth_dark_side"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_dark_smiling"
+        android:left="0dp"
+        android:bottom="190dp">
+        <bitmap
+            android:src="@drawable/mouth_dark_smiling"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_dark_straight"
+        android:left="0dp"
+        android:bottom="192dp">
+        <bitmap
+            android:src="@drawable/mouth_dark_straight"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_light_sad"
+        android:left="0dp"
+        android:bottom="193dp">
+        <bitmap
+            android:src="@drawable/mouth_light_sad"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_light_side"
+        android:left="0dp"
+        android:bottom="189dp">
+        <bitmap
+            android:src="@drawable/mouth_light_side"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_light_smiling"
+        android:left="0dp"
+        android:bottom="190dp">
+        <bitmap
+            android:src="@drawable/mouth_light_smiling"
+            android:gravity="bottom" />
+    </item>
+    <item
+        android:id="@+id/mouth_light_straight"
+        android:left="0dp"
+        android:bottom="193dp">
+        <bitmap
+            android:src="@drawable/mouth_light_straight"
+            android:gravity="bottom" />
+    </item>
+</layer-list>

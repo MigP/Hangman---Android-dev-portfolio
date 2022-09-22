@@ -47,14 +47,44 @@
             app:srcCompat="@drawable/layers_gallows" />
 
         <ImageView
-            android:id="@+id/game_face"
+            android:id="@+id/game_eyes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toTopOf="@id/game_gallows_bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/layers_face" />
+            app:srcCompat="@drawable/layers_eyes" />
+
+        <ImageView
+            android:id="@+id/game_eyebrows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@id/game_gallows_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/layers_eyebrows" />
+
+        <ImageView
+            android:id="@+id/game_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@id/game_gallows_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/layers_extra" />
+
+        <ImageView
+            android:id="@+id/game_mouth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@id/game_gallows_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/layers_mouth" />
 
         <ImageView
             android:id="@+id/game_gallows_bottom"
