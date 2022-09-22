@@ -543,8 +543,8 @@ class GameActivity : AppCompatActivity() {
         viewModel.activeUser?.value!!.lives = 5
         viewModel.activeUser?.value!!.score = 0
 
-        (blinkTimerInit as CountDownTimer).cancel()//TODO
-        (blinkTimerEnd as CountDownTimer).cancel()//TODO
+        (blinkTimerInit as CountDownTimer).cancel()
+        (blinkTimerEnd as CountDownTimer).cancel()
         (timer10 as CountDownTimer).cancel()
         binding.potentialPrize.alpha = 0F
 
@@ -1721,7 +1721,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // Display happy avatar
-    private fun displayHappyAvatar() {//TODO
+    private fun displayHappyAvatar() {
         val tempAvatar = viewModel.activeAvatar!!.value
         viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
         if (viewModel.activeAvatar!!.value?.complexion  == "light") {
@@ -1793,7 +1793,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile = R.raw.new_word
             playSound(soundFile)
 
-            avatarBlink() //TODO
+            avatarBlink()
         }
         binding.waitingPlaceholder.isVisible = false
 
@@ -2231,7 +2231,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // Avatar blink
-    private fun avatarBlink() { //TODO
+    private fun avatarBlink() {
         // Cancels the timers if they already exist and are running
         if (blinkTimerInit != null) {
             (blinkTimerInit as CountDownTimer).cancel()
@@ -2240,7 +2240,7 @@ class GameActivity : AppCompatActivity() {
             (blinkTimerEnd as CountDownTimer).cancel()
         }
 
-        displayHappyEyesAvatar()
+        displayHappyEyesAvatar() //TODO get current avatar eyes type and revert to them after blink instead of only happy eyes
 
         // Sets a random duration
         val blinkTimerDuration = (1000 until 5000).random().toLong()
