@@ -103,7 +103,7 @@ class RegisterFragment : Fragment() {
                     if (viewModel.usernameExists(requireContext(), enteredUsername)) { // Chosen user name already exists
                         Toast.makeText(requireContext(), R.string.username_exists, Toast.LENGTH_LONG).show()
                     } else { // Registration successful. Go to Log in fragment
-                        viewModel.insertUser(requireContext(), User(enteredUsername, enteredPassword))
+                        viewModel.insertUser(requireContext(), User(requireContext(), enteredUsername, enteredPassword))
                         setFragmentResult("requestKey", bundleOf("targetFragment" to "LogIn"))
                     }
                 }

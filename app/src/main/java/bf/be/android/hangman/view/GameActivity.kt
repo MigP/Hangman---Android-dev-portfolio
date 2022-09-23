@@ -75,7 +75,7 @@ class GameActivity : AppCompatActivity() {
         initialiseUi()
 
         // Creates viewModel game round object
-        viewModel.createNewGameRound()
+        viewModel.createNewGameRound(this)
 
         lifecycleScope.launch {
             // Creates viewModel avatar list
@@ -271,6 +271,13 @@ class GameActivity : AppCompatActivity() {
         val buyDefinitionBtn = helpMenuView.findViewById(R.id.definitionBuyBtn) as Button
         val buyBodyPartBtn = helpMenuView.findViewById(R.id.bodyPartBuyBtn) as Button
 
+        val letterPrice = helpMenuView.findViewById(R.id.helpMenuCoinPrice) as TextView
+        letterPrice.setText(viewModel.activeGameRound?.value!!.helpValues_Letter_price.toString())
+        val definitionPrice = helpMenuView.findViewById(R.id.helpMenuBanknotePrice) as TextView
+        definitionPrice.setText(viewModel.activeGameRound?.value!!.helpValues_Definition_price.toString())
+        val bodyPartPrice = helpMenuView.findViewById(R.id.helpMenuMenuDiamondPrice) as TextView
+        bodyPartPrice.setText(viewModel.activeGameRound?.value!!.helpValues_BodyPart_price.toString())
+
         builder.setView(helpMenuView)
         val dialog = builder.create()
 
@@ -280,21 +287,21 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        if (viewModel.activeUser?.value!!.coins < 150 || !activeRound) {
+        if (viewModel.activeUser?.value!!.coins < viewModel.activeGameRound?.value!!.helpValues_Letter_price || !activeRound) {
             buyLetterBtn.isEnabled = false
             buyLetterBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyLetterBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.banknotes < 10 || !activeRound || viewModel.word.value?.revealedDefinitions!!.isEmpty()) {
+        if (viewModel.activeUser?.value!!.banknotes < viewModel.activeGameRound?.value!!.helpValues_Definition_price || !activeRound || viewModel.word.value?.revealedDefinitions!!.isEmpty()) {
             buyDefinitionBtn.isEnabled = false
             buyDefinitionBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyDefinitionBtn.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.diamonds < 2 || !activeRound || viewModel.activeGameRound?.value!!.letterMisses == 0) {
+        if (viewModel.activeUser?.value!!.diamonds < viewModel.activeGameRound?.value!!.helpValues_BodyPart_price || !activeRound || viewModel.activeGameRound?.value!!.letterMisses == 0) {
             buyBodyPartBtn.isEnabled = false
             buyBodyPartBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -327,7 +334,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile2 = R.raw.reveal_hint
             playSound(soundFile2)
 
-            viewModel.activeUser?.value!!.coins -= 150
+            viewModel.activeUser?.value!!.coins -= viewModel.activeGameRound?.value!!.helpValues_Letter_price
             updateAssetBar()
 
             dialog.cancel()
@@ -349,7 +356,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile2 = R.raw.reveal_hint
             playSound(soundFile2)
 
-            viewModel.activeUser?.value!!.banknotes -= 10
+            viewModel.activeUser?.value!!.banknotes -= viewModel.activeGameRound?.value!!.helpValues_Definition_price
             updateAssetBar()
 
             dialog.cancel()
@@ -368,7 +375,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile2 = R.raw.reveal_hint
             playSound(soundFile2)
 
-            viewModel.activeUser?.value!!.diamonds -= 2
+            viewModel.activeUser?.value!!.diamonds -= viewModel.activeGameRound?.value!!.helpValues_BodyPart_price
             updateAssetBar()
             updateAssetBar()
 
@@ -420,6 +427,13 @@ class GameActivity : AppCompatActivity() {
         val buyDiamond = exchangeMenuView.findViewById(R.id.exchangeBuyDiamondBtn) as Button
         val buyLife = exchangeMenuView.findViewById(R.id.exchangeBuyLifeBtn) as Button
 
+        val banknotePrice = exchangeMenuView.findViewById(R.id.banknote_price) as TextView
+        banknotePrice.setText(viewModel.activeGameRound?.value!!.exchangeValues_Banknotes_price.toString())
+        val diamondPrice = exchangeMenuView.findViewById(R.id.diamond_price) as TextView
+        diamondPrice.setText(viewModel.activeGameRound?.value!!.exchangeValues_Diamonds_price.toString())
+        val lifePrice = exchangeMenuView.findViewById(R.id.life_price) as TextView
+        lifePrice.setText(viewModel.activeGameRound?.value!!.exchangeValues_Lives_price.toString())
+
         builder.setView(exchangeMenuView)
         val dialog = builder.create()
 
@@ -429,21 +443,21 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        if (viewModel.activeUser?.value!!.coins < 25) {
+        if (viewModel.activeUser?.value!!.coins < viewModel.activeGameRound?.value!!.exchangeValues_Banknotes_price) {
             buyBanknote.isEnabled = false
             buyBanknote.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyBanknote.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.banknotes < 10) {
+        if (viewModel.activeUser?.value!!.banknotes < viewModel.activeGameRound?.value!!.exchangeValues_Diamonds_price) {
             buyDiamond.isEnabled = false
             buyDiamond.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
             buyDiamond.isActivated = true
         }
 
-        if (viewModel.activeUser?.value!!.diamonds < 3) {
+        if (viewModel.activeUser?.value!!.diamonds < viewModel.activeGameRound?.value!!.exchangeValues_Lives_price) {
             buyLife.isEnabled = false
             buyLife.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -457,7 +471,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile1 = R.raw.click_button
             playSound(soundFile1)
 
-            viewModel.activeUser?.value!!.coins -= 25
+            viewModel.activeUser?.value!!.coins -= viewModel.activeGameRound?.value!!.exchangeValues_Banknotes_price
             viewModel.activeUser?.value!!.banknotes += 1
 
             // Banknotes sound
@@ -471,7 +485,7 @@ class GameActivity : AppCompatActivity() {
             // Button click sound
             val soundFile1 = R.raw.click_button
             playSound(soundFile1)
-            viewModel.activeUser?.value!!.banknotes -= 10
+            viewModel.activeUser?.value!!.banknotes -= viewModel.activeGameRound?.value!!.exchangeValues_Diamonds_price
             viewModel.activeUser?.value!!.diamonds += 1
 
             // Diamonds sound
@@ -485,7 +499,7 @@ class GameActivity : AppCompatActivity() {
             // Button click sound
             val soundFile1 = R.raw.click_button
             playSound(soundFile1)
-            viewModel.activeUser?.value!!.diamonds -= 3
+            viewModel.activeUser?.value!!.diamonds -= viewModel.activeGameRound?.value!!.exchangeValues_Lives_price
             viewModel.activeUser?.value!!.lives += 1
 
             // Lives sound
@@ -897,6 +911,68 @@ class GameActivity : AppCompatActivity() {
 
         val gameHelpBtn = gameHelpView.findViewById(R.id.gameHelpBtn) as Button
 
+        // Writes the correct game constants into the game help sections
+        val gameConstantsValues: Array<String> = resources.getStringArray(R.array.user_resources)
+        val gameExchangeConstantsValues: Array<String> = resources.getStringArray(R.array.resource_exchanges)
+        val gameHelpConstantsValues: Array<String> = resources.getStringArray(R.array.help_prices)
+
+        val gameHelp_section2 = gameHelpView.findViewById(R.id.gameHelp_section2) as TextView
+        val gameHelp_section4 = gameHelpView.findViewById(R.id.gameHelp_section4) as TextView
+        val gameHelp_section6 = gameHelpView.findViewById(R.id.gameHelp_section6) as TextView
+        val gameHelp_section7 = gameHelpView.findViewById(R.id.gameHelp_section7) as TextView
+        val gameHelp_section8 = gameHelpView.findViewById(R.id.gameHelp_section8) as TextView
+
+        if (gameConstantsValues[3].toInt() == 1) { // If game constant lives is 1
+            gameHelp_section2.setText(resources.getString(R.string.game_help_2a) + gameConstantsValues[3] + resources.getString(R.string.game_help_2b_singular))
+            gameHelp_section4.setText(resources.getString(R.string.game_help_4a) + gameConstantsValues[3] + resources.getString(R.string.game_help_4b_singular))
+        } else {
+            gameHelp_section2.setText(resources.getString(R.string.game_help_2a) + gameConstantsValues[3] + resources.getString(R.string.game_help_2b_plural))
+            gameHelp_section4.setText(resources.getString(R.string.game_help_4a) + gameConstantsValues[3] + resources.getString(R.string.game_help_4b_plural))
+        }
+
+        var section6String = gameHelpConstantsValues[0]
+        if (gameHelpConstantsValues[0].toInt() == 1) { // If game constant reveal letter price is 1
+            section6String += resources.getString(R.string.game_help_6a_singular)
+        } else {
+            section6String += resources.getString(R.string.game_help_6a_plural)
+        }
+        section6String += gameExchangeConstantsValues[0]
+        if (gameExchangeConstantsValues[0].toInt() == 1) { // If game constant banknote price is 1
+            section6String += resources.getString(R.string.game_help_6b_singular)
+        } else {
+            section6String += resources.getString(R.string.game_help_6b_plural)
+        }
+        gameHelp_section6.setText(section6String)
+
+
+        var section7String = gameHelpConstantsValues[1]
+        if (gameHelpConstantsValues[1].toInt() == 1) { // If game constant reveal definition price is 1
+            section7String += resources.getString(R.string.game_help_7a_singular)
+        } else {
+            section7String += resources.getString(R.string.game_help_7a_plural)
+        }
+        section7String += gameExchangeConstantsValues[1]
+        if (gameExchangeConstantsValues[1].toInt() == 1) { // If game constant diamond price is 1
+            section7String += resources.getString(R.string.game_help_7b_singular)
+        } else {
+            section7String += resources.getString(R.string.game_help_7b_plural)
+        }
+        gameHelp_section7.setText(section7String)
+
+        var section8String = gameHelpConstantsValues[2]
+        if (gameHelpConstantsValues[2].toInt() == 1) { // If game constant restore a body part price is 1
+            section8String += resources.getString(R.string.game_help_8a_singular)
+        } else {
+            section8String += resources.getString(R.string.game_help_8a_plural)
+        }
+        section8String += gameExchangeConstantsValues[2]
+        if (gameExchangeConstantsValues[2].toInt() == 1) { // If game constant life price is 1
+            section8String += resources.getString(R.string.game_help_8b_singular)
+        } else {
+            section8String += resources.getString(R.string.game_help_8b_plural)
+        }
+        gameHelp_section8.setText(section8String)
+
         builder.setView(gameHelpView)
         val dialog = builder.create()
 
@@ -1153,11 +1229,12 @@ class GameActivity : AppCompatActivity() {
 
             // Adds prize to the assets bar
             if (viewModel.activeGameRound?.value!!.potentialPrize > 0) {
-                viewModel.activeUser?.value!!.coins += viewModel.activeGameRound?.value!!.potentialPrize + 1 + prizeCoins
+                viewModel.activeUser?.value!!.coins += viewModel.activeGameRound?.value!!.potentialPrize + 1 + prizeCoins //TODO
 
                 // Coins sound
                 val soundFile = R.raw.coins
                 playSound(soundFile)
+
             }
 
             // Adds score to the assets bar
@@ -1743,7 +1820,7 @@ class GameActivity : AppCompatActivity() {
     // --- Game round ---
     // Resets the view model game round object
     private fun resetGameRound() {
-        val tempGameRound = GameRound()
+        val tempGameRound = GameRound(this)
         viewModel._activeGameRound = MutableLiveData(tempGameRound)
     }
 

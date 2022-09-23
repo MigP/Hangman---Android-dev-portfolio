@@ -10,6 +10,27 @@
         <item>reply_all</item>
     </string-array>
 
+    <!-- Game constants -->
+    <string-array name="user_resources">
+        <item>0</item> <!-- coins -->
+        <item>0</item> <!-- banknotes -->
+        <item>0</item> <!-- diamonds -->
+        <item>5</item> <!-- lives -->
+        <item>0</item> <!-- score -->
+    </string-array>
+
+    <string-array name="resource_exchanges">
+        <item>25</item> <!-- price of banknotes -->
+        <item>10</item> <!-- price of diamonds -->
+        <item>3</item> <!-- price of lives -->
+    </string-array>
+
+    <string-array name="help_prices">
+        <item>150</item> <!-- price of revealing a letter -->
+        <item>10</item> <!-- price of revealing a definition -->
+        <item>2</item> <!-- price of restoring one body part -->
+    </string-array>
+
     <!-- Database initial entries -->
     <string-array name="languages">
         <item>Français</item>

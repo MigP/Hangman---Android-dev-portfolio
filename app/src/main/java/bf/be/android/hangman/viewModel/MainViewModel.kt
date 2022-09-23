@@ -102,7 +102,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     // User related methods
     suspend fun createUser(context: Context, id: Long, appBarMenu: Menu) = coroutineScope {
-        var user = User()
+        var user = User(context)
         val waitFor = CoroutineScope(Dispatchers.IO).async {
             val userDao = UserDao(context)
             userDao.openReadable()
@@ -135,8 +135,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     }
 
     // Game round related methods
-    fun createNewGameRound() {
-            val tempGameRound = GameRound()
+    fun createNewGameRound(context: Context) {
+            val tempGameRound = GameRound(context)
             _activeGameRound = MutableLiveData(tempGameRound)
     }
 

@@ -27,8 +27,10 @@ public class UserDao {
 
     private final DbHelper helper;
     private SQLiteDatabase database;
+    private final Context context;
 
     public UserDao(Context context) {
+        this.context = context;
         helper = new DbHelper(context);
     }
 
@@ -42,7 +44,7 @@ public class UserDao {
 
     @SuppressLint("Range")
     public User getUserFromCursor(Cursor cursor) {
-        User user = new User();
+        User user = new User(context);
         user.setId(cursor.getLong(cursor.getColumnIndex("id")));
         user.setUsername(cursor.getString(cursor.getColumnIndex("username")));
         user.setPassword(cursor.getString(cursor.getColumnIndex("password")));

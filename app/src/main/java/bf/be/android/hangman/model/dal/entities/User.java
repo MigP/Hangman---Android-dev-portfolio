@@ -1,8 +1,16 @@
 package bf.be.android.hangman.model.dal.entities;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
 
+import bf.be.android.hangman.R;
+import bf.be.android.hangman.model.dal.DbHelper;
+
 public class User {
+    private final Context context;
     private long id;
     private String username;
     private String password;
@@ -15,20 +23,29 @@ public class User {
     private int lives = 5;
     private int score = 0;
 
-    public User() {
+    public User(Context context) {
+        this.context = context;
+
+        initialiseConstants();
     }
 
-    public User(String username, String password) {
+    public User(Context context, String username, String password) {
+        this.context = context;
         this.username = username;
         this.password = password;
+
+        initialiseConstants();
     }
 
-    public User(String username, String password, int highscore, int languageId, int avatarId) {
+    public User(Context context, String username, String password, int highscore, int languageId, int avatarId) {
+        this.context = context;
         this.username = username;
         this.password = password;
         this.highscore = highscore;
         this.languageId = languageId;
         this.avatarId = avatarId;
+
+        initialiseConstants();
     }
 
     @NonNull
@@ -146,5 +163,16 @@ public class User {
     public User setScore(int score) {
         this.score = score;
         return this;
+    }
+
+    private void initialiseConstants() {
+        Resources res = this.context.getResources();
+
+        String[] gameConstantsValues = res.getStringArray(R.array.user_resources);
+        this.coins = Integer.parseInt(gameConstantsValues[0]);
+        this.banknotes = Integer.parseInt(gameConstantsValues[1]);
+        this.diamonds = Integer.parseInt(gameConstantsValues[2]);
+        this.lives = Integer.parseInt(gameConstantsValues[3]);
+        this.score = Integer.parseInt(gameConstantsValues[4]);
     }
 }

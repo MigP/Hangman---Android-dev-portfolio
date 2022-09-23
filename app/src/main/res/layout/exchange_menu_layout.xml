@@ -30,6 +30,7 @@
                 app:srcCompat="@drawable/coin" />
 
             <TextView
+                android:id="@+id/banknote_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
@@ -81,6 +82,7 @@
                 app:srcCompat="@drawable/banknote" />
 
             <TextView
+                android:id="@+id/diamond_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
@@ -131,6 +133,7 @@
                 app:srcCompat="@drawable/diamond" />
 
             <TextView
+                android:id="@+id/life_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
