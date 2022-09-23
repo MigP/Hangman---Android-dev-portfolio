@@ -1232,7 +1232,7 @@ class GameActivity : AppCompatActivity() {
 
             // Adds prize to the assets bar
             if (viewModel.activeGameRound?.value!!.potentialPrize > 0) {
-                viewModel.activeUser?.value!!.coins += viewModel.activeGameRound?.value!!.potentialPrize + 1 + prizeCoins //TODO
+                viewModel.activeUser?.value!!.coins += viewModel.activeGameRound?.value!!.potentialPrize + 1 + prizeCoins
 
                 // Coins sound
                 val soundFile = R.raw.coins
@@ -1245,7 +1245,7 @@ class GameActivity : AppCompatActivity() {
 
             updateAssetBar()
 
-            //TODO Implement avatar's reactions methods (timer, etc.)
+            //TODO Implement avatar's reactions methods (time dependent)
 
             // Button click sound
             val soundFile = R.raw.click_letter_guess
@@ -1812,7 +1812,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            avatarAnimations?.displayHappyEyesAvatar(this@GameActivity, viewModel) //TODO get current avatar eyes type and revert to them after blink instead of only happy eyes
+            avatarAnimations?.displayHappyEyesAvatar(this@GameActivity, viewModel) //TODO To implement at a future date: get current avatar eyes type instead of always reverting to happy eyes
         }
 
         // Sets a random duration
