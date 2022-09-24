@@ -67,11 +67,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val activeLanguage: LiveData<Language>?
         get() = _activeLanguage
 
-    // Active game round
-    var _activeGameRound: MutableLiveData<GameRound>? = null
-    val activeGameRound: LiveData<GameRound>?
-        get() = _activeGameRound
-
     // Selected avatar on the list of avatars
     var avatarLastSelectedCheckbox = MutableLiveData(0)
 
@@ -140,26 +135,20 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         _activeUser = MutableLiveData(user)
     }
 
-    // Game round related methods
-    fun createNewGameRound(context: Context) {
-            val tempGameRound = GameRound(context)
-            _activeGameRound = MutableLiveData(tempGameRound)
-    }
-
     // Word object related methods
     private fun generateNewWord(language: String) {
         val newWord = Word(_randomWord.value.toString(), _definitions.value, language)
         _word.value = newWord
     }
 
-    fun updateDisplayedWord(guessedLetter: String): Boolean {
+    fun updateDisplayedWord(guessedLetter: String, gameRound: GameRound): Boolean {
         var correctLetter = false
         if (_word.value != null) {
             val word = StringBuilder()
             for (i in 0 until _word.value?.displayedWord!!.length) {
                 if (guessedLetter == prepareCharacter(_word.value?.hiddenWord?.get(i).toString())) {
                     correctLetter = true
-                    _activeGameRound?.value!!.guessedLetters++
+                    gameRound.guessedLetters++
                     word.append(_word.value?.hiddenWord?.get(i).toString().uppercase())
                 } else {
                     word.append(_word.value?.displayedWord!![i])

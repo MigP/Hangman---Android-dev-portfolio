@@ -8,6 +8,7 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.ImageView
 import bf.be.android.hangman.R
+import bf.be.android.hangman.view.GameActivity
 import bf.be.android.hangman.viewModel.MainViewModel
 
 class AvatarAnimations () {
@@ -186,7 +187,7 @@ class AvatarAnimations () {
     // --- Methods to display the updated parts of the avatar ---
     // Update displayed avatar (displays the relevant body parts only)
     suspend fun updateAvatar(context: Context, viewModel: MainViewModel) {
-        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+        val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar graphics
         this.hideAvatarGraphics(context)
@@ -347,7 +348,7 @@ class AvatarAnimations () {
 
     // Update displayed avatar's eyes (displays the relevant eyes only)
     suspend fun updateAvatarEyes(context: Context, viewModel: MainViewModel) {
-        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+        val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's eyes graphics
         this.hideAvatarEyesGraphics(context)
@@ -392,7 +393,7 @@ class AvatarAnimations () {
 
     // Update displayed avatar's eyebrows (displays the relevant eyebrows only)
     suspend fun updateAvatarEyebrows(context: Context, viewModel: MainViewModel) {
-        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+        val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's eyebrows graphics
         this.hideAvatarEyebrowsGraphics(context)
@@ -437,7 +438,7 @@ class AvatarAnimations () {
 
     // Update displayed avatar's extras (displays the relevant extras only)
     suspend fun updateAvatarExtra(context: Context, viewModel: MainViewModel) {
-        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+        val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's extras graphics
         this.hideAvatarExtraGraphics(context)
@@ -482,7 +483,7 @@ class AvatarAnimations () {
 
     // Update displayed avatar's mouth (displays the relevant mouth only)
     suspend fun updateAvatarMouth(context: Context, viewModel: MainViewModel) {
-        val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
+        val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's mouth graphics
         this.hideAvatarMouthGraphics(context)

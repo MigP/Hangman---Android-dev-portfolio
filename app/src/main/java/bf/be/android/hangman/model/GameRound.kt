@@ -6,6 +6,7 @@ import bf.be.android.hangman.R
 
 
 class GameRound (private val context: Context) {
+    var activeRound = false
     var letterMisses = 0
     var guessedLetters = 0
     var lettersGuessedConsecutively = 0
