@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.FragmentLoginBinding
+import bf.be.android.hangman.model.Sounds
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -34,6 +35,9 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Creates sounds object
+        sounds = Sounds(requireContext())
+
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -62,6 +66,8 @@ class LoginFragment : Fragment() {
 
     companion object {
         var pwVisibilityState = false
+        var sounds: Sounds? = null
+
         @JvmStatic
         fun newInstance() =
             LoginFragment().apply {
@@ -70,11 +76,8 @@ class LoginFragment : Fragment() {
 
     private fun login (view: View) {
         // Button click sound
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        if (prefs.getString("sound", "on").equals("on")) {
-            val soundFile = R.raw.click_button
-            playSound(soundFile)
-        }
+        val soundFile = R.raw.click_button
+        sounds?.playSound(soundFile)
 
         val enteredUsername = binding.loginUsernameInput.text.toString()
         val enteredPassword = binding.loginPasswordInput.text.toString()
@@ -102,16 +105,6 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), R.string.wrong_credentials, Toast.LENGTH_LONG).show()
                 }
             }
-        }
-    }
-
-    // Sound effects
-    private fun playSound(soundFile: Int) {
-        val soundToPlay = MediaPlayer.create(requireContext(), soundFile)
-        soundToPlay.start()
-        soundToPlay.setOnCompletionListener { soundToPlay ->
-            soundToPlay.stop()
-            soundToPlay?.release()
         }
     }
 }

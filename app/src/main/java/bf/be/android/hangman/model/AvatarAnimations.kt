@@ -11,11 +11,13 @@ import bf.be.android.hangman.view.GameActivity
 import bf.be.android.hangman.viewModel.MainViewModel
 
 class AvatarAnimations () {
+    // --- Functional methods ---
     // Returns the drawable id of a string (image src name)
     private fun getStringIdentifier(context: Context, name: String?): Int {
         return context.resources.getIdentifier(name, "id", context.packageName)
     }
 
+    // --- Methods to hide specific parts of the avatar ---
     // Hides all the graphics related to the avatar
     fun hideAvatarGraphics(context: Context) {
         // Gets the layers drawable
@@ -91,7 +93,7 @@ class AvatarAnimations () {
         layoutlistEyebrows.setImageDrawable(layerDrawableEyebrows)
     }
 
-    // Hides all the graphics related to the avatar's extra
+    // Hides all the graphics related to the avatar's extras (glasses)
     fun hideAvatarExtraGraphics(context: Context) {
         // Gets the layer drawable
         val layerDrawableExtra = context.resources.getDrawable(R.drawable.layers_extra) as LayerDrawable
@@ -125,6 +127,60 @@ class AvatarAnimations () {
         layoutlistMouth.setImageDrawable(layerDrawableMouth)
     }
 
+    // --- Methods to prepare the specific parts of the avatar to be updated and displayed ---
+    // Display dead avatar (updates the whole avatar because the last leg was added before calling this)
+    suspend fun displayDeadAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 6 // Sad light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 5 // Sad dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        GameActivity.avatarAnimations?.updateAvatar(context, viewModel)
+    }
+
+    // Display happy avatar (eyes, eyebrows, mouth)
+    suspend fun displayHappyFaceEyesForwardAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 7 // Smiling light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 3 // Smiling dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
+        GameActivity.avatarAnimations?.updateAvatarEyebrows(context, viewModel)
+        GameActivity.avatarAnimations?.updateAvatarMouth(context, viewModel)
+    }
+
+    // Display blink avatar (eyes)
+    suspend fun displayBlinkAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
+
+        viewModel._activeAvatar?.value = tempAvatar
+        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
+    }
+
+    // Display happy eyes avatar (eyes)
+    suspend fun displayHappyEyesAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
+
+        viewModel._activeAvatar?.value = tempAvatar
+        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
+    }
+
+    // --- Methods to display the updated parts of the avatar ---
     // Update displayed avatar (displays the relevant body parts only)
     suspend fun updateAvatar(context: Context, viewModel: MainViewModel) {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
@@ -464,57 +520,5 @@ class AvatarAnimations () {
 
         // Sets their src to the new updated layers drawable
         layoutlistMouth.setImageDrawable(layerDrawableMouth)
-    }
-
-    // Display dead avatar
-    suspend fun displayDeadAvatar(context: Context, viewModel: MainViewModel) {
-        val tempAvatar = viewModel.activeAvatar!!.value
-        viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
-        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
-            viewModel.activeAvatar!!.value!!.eyebrowsId = 6 // Sad light eyebrows
-            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
-        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
-            viewModel.activeAvatar!!.value!!.eyebrowsId = 5 // Sad dark eyebrows
-            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
-        }
-
-        viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatar(context, viewModel)
-    }
-
-    // Display happy avatar
-    suspend fun displayHappyFaceEyesForwardAvatar(context: Context, viewModel: MainViewModel) {
-        val tempAvatar = viewModel.activeAvatar!!.value
-        viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
-        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
-            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
-            viewModel.activeAvatar!!.value!!.mouthId = 7 // Smiling light mouth
-        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
-            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
-            viewModel.activeAvatar!!.value!!.mouthId = 3 // Smiling dark mouth
-        }
-
-        viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
-        GameActivity.avatarAnimations?.updateAvatarEyebrows(context, viewModel)
-        GameActivity.avatarAnimations?.updateAvatarMouth(context, viewModel)
-    }
-
-    // Display blink avatar
-    suspend fun displayBlinkAvatar(context: Context, viewModel: MainViewModel) {
-        val tempAvatar = viewModel.activeAvatar!!.value
-        viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
-
-        viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
-    }
-
-    // Display happy eyes avatar
-    suspend fun displayHappyEyesAvatar(context: Context, viewModel: MainViewModel) {
-        val tempAvatar = viewModel.activeAvatar!!.value
-        viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
-
-        viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
     }
 }

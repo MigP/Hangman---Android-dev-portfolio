@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.FragmentRegisterBinding
+import bf.be.android.hangman.model.Sounds
 import bf.be.android.hangman.model.dal.entities.User
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
@@ -34,6 +35,9 @@ class RegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Creates sounds object
+        sounds = Sounds(requireContext())
+
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -75,6 +79,8 @@ class RegisterFragment : Fragment() {
     companion object {
         var pwVisibilityState = false
         var pw2VisibilityState = false
+        var sounds: Sounds? = null
+
         @JvmStatic
         fun newInstance() =
             RegisterFragment().apply {
@@ -83,11 +89,8 @@ class RegisterFragment : Fragment() {
 
     private fun register (view: View) {
         // Button click sound
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        if (prefs.getString("sound", "on").equals("on")) {
-            val soundFile = R.raw.click_button
-            playSound(soundFile)
-        }
+        val soundFile = R.raw.click_button
+        sounds?.playSound(soundFile)
 
         val enteredUsername = binding.registerUsernameInput.text.toString()
         val enteredPassword = binding.registerPasswordInput.text.toString()
@@ -108,16 +111,6 @@ class RegisterFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    // Sound effects
-    private fun playSound(soundFile: Int) {
-        val soundToPlay = MediaPlayer.create(requireContext(), soundFile)
-        soundToPlay.start()
-        soundToPlay.setOnCompletionListener { soundToPlay ->
-            soundToPlay.stop()
-            soundToPlay?.release()
         }
     }
 }

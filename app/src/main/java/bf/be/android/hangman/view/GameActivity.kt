@@ -25,10 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityGameBinding
-import bf.be.android.hangman.model.AvatarAnimations
-import bf.be.android.hangman.model.AvatarMoods
-import bf.be.android.hangman.model.GameRound
-import bf.be.android.hangman.model.Word
+import bf.be.android.hangman.model.*
 import bf.be.android.hangman.model.adapters.DefinitionsAdapter
 import bf.be.android.hangman.model.adapters.HighscoresAdapter
 import bf.be.android.hangman.model.dal.entities.Avatar
@@ -52,6 +49,7 @@ class GameActivity : AppCompatActivity() {
         var blinkTimerEnd: CountDownTimer? = null
         var blinkTimerInit: CountDownTimer? = null
         var avatarAnimations:AvatarAnimations? = null
+        var sounds: Sounds? = null
     }
 
     //Create a ViewModel
@@ -64,7 +62,7 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialise all bindings
+        // Initialises all bindings
         initialiseBindings()
 
         // Shared preferences
@@ -75,6 +73,9 @@ class GameActivity : AppCompatActivity() {
 
         // Creates avatar animations object
         avatarAnimations = AvatarAnimations()
+
+        // Creates sounds object
+        sounds = Sounds(this)
 
         // Initialises UI
         initialiseUi()
@@ -88,7 +89,7 @@ class GameActivity : AppCompatActivity() {
             val allLanguages = viewModel.findAllLanguages(applicationContext)
             viewModel.languageList = MutableLiveData(allLanguages)
 
-            // Creates user object
+            // Creates viewModel user object
             viewModel.createUser(applicationContext, prefs.getString("userId", "")!!.toLong(), appBarMenu!!)
             actionBar?.title = viewModel.activeUser?.value!!.username
             supportActionBar?.title = viewModel.activeUser?.value!!.username
@@ -100,9 +101,9 @@ class GameActivity : AppCompatActivity() {
                 // Update viewModel active avatar
                 val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
-            }
 
-            initViewModel()
+                initViewModel()
+            }
         }
 
         // Options side menu
@@ -199,7 +200,7 @@ class GameActivity : AppCompatActivity() {
         binding.newRoundBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             initiateNewRound(it)
         }
@@ -210,7 +211,7 @@ class GameActivity : AppCompatActivity() {
         binding.hintBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            MainActivity.sounds?.playSound(soundFile)
 
             showHelpMenu()
         }
@@ -221,7 +222,7 @@ class GameActivity : AppCompatActivity() {
         binding.exchangeBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             showExchangeMenu()
         }
@@ -232,7 +233,7 @@ class GameActivity : AppCompatActivity() {
         binding.abandonBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             showAbandonGameRound()
         }
@@ -347,7 +348,7 @@ class GameActivity : AppCompatActivity() {
         buyLetterBtn.setOnClickListener {
             // Button click sound
             val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            sounds?.playSound(soundFile1)
 
             // Chooses a random letter missing from the displayed word
             val missingLetters = ArrayList<String>()
@@ -366,7 +367,7 @@ class GameActivity : AppCompatActivity() {
 
             // Reveal hint sound
             val soundFile2 = R.raw.reveal_hint
-            playSound(soundFile2)
+            sounds?.playSound(soundFile2)
 
             viewModel.activeUser?.value!!.coins -= viewModel.activeGameRound?.value!!.helpValues_Letter_price
             updateAssetBar()
@@ -376,7 +377,7 @@ class GameActivity : AppCompatActivity() {
         buyDefinitionBtn.setOnClickListener {
             // Button click sound
             val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            sounds?.playSound(soundFile1)
 
             // Gets a random index position in the revealed definitions array
             val revealedDefinitionsNr = viewModel.word.value!!.revealedDefinitions.size
@@ -388,7 +389,7 @@ class GameActivity : AppCompatActivity() {
 
             // Reveal hint sound
             val soundFile2 = R.raw.reveal_hint
-            playSound(soundFile2)
+            sounds?.playSound(soundFile2)
 
             viewModel.activeUser?.value!!.banknotes -= viewModel.activeGameRound?.value!!.helpValues_Definition_price
             updateAssetBar()
@@ -398,7 +399,7 @@ class GameActivity : AppCompatActivity() {
         buyBodyPartBtn.setOnClickListener {
             // Button click sound
             val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            sounds?.playSound(soundFile1)
 
             viewModel.activeGameRound?.value!!.letterMisses--
             lifecycleScope.launch {
@@ -407,7 +408,7 @@ class GameActivity : AppCompatActivity() {
 
             // Reveal hint sound
             val soundFile2 = R.raw.reveal_hint
-            playSound(soundFile2)
+            sounds?.playSound(soundFile2)
 
             viewModel.activeUser?.value!!.diamonds -= viewModel.activeGameRound?.value!!.helpValues_BodyPart_price
             updateAssetBar()
@@ -437,7 +438,7 @@ class GameActivity : AppCompatActivity() {
         singleDefinitionBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             dialog.cancel()
         }
@@ -503,14 +504,14 @@ class GameActivity : AppCompatActivity() {
         buyBanknote.setOnClickListener {
             // Button click sound
             val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            sounds?.playSound(soundFile1)
 
             viewModel.activeUser?.value!!.coins -= viewModel.activeGameRound?.value!!.exchangeValues_Banknotes_price
             viewModel.activeUser?.value!!.banknotes += 1
 
             // Banknotes sound
             val soundFile2 = R.raw.banknotes
-            playSound(soundFile2)
+            sounds?.playSound(soundFile2)
 
             updateAssetBar()
             dialog.cancel()
@@ -518,13 +519,14 @@ class GameActivity : AppCompatActivity() {
         buyDiamond.setOnClickListener {
             // Button click sound
             val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            sounds?.playSound(soundFile1)
+
             viewModel.activeUser?.value!!.banknotes -= viewModel.activeGameRound?.value!!.exchangeValues_Diamonds_price
             viewModel.activeUser?.value!!.diamonds += 1
 
             // Diamonds sound
             val soundFile2 = R.raw.diamonds
-            playSound(soundFile2)
+            sounds?.playSound(soundFile2)
 
             updateAssetBar()
             dialog.cancel()
@@ -532,13 +534,14 @@ class GameActivity : AppCompatActivity() {
         buyLife.setOnClickListener {
             // Button click sound
             val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            sounds?.playSound(soundFile1)
+
             viewModel.activeUser?.value!!.diamonds -= viewModel.activeGameRound?.value!!.exchangeValues_Lives_price
             viewModel.activeUser?.value!!.lives += 1
 
             // Lives sound
             val soundFile2 = R.raw.buy_lives
-            playSound(soundFile2)
+            sounds?.playSound(soundFile2)
 
             updateAssetBar()
             dialog.cancel()
@@ -561,7 +564,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setPositiveButton(R.string.yes) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             abandonGameRound()
             dialog.cancel()
@@ -569,7 +572,8 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
+
             dialog.cancel()
         }
 
@@ -610,7 +614,7 @@ class GameActivity : AppCompatActivity() {
 
         // Abandon game round sound
         val soundFile = R.raw.abandon_round
-        playSound(soundFile)
+        sounds?.playSound(soundFile)
     }
 
     // --- Left side menu ---
@@ -625,11 +629,11 @@ class GameActivity : AppCompatActivity() {
                 if(optionsMenu.isDrawerOpen(GravityCompat.START)) {
                     // Close menu sound
                     val soundFile = R.raw.close_window
-                    playSound(soundFile)
+                    sounds?.playSound(soundFile)
                 } else {
                     // Open menu sound
                     val soundFile = R.raw.open_window
-                    playSound(soundFile)
+                    sounds?.playSound(soundFile)
                 }
             }
         }
@@ -688,7 +692,7 @@ class GameActivity : AppCompatActivity() {
             dialogbuider.setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                 // Button click sound
                 val soundFile = R.raw.click_button
-                playSound(soundFile)
+                sounds?.playSound(soundFile)
 
                 // Update user object and db with the selected language
                 val tempUser = viewModel.activeUser!!.value
@@ -780,7 +784,7 @@ class GameActivity : AppCompatActivity() {
             dialogbuider.setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                 // Button click sound
                 val soundFile = R.raw.click_button
-                playSound(soundFile)
+                sounds?.playSound(soundFile)
 
                 // Update user object and db with the selected avatar
                 val tempUser = viewModel.activeUser!!.value
@@ -791,6 +795,8 @@ class GameActivity : AppCompatActivity() {
                 val tempAvatar: Avatar =
                     viewModel.avatarList.value!![viewModel.avatarLastSelectedCheckbox.value!!]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
+
+                initViewModel()
 
                 // Check if user has chosen a language yet and if not, prompt for it
                 if (viewModel.activeUser?.value!!.languageId == 0 && initialCheck) { // Open window to choose language
@@ -821,7 +827,8 @@ class GameActivity : AppCompatActivity() {
         dialogBuilder.setNegativeButton(R.string.cancel) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
+
             dialog.cancel()
         }
 
@@ -831,7 +838,7 @@ class GameActivity : AppCompatActivity() {
             b.setOnClickListener {
                 // Button click sound
                 val soundFile = R.raw.click_button
-                playSound(soundFile)
+                sounds?.playSound(soundFile)
 
                 val input = mAlertDialog.findViewById<View>(R.id.et_editUsername) as EditText
 
@@ -887,7 +894,8 @@ class GameActivity : AppCompatActivity() {
         dialogBuilder.setNegativeButton(R.string.cancel) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
+
             dialog.cancel()
         }
 
@@ -897,7 +905,7 @@ class GameActivity : AppCompatActivity() {
             b.setOnClickListener {
                 // Button click sound
                 val soundFile = R.raw.click_button
-                playSound(soundFile)
+                sounds?.playSound(soundFile)
 
                 val inputPassword =
                     mAlertDialog.findViewById<View>(R.id.et_editPassword) as EditText
@@ -921,7 +929,7 @@ class GameActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             // Button click sound
                             val soundFile = R.raw.click_button
-                            playSound(soundFile)
+                            sounds?.playSound(soundFile)
 
                             // Update user object and db with the selected password
                             val tempUser = viewModel.activeUser!!.value
@@ -1021,7 +1029,7 @@ class GameActivity : AppCompatActivity() {
         gameHelpBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             dialog.cancel()
         }
@@ -1043,7 +1051,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setPositiveButton(R.string.yes) { _, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             // Delete the user's account from the database
             viewModel.deleteUser(this, viewModel.activeUser?.value!!.id)
@@ -1059,7 +1067,8 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
+
             dialog.cancel()
         }
 
@@ -1083,7 +1092,7 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setPositiveButton(R.string.yes) { _, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             val editor = prefs.edit()
@@ -1095,7 +1104,8 @@ class GameActivity : AppCompatActivity() {
         dialogbuider.setNegativeButton(R.string.no) { dialog, _ ->
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
+
             dialog.cancel()
         }
 
@@ -1131,7 +1141,7 @@ class GameActivity : AppCompatActivity() {
     fun onLanguageItemClick(item: MenuItem) {
         // Button click sound
         val soundFile = R.raw.click_button
-        playSound(soundFile)
+        sounds?.playSound(soundFile)
 
         chooseLanguage()
     }
@@ -1140,7 +1150,7 @@ class GameActivity : AppCompatActivity() {
     fun onHighscoresItemClick(item: MenuItem) {
         // Button click sound
         val soundFile = R.raw.click_button
-        playSound(soundFile)
+        sounds?.playSound(soundFile)
 
         showHighscores()
     }
@@ -1151,7 +1161,7 @@ class GameActivity : AppCompatActivity() {
 
         // Button click sound
         val soundFile = R.raw.click_button
-        playSound(soundFile)
+        sounds?.playSound(soundFile)
 
         // Change sound preferences
         val editor = prefs.edit()
@@ -1219,24 +1229,10 @@ class GameActivity : AppCompatActivity() {
 
         highscoresBtn.setOnClickListener {
             // Button click sound
-            val soundFile = R.raw.click_letter_guess
-            playSound(soundFile)
+            val soundFile = R.raw.click_button
+            sounds?.playSound(soundFile)
 
             dialog.cancel()
-        }
-    }
-
-    // --- Sound effects ---
-    // Sound effects
-    private fun playSound(soundFile: Int) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "on").equals("on")) {
-            val soundToPlay = MediaPlayer.create(applicationContext, soundFile)
-            soundToPlay.start()
-            soundToPlay.setOnCompletionListener { soundToPlay ->
-                soundToPlay.stop()
-                soundToPlay?.release()
-            }
         }
     }
 
@@ -1266,7 +1262,7 @@ class GameActivity : AppCompatActivity() {
 
                 // Coins sound
                 val soundFile = R.raw.coins
-                playSound(soundFile)
+                sounds?.playSound(soundFile)
 
             }
 
@@ -1277,19 +1273,22 @@ class GameActivity : AppCompatActivity() {
 
             //TODO Implement avatar's reactions methods (time dependent)
 
-            // Button click sound
+            // Letter guess sound
             val soundFile = R.raw.click_letter_guess
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         } else { // Missed letter
+            // Starts the counter for the avatar eyes blinks
+            if (viewModel.activeGameRound!!.value!!.letterMisses == 0) avatarBlink()
+
             viewModel.activeGameRound?.value!!.letterMisses++
             viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
             viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults = 0
 
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.missed_letter)
 
-            // Button click sound
+            // Letter miss sound
             val soundFile = R.raw.click_letter_miss
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             lifecycleScope.launch {
                 if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
@@ -1385,9 +1384,7 @@ class GameActivity : AppCompatActivity() {
 
             // New word sound
             val soundFile = R.raw.new_word
-            playSound(soundFile)
-
-            avatarBlink()
+            sounds?.playSound(soundFile)
         }
         binding.waitingPlaceholder.isVisible = false
 
@@ -1414,7 +1411,7 @@ class GameActivity : AppCompatActivity() {
 
             // Coins sound
             val soundFile = R.raw.coins
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         }
 
         // Adds bonus banknotes if consecutive words with no faults
@@ -1423,19 +1420,19 @@ class GameActivity : AppCompatActivity() {
 
             // Banknotes sound
             val soundFile = R.raw.banknotes
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         } else if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults == 5) {
             viewModel.activeUser?.value!!.banknotes += 5
 
             // Banknotes sound
             val soundFile = R.raw.banknotes
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         } else if (viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults > 0) {
             viewModel.activeUser?.value!!.banknotes += 1
 
             // Banknotes sound
             val soundFile = R.raw.banknotes
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         }
 
         // Adds bonus diamonds if consecutive words with no faults
@@ -1444,7 +1441,7 @@ class GameActivity : AppCompatActivity() {
 
             // Diamonds sound
             val soundFile = R.raw.diamonds
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         }
 
         // Adds bonus score if consecutive words with no faults
@@ -1470,7 +1467,7 @@ class GameActivity : AppCompatActivity() {
 
         // Win word sound
         val soundFile = R.raw.win_word
-        playSound(soundFile)
+        sounds?.playSound(soundFile)
     }
 
     // Failed the word
@@ -1499,11 +1496,11 @@ class GameActivity : AppCompatActivity() {
         if (viewModel.activeUser?.value!!.lives == 0) {
             // Lose game round sound
             val soundFile = R.raw.fail_round
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         } else {
             // Fail word sound
             val soundFile = R.raw.fail_word
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
         }
     }
 
@@ -1611,8 +1608,8 @@ class GameActivity : AppCompatActivity() {
 
         finalScoreBtn.setOnClickListener {
             // Button click sound
-            val soundFile1 = R.raw.click_button
-            playSound(soundFile1)
+            val soundFile = R.raw.click_button
+            sounds?.playSound(soundFile)
 
             viewModel.activeUser?.value!!.score = 0
             dialog.cancel()
@@ -1665,7 +1662,7 @@ class GameActivity : AppCompatActivity() {
         endDefinitionsBtn.setOnClickListener {
             // Button click sound
             val soundFile = R.raw.click_button
-            playSound(soundFile)
+            sounds?.playSound(soundFile)
 
             if (viewModel.activeUser?.value!!.lives == 0) {
                 loseGameRound()

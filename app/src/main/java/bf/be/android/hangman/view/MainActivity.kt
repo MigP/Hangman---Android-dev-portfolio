@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityMainBinding
+import bf.be.android.hangman.model.Sounds
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -23,12 +24,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var introAnimationDelayTime: Long = 250
 
+    companion object {
+        var sounds: Sounds? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // View binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Creates sounds object
+        sounds = Sounds(this)
 
         // Check if this user has opted to be remembered and if so, bypass log in
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -82,13 +90,8 @@ class MainActivity : AppCompatActivity() {
         titleBlowUp.start()
 
         // Intro swoosh sound
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getString("sound", "on").equals("on")) {
-            Timer().schedule(timerTask {
-                val soundFile = R.raw.intro_swoosh
-                playSound(soundFile)
-            }, introAnimationDelayTime)
-        }
+        val soundFile = R.raw.intro_swoosh
+        sounds?.playSound(soundFile)
 
         val titleShrink: ValueAnimator = ValueAnimator.ofFloat(110f, 80f)
         titleShrink.addUpdateListener { valueAnimator ->
@@ -111,16 +114,6 @@ class MainActivity : AppCompatActivity() {
         fragmentFadeIn.startOffset = 1500
         fragmentFadeIn.fillAfter = true
         binding.fragmentContainerView.startAnimation(fragmentFadeIn)
-    }
-
-    // Sound effects
-    private fun playSound(soundFile: Int) {
-        val soundToPlay = MediaPlayer.create(applicationContext, soundFile)
-        soundToPlay.start()
-        soundToPlay.setOnCompletionListener { soundToPlay ->
-            soundToPlay.stop()
-            soundToPlay?.release()
-        }
     }
 
     // Sound menu functions
@@ -154,14 +147,8 @@ class MainActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Button click sound
-        if (prefs.getString("sound", "").equals("on")) {
-            val buttonClickSound = MediaPlayer.create(this, R.raw.click_button)
-            buttonClickSound.start()
-            buttonClickSound.setOnCompletionListener { buttonClickSound ->
-                buttonClickSound.stop()
-                buttonClickSound?.release()
-            }
-        }
+        val soundFile = R.raw.click_button
+        sounds?.playSound(soundFile)
 
         // Change sound preferences
         val editor = prefs.edit()
