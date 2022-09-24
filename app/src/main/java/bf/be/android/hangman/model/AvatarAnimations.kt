@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.ImageView
 import bf.be.android.hangman.R
-import bf.be.android.hangman.view.GameActivity
 import bf.be.android.hangman.viewModel.MainViewModel
 
 class AvatarAnimations () {
+    var blinkTimerEnd: CountDownTimer? = null
+    var blinkTimerInit: CountDownTimer? = null
+
     // --- Functional methods ---
     // Returns the drawable id of a string (image src name)
     private fun getStringIdentifier(context: Context, name: String?): Int {
@@ -141,7 +144,7 @@ class AvatarAnimations () {
         }
 
         viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatar(context, viewModel)
+        this.updateAvatar(context, viewModel)
     }
 
     // Display happy avatar (eyes, eyebrows, mouth)
@@ -157,9 +160,9 @@ class AvatarAnimations () {
         }
 
         viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
-        GameActivity.avatarAnimations?.updateAvatarEyebrows(context, viewModel)
-        GameActivity.avatarAnimations?.updateAvatarMouth(context, viewModel)
+        this.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyebrows(context, viewModel)
+        this.updateAvatarMouth(context, viewModel)
     }
 
     // Display blink avatar (eyes)
@@ -168,7 +171,7 @@ class AvatarAnimations () {
         viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
 
         viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyes(context, viewModel)
     }
 
     // Display happy eyes avatar (eyes)
@@ -177,7 +180,7 @@ class AvatarAnimations () {
         viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
 
         viewModel._activeAvatar?.value = tempAvatar
-        GameActivity.avatarAnimations?.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyes(context, viewModel)
     }
 
     // --- Methods to display the updated parts of the avatar ---
@@ -186,7 +189,7 @@ class AvatarAnimations () {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar graphics
-        GameActivity.avatarAnimations?.hideAvatarGraphics(context)
+        this.hideAvatarGraphics(context)
 
         // Gets relevant Ids from avatar object
         val avatarExtra = viewModel.activeAvatar!!.value!!.extrasId
@@ -347,7 +350,7 @@ class AvatarAnimations () {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar's eyes graphics
-        GameActivity.avatarAnimations?.hideAvatarEyesGraphics(context)
+        this.hideAvatarEyesGraphics(context)
 
         // Gets relevant Ids from avatar object
         val avatarEyes = viewModel.activeAvatar!!.value!!.eyesId
@@ -392,7 +395,7 @@ class AvatarAnimations () {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar's eyebrows graphics
-        GameActivity.avatarAnimations?.hideAvatarEyebrowsGraphics(context)
+        this.hideAvatarEyebrowsGraphics(context)
 
         // Gets relevant Ids from avatar object
         val avatarEyebrows = viewModel.activeAvatar!!.value!!.eyebrowsId
@@ -437,7 +440,7 @@ class AvatarAnimations () {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar's extras graphics
-        GameActivity.avatarAnimations?.hideAvatarExtraGraphics(context)
+        this.hideAvatarExtraGraphics(context)
 
         // Gets relevant Ids from avatar object
         val avatarExtra = viewModel.activeAvatar!!.value!!.extrasId
@@ -482,7 +485,7 @@ class AvatarAnimations () {
         val nrOfMisses = viewModel.activeGameRound?.value!!.letterMisses
 
         // Hides all displayed avatar's mouth graphics
-        GameActivity.avatarAnimations?.hideAvatarMouthGraphics(context)
+        this.hideAvatarMouthGraphics(context)
 
         // Gets relevant Ids from avatar object
         val avatarMouth = viewModel.activeAvatar!!.value!!.mouthId
@@ -520,5 +523,48 @@ class AvatarAnimations () {
 
         // Sets their src to the new updated layers drawable
         layoutlistMouth.setImageDrawable(layerDrawableMouth)
+    }
+
+    // --- Methods that make use of timers to change the avatar's appearance
+    // Avatar blink
+    fun avatarBlink(viewModel: MainViewModel) {
+        // Cancels the timers if they already exist and are running
+        if (blinkTimerInit != null) {
+            (blinkTimerInit as CountDownTimer).cancel()
+        }
+        if (blinkTimerEnd != null) {
+            (blinkTimerEnd as CountDownTimer).cancel()
+        }
+
+        viewModel._activeAvatarMood.value = AvatarMoods.EYES_HAPPY_FORWARD
+
+        // Sets a random duration
+        val blinkTimerDuration = (1000 until 5000).random().toLong()
+
+        // Defines the blinkTimerInit timer (avatar with open eyes)
+        blinkTimerInit = object: CountDownTimer(blinkTimerDuration, blinkTimerDuration) {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            override fun onFinish() {
+                viewModel._activeAvatarMood.value = AvatarMoods.EYES_CLOSED
+
+                // Starts the timer
+                (blinkTimerEnd as CountDownTimer).start()
+            }
+        }
+
+        // Defines the blinkTimerEnd timer (avatar with blinked eyes)
+        blinkTimerEnd = object: CountDownTimer(150, 150) {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            override fun onFinish() {
+                avatarBlink(viewModel)
+            }
+        }
+
+        // Starts the timer
+        (blinkTimerInit as CountDownTimer).start()
     }
 }

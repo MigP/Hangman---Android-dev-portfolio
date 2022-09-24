@@ -11,6 +11,7 @@
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_animations.xml" value="0.2285" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_gallows.xml" value="0.25" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_man.xml" value="0.2225" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/drawable/menu_shape.xml" value="0.229" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/abandon_round_layout.xml" value="0.5" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/activity_game.xml" value="0.292259083728278" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -23,30 +24,20 @@
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/help_menu_layout.xml" value="0.22291666666666668" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/hint_menu_layout.xml" value="0.5" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/nav_header.xml" value="0.25" />
+        <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/layout/reveal_all_definitions_layout.xml" value="0.22239583333333332" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/menu/settings_menu.xml" value="0.215625" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/menu/sound_options.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/Mig/AndroidStudioProjects/Hangman/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/border_line.xml" value="0.2985" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_extra.xml" value="0.2985" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_eyebrows.xml" value="0.2985" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_eyes.xml" value="0.2985" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_face.xml" value="0.2985" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_gallows.xml" value="0.21" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_man.xml" value="0.335" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/layers_mouth.xml" value="0.2985" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/drawable/menu_shape.xml" value="0.2985" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/activity_game.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/avatar_list_item_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/delete_account.xml" value="0.365625" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/edit_password_layout.xml" value="0.365625" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/edit_username_layout.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/exchange_menu_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/fragment_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/fragment_register.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/game_help_layout.xml" value="0.30436662343277127" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/help_menu_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/language_list_item_layout.xml" value="0.365625" />
-        <entry key="..\:/Users/STG1851/AndroidStudioProjects/Hangman/app/src/main/res/layout/reveal_all_definitions_layout.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

@@ -46,8 +46,6 @@ class GameActivity : AppCompatActivity() {
         var appBarMenu: Menu? = null
         var activeRound = false
         var timer10: CountDownTimer? = null
-        var blinkTimerEnd: CountDownTimer? = null
-        var blinkTimerInit: CountDownTimer? = null
         var avatarAnimations:AvatarAnimations? = null
         var sounds: Sounds? = null
     }
@@ -595,8 +593,14 @@ class GameActivity : AppCompatActivity() {
         viewModel.activeUser?.value!!.lives = 5
         viewModel.activeUser?.value!!.score = 0
 
-        (blinkTimerInit as CountDownTimer).cancel()
-        (blinkTimerEnd as CountDownTimer).cancel()
+        // Cancels the timers if they already exist and are running
+        if (avatarAnimations?.blinkTimerInit != null) {
+            (avatarAnimations?.blinkTimerInit as CountDownTimer).cancel()
+        }
+        if (avatarAnimations?.blinkTimerEnd != null) {
+            (avatarAnimations?.blinkTimerEnd as CountDownTimer).cancel()
+        }
+
         (timer10 as CountDownTimer).cancel()
         binding.potentialPrize.alpha = 0F
 
@@ -796,7 +800,7 @@ class GameActivity : AppCompatActivity() {
                     viewModel.avatarList.value!![viewModel.avatarLastSelectedCheckbox.value!!]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
 
-                initViewModel()
+                if (initialCheck) initViewModel()
 
                 // Check if user has chosen a language yet and if not, prompt for it
                 if (viewModel.activeUser?.value!!.languageId == 0 && initialCheck) { // Open window to choose language
@@ -1278,7 +1282,7 @@ class GameActivity : AppCompatActivity() {
             sounds?.playSound(soundFile)
         } else { // Missed letter
             // Starts the counter for the avatar eyes blinks
-            if (viewModel.activeGameRound!!.value!!.letterMisses == 0) avatarBlink()
+            if (viewModel.activeGameRound!!.value!!.letterMisses == 0) avatarAnimations?.avatarBlink(viewModel)
 
             viewModel.activeGameRound?.value!!.letterMisses++
             viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
@@ -1293,11 +1297,11 @@ class GameActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 if (viewModel.activeGameRound!!.value!!.letterMisses == 6) { // Word failed
                     // Cancels the timers if they already exist and are running
-                    if (blinkTimerInit != null) {
-                        (blinkTimerInit as CountDownTimer).cancel()
+                    if (avatarAnimations?.blinkTimerInit != null) {
+                        (avatarAnimations?.blinkTimerInit as CountDownTimer).cancel()
                     }
-                    if (blinkTimerEnd != null) {
-                        (blinkTimerEnd as CountDownTimer).cancel()
+                    if (avatarAnimations?.blinkTimerEnd != null) {
+                        (avatarAnimations?.blinkTimerEnd as CountDownTimer).cancel()
                     }
 
                     // Displays the dead avatar
@@ -1311,7 +1315,7 @@ class GameActivity : AppCompatActivity() {
 
         prizeFadeOutCountdown()
 
-        if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) {
+        if (viewModel.activeGameRound?.value!!.guessedLetters == viewModel.word.value?.hiddenWord.toString().length) { // Word guessed
             wordGuessed()
         }
 
@@ -1455,7 +1459,6 @@ class GameActivity : AppCompatActivity() {
         }
         updateAssetBar()
 
-        viewModel.activeGameRound?.value!!.letterMisses = 0
         activeRound = false
         hideKeyboard()
         resetKeyboard()
@@ -1491,7 +1494,6 @@ class GameActivity : AppCompatActivity() {
         hideKeyboard()
         pickEndAnimation("lose")
         showEndDefinitions()
-        viewModel.activeGameRound?.value!!.letterMisses = 0
 
         if (viewModel.activeUser?.value!!.lives == 0) {
             // Lose game round sound
@@ -1819,47 +1821,5 @@ class GameActivity : AppCompatActivity() {
 
         // Starts the timer
         (timer10 as CountDownTimer).start()
-    }
-
-    // Avatar blink
-    private fun avatarBlink() {
-        // Cancels the timers if they already exist and are running
-        if (blinkTimerInit != null) {
-            (blinkTimerInit as CountDownTimer).cancel()
-        }
-        if (blinkTimerEnd != null) {
-            (blinkTimerEnd as CountDownTimer).cancel()
-        }
-
-        viewModel._activeAvatarMood.value = AvatarMoods.EYES_HAPPY_FORWARD
-
-        // Sets a random duration
-        val blinkTimerDuration = (1000 until 5000).random().toLong()
-
-        // Defines the blinkTimerInit timer (avatar with open eyes)
-        blinkTimerInit = object: CountDownTimer(blinkTimerDuration, blinkTimerDuration) {
-            override fun onTick(millisUntilFinished: Long) {
-            }
-
-            override fun onFinish() {
-                viewModel._activeAvatarMood.value = AvatarMoods.EYES_CLOSED
-
-                // Starts the timer
-                (blinkTimerEnd as CountDownTimer).start()
-            }
-        }
-
-        // Defines the blinkTimerEnd timer (avatar with blinked eyes)
-        blinkTimerEnd = object: CountDownTimer(150, 150) {
-            override fun onTick(millisUntilFinished: Long) {
-            }
-
-            override fun onFinish() {
-                avatarBlink()
-            }
-        }
-
-        // Starts the timer
-        (blinkTimerInit as CountDownTimer).start()
     }
 }
