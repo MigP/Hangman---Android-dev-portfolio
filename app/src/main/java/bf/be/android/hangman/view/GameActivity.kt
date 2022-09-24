@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityGameBinding
 import bf.be.android.hangman.model.AvatarAnimations
+import bf.be.android.hangman.model.AvatarMoods
 import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.adapters.DefinitionsAdapter
@@ -66,8 +67,6 @@ class GameActivity : AppCompatActivity() {
         // Initialise all bindings
         initialiseBindings()
 
-        initViewModel()
-
         // Shared preferences
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
@@ -102,6 +101,8 @@ class GameActivity : AppCompatActivity() {
                 val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
             }
+
+            initViewModel()
         }
 
         // Options side menu
@@ -253,6 +254,36 @@ class GameActivity : AppCompatActivity() {
     private fun initViewModel() {
         // When view model word changes, startNewRoundUi is called
         viewModel.word.observe(this, this::validateRandomWord)
+
+        // When view model avatar mood changes, relevant method is called
+        viewModel.activeAvatarMood.observe(this, this::updateAvatarMood)
+    }
+
+    // --- Avatar moods ---
+    // Update avatar mood in the view model
+    private fun updateAvatarMood(it: AvatarMoods) {
+        when (it) {
+            AvatarMoods.FACE_HAPPY_EYES_FORWARD -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayHappyFaceEyesForwardAvatar(this@GameActivity, viewModel)
+                }
+            }
+            AvatarMoods.FACE_DEAD -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayDeadAvatar(this@GameActivity, viewModel)
+                }
+            }
+            AvatarMoods.EYES_HAPPY_FORWARD -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayHappyEyesAvatar(this@GameActivity, viewModel) //TODO To implement at a future date: get current avatar eyes type instead of always reverting to happy eyes
+                }
+            }
+            AvatarMoods.EYES_CLOSED -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayBlinkAvatar(this@GameActivity, viewModel)
+                }
+            }
+        }
     }
 
     // --- Right side menus ---
@@ -1215,7 +1246,6 @@ class GameActivity : AppCompatActivity() {
         var prizeCoins = 1
 
         if (viewModel.updateDisplayedWord(pressed)) { // Guessed letter
-            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, 1)
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.guessed_letter)
 
             // Updates number of consecutive guessed letters
@@ -1251,7 +1281,6 @@ class GameActivity : AppCompatActivity() {
             val soundFile = R.raw.click_letter_guess
             playSound(soundFile)
         } else { // Missed letter
-            viewModel._activeGameRound?.value!!.setLetterboardState(pressed, -1)
             viewModel.activeGameRound?.value!!.letterMisses++
             viewModel.activeGameRound?.value!!.lettersGuessedConsecutively = 0
             viewModel.activeGameRound?.value!!.wordsGuessedConsecutivelyNoFaults = 0
@@ -1273,10 +1302,7 @@ class GameActivity : AppCompatActivity() {
                     }
 
                     // Displays the dead avatar
-                    lifecycleScope.launch {
-                        avatarAnimations?.displayDeadAvatar(viewModel)
-                        avatarAnimations?.updateAvatar(this@GameActivity, viewModel)
-                    }
+                    viewModel._activeAvatarMood.value = AvatarMoods.FACE_DEAD
                 } else {
                     avatarAnimations?.updateAvatar(this@GameActivity, viewModel)
                 }
@@ -1302,7 +1328,6 @@ class GameActivity : AppCompatActivity() {
             val letterBtn: Button = findViewById(resources.getIdentifier("keyboard$c", "id", packageName))
             letterBtn.isEnabled = true
             letterBtn.backgroundTintList = this.resources.getColorStateList(R.color.reset_letter)
-            viewModel._activeGameRound?.value!!.setLetterboardState(c.toString(), 0)
 
             ++c
         }
@@ -1321,9 +1346,7 @@ class GameActivity : AppCompatActivity() {
         hideNewRoundBtn()
         hideAllAnimations()
         hideDisplayedWord()
-        lifecycleScope.launch {
-            avatarAnimations?.displayHappyAvatar(this@GameActivity, viewModel)
-        }
+        viewModel._activeAvatarMood.value = AvatarMoods.FACE_HAPPY_EYES_FORWARD
 
         avatarAnimations?.hideAvatarGraphics(this)
 
@@ -1811,9 +1834,7 @@ class GameActivity : AppCompatActivity() {
             (blinkTimerEnd as CountDownTimer).cancel()
         }
 
-        lifecycleScope.launch {
-            avatarAnimations?.displayHappyEyesAvatar(this@GameActivity, viewModel) //TODO To implement at a future date: get current avatar eyes type instead of always reverting to happy eyes
-        }
+        viewModel._activeAvatarMood.value = AvatarMoods.EYES_HAPPY_FORWARD
 
         // Sets a random duration
         val blinkTimerDuration = (1000 until 5000).random().toLong()
@@ -1824,9 +1845,8 @@ class GameActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                lifecycleScope.launch {
-                    avatarAnimations?.displayBlinkAvatar(this@GameActivity, viewModel)
-                }
+                viewModel._activeAvatarMood.value = AvatarMoods.EYES_CLOSED
+
                 // Starts the timer
                 (blinkTimerEnd as CountDownTimer).start()
             }

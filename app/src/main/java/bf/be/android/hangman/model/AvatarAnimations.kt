@@ -467,7 +467,7 @@ class AvatarAnimations () {
     }
 
     // Display dead avatar
-    fun displayDeadAvatar(viewModel: MainViewModel) {
+    suspend fun displayDeadAvatar(context: Context, viewModel: MainViewModel) {
         val tempAvatar = viewModel.activeAvatar!!.value
         viewModel.activeAvatar!!.value!!.eyesId = 6 // Closed eyes
         if (viewModel.activeAvatar!!.value?.complexion  == "light") {
@@ -479,10 +479,11 @@ class AvatarAnimations () {
         }
 
         viewModel._activeAvatar?.value = tempAvatar
+        GameActivity.avatarAnimations?.updateAvatar(context, viewModel)
     }
 
     // Display happy avatar
-    suspend fun displayHappyAvatar(context: Context, viewModel: MainViewModel) {
+    suspend fun displayHappyFaceEyesForwardAvatar(context: Context, viewModel: MainViewModel) {
         val tempAvatar = viewModel.activeAvatar!!.value
         viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
         if (viewModel.activeAvatar!!.value?.complexion  == "light") {

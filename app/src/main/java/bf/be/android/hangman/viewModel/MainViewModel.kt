@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import bf.be.android.hangman.R
+import bf.be.android.hangman.model.AvatarMoods
 import bf.be.android.hangman.model.GameRound
 import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.apis.*
@@ -55,6 +56,11 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     var _activeAvatar: MutableLiveData<Avatar>? = null
     val activeAvatar: LiveData<Avatar>?
         get() = _activeAvatar
+
+    // Active avatar mood
+    var _activeAvatarMood = MutableLiveData(AvatarMoods.FACE_HAPPY_EYES_FORWARD)
+    val activeAvatarMood: LiveData<AvatarMoods>
+        get() = _activeAvatarMood
 
     // Active language
     var _activeLanguage: MutableLiveData<Language>? = null
