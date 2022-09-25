@@ -3,7 +3,6 @@ package bf.be.android.hangman.viewModel
 import android.app.Application
 import android.content.Context
 import android.view.Menu
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -26,7 +25,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
 
@@ -186,7 +184,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         return@coroutineScope allHighscores!!
     }
 
-    suspend fun insertHighscore(highscore: Int, context: Context) = coroutineScope {
+    fun insertHighscore(highscore: Int, context: Context) {
         val newHighscore = Highscore(
             highscore,
             SimpleDateFormat("dd/MM/yyyy").format(Date()).toString(),

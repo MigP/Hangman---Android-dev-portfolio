@@ -11,7 +11,7 @@ import bf.be.android.hangman.R
 import bf.be.android.hangman.view.GameActivity
 import bf.be.android.hangman.viewModel.MainViewModel
 
-class AvatarAnimations () {
+class AvatarAnimations {
     var blinkTimerEnd: CountDownTimer? = null
     var blinkTimerInit: CountDownTimer? = null
 
@@ -50,10 +50,10 @@ class AvatarAnimations () {
 
         // Gets the ImageView where the layers drawable are by their id
         val layoutlist1 = (context as Activity).findViewById<View>(R.id.game_gallows_top) as ImageView
-        val layoutlistEyes = (context as Activity).findViewById<View>(R.id.game_eyes) as ImageView
-        val layoutlistEyebrows = (context as Activity).findViewById<View>(R.id.game_eyebrows) as ImageView
-        val layoutlistExtra = (context as Activity).findViewById<View>(R.id.game_extra) as ImageView
-        val layoutlistMouth = (context as Activity).findViewById<View>(R.id.game_mouth) as ImageView
+        val layoutlistEyes = context.findViewById<View>(R.id.game_eyes) as ImageView
+        val layoutlistEyebrows = context.findViewById<View>(R.id.game_eyebrows) as ImageView
+        val layoutlistExtra = context.findViewById<View>(R.id.game_extra) as ImageView
+        val layoutlistMouth = context.findViewById<View>(R.id.game_mouth) as ImageView
 
         // Sets their src to the new updated layers drawable
         layoutlist1.setImageDrawable(layerDrawable)
@@ -64,7 +64,7 @@ class AvatarAnimations () {
     }
 
     // Hides all the graphics related to the avatar's eyes
-    fun hideAvatarEyesGraphics(context: Context) {
+    private fun hideAvatarEyesGraphics(context: Context) {
         // Gets the layer drawable
         val layerDrawableEyes = context.resources.getDrawable(R.drawable.layers_eyes) as LayerDrawable
 
@@ -81,7 +81,7 @@ class AvatarAnimations () {
     }
 
     // Hides all the graphics related to the avatar's eyebrows
-    fun hideAvatarEyebrowsGraphics(context: Context) {
+    private fun hideAvatarEyebrowsGraphics(context: Context) {
         // Gets the layer drawable
         val layerDrawableEyebrows = context.resources.getDrawable(R.drawable.layers_eyebrows) as LayerDrawable
 
@@ -98,7 +98,7 @@ class AvatarAnimations () {
     }
 
     // Hides all the graphics related to the avatar's extras (glasses)
-    fun hideAvatarExtraGraphics(context: Context) {
+    private fun hideAvatarExtraGraphics(context: Context) {
         // Gets the layer drawable
         val layerDrawableExtra = context.resources.getDrawable(R.drawable.layers_extra) as LayerDrawable
 
@@ -115,7 +115,7 @@ class AvatarAnimations () {
     }
 
     // Hides all the graphics related to the avatar's mouth
-    fun hideAvatarMouthGraphics(context: Context) {
+    private fun hideAvatarMouthGraphics(context: Context) {
         // Gets the layer drawable
         val layerDrawableMouth = context.resources.getDrawable(R.drawable.layers_mouth) as LayerDrawable
 
@@ -405,10 +405,10 @@ class AvatarAnimations () {
 
         // Gets the ImageViews where the layers drawable are by their id
         val layoutlist1 = (context as Activity).findViewById<View>(R.id.game_gallows_top) as ImageView
-        val layoutlistEyes = (context as Activity).findViewById<View>(R.id.game_eyes) as ImageView
-        val layoutlistEyebrows = (context as Activity).findViewById<View>(R.id.game_eyebrows) as ImageView
-        val layoutlistExtra = (context as Activity).findViewById<View>(R.id.game_extra) as ImageView
-        val layoutlistMouth = (context as Activity).findViewById<View>(R.id.game_mouth) as ImageView
+        val layoutlistEyes = context.findViewById<View>(R.id.game_eyes) as ImageView
+        val layoutlistEyebrows = context.findViewById<View>(R.id.game_eyebrows) as ImageView
+        val layoutlistExtra = context.findViewById<View>(R.id.game_extra) as ImageView
+        val layoutlistMouth = context.findViewById<View>(R.id.game_mouth) as ImageView
 
         // Sets their src to the new updated layers drawable
         layoutlist1.setImageDrawable(layerDrawable1)
@@ -419,7 +419,7 @@ class AvatarAnimations () {
     }
 
     // Update displayed avatar's eyes (displays the relevant eyes only)
-    suspend fun updateAvatarEyes(context: Context, viewModel: MainViewModel) {
+    private suspend fun updateAvatarEyes(context: Context, viewModel: MainViewModel) {
         val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's eyes graphics
@@ -464,7 +464,7 @@ class AvatarAnimations () {
     }
 
     // Update displayed avatar's eyebrows (displays the relevant eyebrows only)
-    suspend fun updateAvatarEyebrows(context: Context, viewModel: MainViewModel) {
+    private suspend fun updateAvatarEyebrows(context: Context, viewModel: MainViewModel) {
         val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's eyebrows graphics
@@ -509,7 +509,7 @@ class AvatarAnimations () {
     }
 
     // Update displayed avatar's extras (displays the relevant extras only)
-    suspend fun updateAvatarExtra(context: Context, viewModel: MainViewModel) {
+    private suspend fun updateAvatarExtra(context: Context, viewModel: MainViewModel) {
         val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's extras graphics
@@ -554,7 +554,7 @@ class AvatarAnimations () {
     }
 
     // Update displayed avatar's mouth (displays the relevant mouth only)
-    suspend fun updateAvatarMouth(context: Context, viewModel: MainViewModel) {
+    private suspend fun updateAvatarMouth(context: Context, viewModel: MainViewModel) {
         val nrOfMisses = GameActivity.gameRound!!.letterMisses
 
         // Hides all displayed avatar's mouth graphics
@@ -602,9 +602,8 @@ class AvatarAnimations () {
     // Avatar blink
     fun avatarBlink(viewModel: MainViewModel) {
         // Choose random mood
-        var currentAvatarMood = viewModel._activeAvatarMood.value
-        val randomSeed = (1..14).random()
-        when (randomSeed) {
+        val currentAvatarMood = viewModel._activeAvatarMood.value
+        when ((1..14).random()) {
             1 -> {
                 if (currentAvatarMood != AvatarMoods.FACE_BORED_EYES_UP_LEFT) viewModel._activeAvatarMood.value = AvatarMoods.FACE_BORED_EYES_UP_LEFT
             }

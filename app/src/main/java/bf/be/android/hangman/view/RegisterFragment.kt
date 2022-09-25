@@ -1,8 +1,6 @@
 package bf.be.android.hangman.view
 
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater

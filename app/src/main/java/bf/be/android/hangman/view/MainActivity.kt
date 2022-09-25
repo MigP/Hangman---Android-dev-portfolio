@@ -2,7 +2,6 @@ package bf.be.android.hangman.view
 
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
@@ -16,8 +15,6 @@ import androidx.fragment.app.FragmentTransaction
 import bf.be.android.hangman.R
 import bf.be.android.hangman.databinding.ActivityMainBinding
 import bf.be.android.hangman.model.Sounds
-import java.util.*
-import kotlin.concurrent.timerTask
 
 
 class MainActivity : AppCompatActivity() {

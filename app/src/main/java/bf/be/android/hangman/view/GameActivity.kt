@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.preference.PreferenceManager
@@ -325,11 +324,11 @@ class GameActivity : AppCompatActivity() {
         val buyBodyPartBtn = helpMenuView.findViewById(R.id.bodyPartBuyBtn) as Button
 
         val letterPrice = helpMenuView.findViewById(R.id.helpMenuCoinPrice) as TextView
-        letterPrice.setText(gameRound!!.helpValues_Letter_price.toString())
+        letterPrice.text = gameRound!!.helpValues_Letter_price.toString()
         val definitionPrice = helpMenuView.findViewById(R.id.helpMenuBanknotePrice) as TextView
-        definitionPrice.setText(gameRound!!.helpValues_Definition_price.toString())
+        definitionPrice.text = gameRound!!.helpValues_Definition_price.toString()
         val bodyPartPrice = helpMenuView.findViewById(R.id.helpMenuMenuDiamondPrice) as TextView
-        bodyPartPrice.setText(gameRound!!.helpValues_BodyPart_price.toString())
+        bodyPartPrice.text = gameRound!!.helpValues_BodyPart_price.toString()
 
         builder.setView(helpMenuView)
         val dialog = builder.create()
@@ -481,11 +480,11 @@ class GameActivity : AppCompatActivity() {
         val buyLife = exchangeMenuView.findViewById(R.id.exchangeBuyLifeBtn) as Button
 
         val banknotePrice = exchangeMenuView.findViewById(R.id.banknote_price) as TextView
-        banknotePrice.setText(gameRound!!.exchangeValues_Banknotes_price.toString())
+        banknotePrice.text = gameRound!!.exchangeValues_Banknotes_price.toString()
         val diamondPrice = exchangeMenuView.findViewById(R.id.diamond_price) as TextView
-        diamondPrice.setText(gameRound!!.exchangeValues_Diamonds_price.toString())
+        diamondPrice.text = gameRound!!.exchangeValues_Diamonds_price.toString()
         val lifePrice = exchangeMenuView.findViewById(R.id.life_price) as TextView
-        lifePrice.setText(gameRound!!.exchangeValues_Lives_price.toString())
+        lifePrice.text = gameRound!!.exchangeValues_Lives_price.toString()
 
         builder.setView(exchangeMenuView)
         val dialog = builder.create()
@@ -989,55 +988,55 @@ class GameActivity : AppCompatActivity() {
         val gameHelp_section8 = gameHelpView.findViewById(R.id.gameHelp_section8) as TextView
 
         if (gameConstantsValues[3].toInt() == 1) { // If game constant lives is 1
-            gameHelp_section2.setText(resources.getString(R.string.game_help_2a) + gameConstantsValues[3] + resources.getString(R.string.game_help_2b_singular))
-            gameHelp_section4.setText(resources.getString(R.string.game_help_4a) + gameConstantsValues[3] + resources.getString(R.string.game_help_4b_singular))
+            gameHelp_section2.text = resources.getString(R.string.game_help_2a) + gameConstantsValues[3] + resources.getString(R.string.game_help_2b_singular)
+            gameHelp_section4.text = resources.getString(R.string.game_help_4a) + gameConstantsValues[3] + resources.getString(R.string.game_help_4b_singular)
         } else {
-            gameHelp_section2.setText(resources.getString(R.string.game_help_2a) + gameConstantsValues[3] + resources.getString(R.string.game_help_2b_plural))
-            gameHelp_section4.setText(resources.getString(R.string.game_help_4a) + gameConstantsValues[3] + resources.getString(R.string.game_help_4b_plural))
+            gameHelp_section2.text = resources.getString(R.string.game_help_2a) + gameConstantsValues[3] + resources.getString(R.string.game_help_2b_plural)
+            gameHelp_section4.text = resources.getString(R.string.game_help_4a) + gameConstantsValues[3] + resources.getString(R.string.game_help_4b_plural)
         }
 
         var section6String = gameHelpConstantsValues[0]
-        if (gameHelpConstantsValues[0].toInt() == 1) { // If game constant reveal letter price is 1
-            section6String += resources.getString(R.string.game_help_6a_singular)
+        section6String += if (gameHelpConstantsValues[0].toInt() == 1) { // If game constant reveal letter price is 1
+            resources.getString(R.string.game_help_6a_singular)
         } else {
-            section6String += resources.getString(R.string.game_help_6a_plural)
+            resources.getString(R.string.game_help_6a_plural)
         }
         section6String += gameExchangeConstantsValues[0]
-        if (gameExchangeConstantsValues[0].toInt() == 1) { // If game constant banknote price is 1
-            section6String += resources.getString(R.string.game_help_6b_singular)
+        section6String += if (gameExchangeConstantsValues[0].toInt() == 1) { // If game constant banknote price is 1
+            resources.getString(R.string.game_help_6b_singular)
         } else {
-            section6String += resources.getString(R.string.game_help_6b_plural)
+            resources.getString(R.string.game_help_6b_plural)
         }
-        gameHelp_section6.setText(section6String)
+        gameHelp_section6.text = section6String
 
 
         var section7String = gameHelpConstantsValues[1]
-        if (gameHelpConstantsValues[1].toInt() == 1) { // If game constant reveal definition price is 1
-            section7String += resources.getString(R.string.game_help_7a_singular)
+        section7String += if (gameHelpConstantsValues[1].toInt() == 1) { // If game constant reveal definition price is 1
+            resources.getString(R.string.game_help_7a_singular)
         } else {
-            section7String += resources.getString(R.string.game_help_7a_plural)
+            resources.getString(R.string.game_help_7a_plural)
         }
         section7String += gameExchangeConstantsValues[1]
-        if (gameExchangeConstantsValues[1].toInt() == 1) { // If game constant diamond price is 1
-            section7String += resources.getString(R.string.game_help_7b_singular)
+        section7String += if (gameExchangeConstantsValues[1].toInt() == 1) { // If game constant diamond price is 1
+            resources.getString(R.string.game_help_7b_singular)
         } else {
-            section7String += resources.getString(R.string.game_help_7b_plural)
+            resources.getString(R.string.game_help_7b_plural)
         }
-        gameHelp_section7.setText(section7String)
+        gameHelp_section7.text = section7String
 
         var section8String = gameHelpConstantsValues[2]
-        if (gameHelpConstantsValues[2].toInt() == 1) { // If game constant restore a body part price is 1
-            section8String += resources.getString(R.string.game_help_8a_singular)
+        section8String += if (gameHelpConstantsValues[2].toInt() == 1) { // If game constant restore a body part price is 1
+            resources.getString(R.string.game_help_8a_singular)
         } else {
-            section8String += resources.getString(R.string.game_help_8a_plural)
+            resources.getString(R.string.game_help_8a_plural)
         }
         section8String += gameExchangeConstantsValues[2]
-        if (gameExchangeConstantsValues[2].toInt() == 1) { // If game constant life price is 1
-            section8String += resources.getString(R.string.game_help_8b_singular)
+        section8String += if (gameExchangeConstantsValues[2].toInt() == 1) { // If game constant life price is 1
+            resources.getString(R.string.game_help_8b_singular)
         } else {
-            section8String += resources.getString(R.string.game_help_8b_plural)
+            resources.getString(R.string.game_help_8b_plural)
         }
-        gameHelp_section8.setText(section8String)
+        gameHelp_section8.text = section8String
 
         builder.setView(gameHelpView)
         val dialog = builder.create()
@@ -1230,8 +1229,8 @@ class GameActivity : AppCompatActivity() {
             }
 
             // Passes the highscores onto the recyclerview
-            var highscoresAdapterLayoutManager: RecyclerView.LayoutManager?
-            var highscoresAdapter: RecyclerView.Adapter<HighscoresAdapter.ViewHolder>?
+            val highscoresAdapterLayoutManager: RecyclerView.LayoutManager?
+            val highscoresAdapter: RecyclerView.Adapter<HighscoresAdapter.ViewHolder>?
             highscoresAdapterLayoutManager = LinearLayoutManager(this@GameActivity)
             val recyclerView = highscoresView.findViewById<RecyclerView>(R.id.listOfHighscores)
             recyclerView.layoutManager = highscoresAdapterLayoutManager

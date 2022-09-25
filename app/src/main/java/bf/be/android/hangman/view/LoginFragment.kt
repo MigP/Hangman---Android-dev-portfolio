@@ -1,7 +1,6 @@
 package bf.be.android.hangman.view
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.method.HideReturnsTransformationMethod
@@ -20,7 +19,6 @@ import bf.be.android.hangman.databinding.FragmentLoginBinding
 import bf.be.android.hangman.model.Sounds
 import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
-
 
 class LoginFragment : Fragment() {
     // View binding
