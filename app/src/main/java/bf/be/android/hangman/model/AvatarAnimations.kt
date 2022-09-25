@@ -652,6 +652,8 @@ class AvatarAnimations () {
             }
 
             override fun onFinish() {
+                viewModel._activeAvatarMood.value = AvatarMoods.FACE_HAPPY_EYES_FORWARD
+
                 avatarBlink(viewModel)
             }
         }
