@@ -166,6 +166,78 @@ class AvatarAnimations () {
         this.updateAvatarMouth(context, viewModel)
     }
 
+    // Display bored eyes up left avatar (eyes, eyebrows, mouth)
+    suspend fun displayHappyFaceBoredEyesUpLeftAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 10 // Eyes happy up left
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        this.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyebrows(context, viewModel)
+        this.updateAvatarMouth(context, viewModel)
+    }
+
+    // Display bored eyes up right avatar (eyes, eyebrows, mouth)
+    suspend fun displayHappyFaceBoredEyesUpRightAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 11 // Eyes happy up right
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        this.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyebrows(context, viewModel)
+        this.updateAvatarMouth(context, viewModel)
+    }
+
+    // Display bored eyes down left avatar (eyes, eyebrows, mouth)
+    suspend fun displayHappyFaceBoredEyesDownLeftAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 7 // Eyes happy down left
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        this.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyebrows(context, viewModel)
+        this.updateAvatarMouth(context, viewModel)
+    }
+
+    // Display bored eyes down right avatar (eyes, eyebrows, mouth)
+    suspend fun displayHappyFaceBoredEyesDownRightAvatar(context: Context, viewModel: MainViewModel) {
+        val tempAvatar = viewModel.activeAvatar!!.value
+        viewModel.activeAvatar!!.value!!.eyesId = 8 // Eyes happy down right
+        if (viewModel.activeAvatar!!.value?.complexion  == "light") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 4 // Neutral light eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 6 // Side light mouth
+        } else if (viewModel.activeAvatar!!.value?.complexion == "dark") {
+            viewModel.activeAvatar!!.value!!.eyebrowsId = 3 // Neutral dark eyebrows
+            viewModel.activeAvatar!!.value!!.mouthId = 2 // Side dark mouth
+        }
+
+        viewModel._activeAvatar?.value = tempAvatar
+        this.updateAvatarEyes(context, viewModel)
+        this.updateAvatarEyebrows(context, viewModel)
+        this.updateAvatarMouth(context, viewModel)
+    }
+
     // Display blink avatar (eyes)
     suspend fun displayBlinkAvatar(context: Context, viewModel: MainViewModel) {
         val tempAvatar = viewModel.activeAvatar!!.value
@@ -529,6 +601,27 @@ class AvatarAnimations () {
     // --- Methods that make use of timers to change the avatar's appearance
     // Avatar blink
     fun avatarBlink(viewModel: MainViewModel) {
+        // Choose random mood
+        var currentAvatarMood = viewModel._activeAvatarMood.value
+        val randomSeed = (1..14).random()
+        when (randomSeed) {
+            1 -> {
+                if (currentAvatarMood != AvatarMoods.FACE_BORED_EYES_UP_LEFT) viewModel._activeAvatarMood.value = AvatarMoods.FACE_BORED_EYES_UP_LEFT
+            }
+            2 -> {
+                if (currentAvatarMood != AvatarMoods.FACE_BORED_EYES_UP_RIGHT) viewModel._activeAvatarMood.value = AvatarMoods.FACE_BORED_EYES_UP_RIGHT
+            }
+            3 -> {
+                if (currentAvatarMood != AvatarMoods.FACE_BORED_EYES_DOWN_LEFT) viewModel._activeAvatarMood.value = AvatarMoods.FACE_BORED_EYES_DOWN_LEFT
+            }
+            4 -> {
+                if (currentAvatarMood != AvatarMoods.FACE_BORED_EYES_DOWN_RIGHT) viewModel._activeAvatarMood.value = AvatarMoods.FACE_BORED_EYES_DOWN_RIGHT
+            }
+            else -> {
+                if (currentAvatarMood != AvatarMoods.FACE_HAPPY_EYES_FORWARD) viewModel._activeAvatarMood.value = AvatarMoods.FACE_HAPPY_EYES_FORWARD
+            }
+        }
+
         // Cancels the timers if they already exist and are running
         if (blinkTimerInit != null) {
             (blinkTimerInit as CountDownTimer).cancel()
@@ -537,10 +630,8 @@ class AvatarAnimations () {
             (blinkTimerEnd as CountDownTimer).cancel()
         }
 
-        viewModel._activeAvatarMood.value = AvatarMoods.EYES_HAPPY_FORWARD
-
         // Sets a random duration
-        val blinkTimerDuration = (1000 until 5000).random().toLong()
+        val blinkTimerDuration = (1000..5000).random().toLong()
 
         // Defines the blinkTimerInit timer (avatar with open eyes)
         blinkTimerInit = object: CountDownTimer(blinkTimerDuration, blinkTimerDuration) {

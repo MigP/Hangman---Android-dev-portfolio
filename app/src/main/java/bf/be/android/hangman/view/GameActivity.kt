@@ -267,6 +267,26 @@ class GameActivity : AppCompatActivity() {
                     avatarAnimations?.displayHappyFaceEyesForwardAvatar(this@GameActivity, viewModel)
                 }
             }
+            AvatarMoods.FACE_BORED_EYES_UP_LEFT -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayHappyFaceBoredEyesUpLeftAvatar(this@GameActivity, viewModel)
+                }
+            }
+            AvatarMoods.FACE_BORED_EYES_UP_RIGHT -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayHappyFaceBoredEyesDownRightAvatar(this@GameActivity, viewModel)
+                }
+            }
+            AvatarMoods.FACE_BORED_EYES_DOWN_LEFT -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayHappyFaceBoredEyesDownLeftAvatar(this@GameActivity, viewModel)
+                }
+            }
+            AvatarMoods.FACE_BORED_EYES_DOWN_RIGHT -> {
+                lifecycleScope.launch {
+                    avatarAnimations?.displayHappyFaceBoredEyesUpRightAvatar(this@GameActivity, viewModel)
+                }
+            }
             AvatarMoods.FACE_DEAD -> {
                 lifecycleScope.launch {
                     avatarAnimations?.displayDeadAvatar(this@GameActivity, viewModel)
@@ -274,7 +294,7 @@ class GameActivity : AppCompatActivity() {
             }
             AvatarMoods.EYES_HAPPY_FORWARD -> {
                 lifecycleScope.launch {
-                    avatarAnimations?.displayHappyEyesAvatar(this@GameActivity, viewModel) //TODO To implement at a future date: get current avatar eyes type instead of always reverting to happy eyes
+                    avatarAnimations?.displayHappyEyesAvatar(this@GameActivity, viewModel)
                 }
             }
             AvatarMoods.EYES_CLOSED -> {
@@ -1274,8 +1294,6 @@ class GameActivity : AppCompatActivity() {
             viewModel.activeUser?.value!!.score += prizeCoins
 
             updateAssetBar()
-
-            //TODO Implement avatar's reactions methods (time dependent)
 
             // Letter guess sound
             val soundFile = R.raw.click_letter_guess

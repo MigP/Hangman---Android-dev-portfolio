@@ -33,57 +33,57 @@
 
     <!-- Database initial entries -->
     <string-array name="languages">
-        <item>Français</item>
-        <item>france</item>
-        <item>English</item>
-        <item>uk</item>
+        <item>Français</item> <!-- 1 -->
+        <item>france</item> <!-- 2 -->
+        <item>English</item> <!-- 3 -->
+        <item>uk</item> <!-- 4 -->
     </string-array>
 
     <string-array name="eyebrows">
-        <item>eyebrows_angry_dark</item>
-        <item>eyebrows_angry_light</item>
-        <item>eyebrows_neutral_dark</item>
-        <item>eyebrows_neutral_light</item>
-        <item>eyebrows_sad_dark</item>
-        <item>eyebrows_sad_light</item>
+        <item>eyebrows_angry_dark</item> <!-- 1 -->
+        <item>eyebrows_angry_light</item> <!-- 2 -->
+        <item>eyebrows_neutral_dark</item> <!-- 3 -->
+        <item>eyebrows_neutral_light</item> <!-- 4 -->
+        <item>eyebrows_sad_dark</item> <!-- 5 -->
+        <item>eyebrows_sad_light</item> <!-- 6 -->
     </string-array>
 
     <string-array name="extras">
-        <item>glasses1</item>
-        <item>glasses2</item>
-        <item>glasses3</item>
+        <item>glasses1</item> <!-- 1 -->
+        <item>glasses2</item> <!-- 2 -->
+        <item>glasses3</item> <!-- 3 -->
     </string-array>
 
     <string-array name="eyes">
-        <item>face_eyes_big_down_left</item>
-        <item>face_eyes_big_down_right</item>
-        <item>face_eyes_big_forward</item>
-        <item>face_eyes_big_up_left</item>
-        <item>face_eyes_big_up_right</item>
-        <item>face_eyes_closed</item>
-        <item>face_eyes_happy_down_left</item>
-        <item>face_eyes_happy_down_right</item>
-        <item>face_eyes_happy_forward</item>
-        <item>face_eyes_happy_up_left</item>
-        <item>face_eyes_happy_up_right</item>
-        <item>face_eyes_narrow_down_left</item>
-        <item>face_eyes_narrow_down_right</item>
-        <item>face_eyes_narrow_forward</item>
-        <item>face_eyes_narrow_up_left</item>
-        <item>face_eyes_narrow_up_right</item>
-        <item>face_eyes_squinty</item>
-        <item>face_eyes_very_narrow</item>
+        <item>face_eyes_big_down_left</item> <!-- 1 -->
+        <item>face_eyes_big_down_right</item> <!-- 2 -->
+        <item>face_eyes_big_forward</item> <!-- 3 -->
+        <item>face_eyes_big_up_left</item> <!-- 4 -->
+        <item>face_eyes_big_up_right</item> <!-- 5 -->
+        <item>face_eyes_closed</item> <!-- 6 -->
+        <item>face_eyes_happy_down_left</item> <!-- 7 -->
+        <item>face_eyes_happy_down_right</item> <!-- 8 -->
+        <item>face_eyes_happy_forward</item> <!-- 9 -->
+        <item>face_eyes_happy_up_left</item> <!-- 10 -->
+        <item>face_eyes_happy_up_right</item> <!-- 11 -->
+        <item>face_eyes_narrow_down_left</item> <!-- 12 -->
+        <item>face_eyes_narrow_down_right</item> <!-- 13 -->
+        <item>face_eyes_narrow_forward</item> <!-- 14 -->
+        <item>face_eyes_narrow_up_left</item> <!-- 15 -->
+        <item>face_eyes_narrow_up_right</item> <!-- 16 -->
+        <item>face_eyes_squinty</item> <!-- 17 -->
+        <item>face_eyes_very_narrow</item> <!-- 18 -->
     </string-array>
 
     <string-array name="mouths">
-        <item>mouth_dark_sad</item>
-        <item>mouth_dark_side</item>
-        <item>mouth_dark_smiling</item>
-        <item>mouth_dark_straight</item>
-        <item>mouth_light_sad</item>
-        <item>mouth_light_side</item>
-        <item>mouth_light_smiling</item>
-        <item>mouth_light_straight</item>
+        <item>mouth_dark_sad</item> <!-- 1 -->
+        <item>mouth_dark_side</item> <!-- 2 -->
+        <item>mouth_dark_smiling</item> <!-- 3 -->
+        <item>mouth_dark_straight</item> <!-- 4 -->
+        <item>mouth_light_sad</item> <!-- 5 -->
+        <item>mouth_light_side</item> <!-- 6 -->
+        <item>mouth_light_smiling</item> <!-- 7 -->
+        <item>mouth_light_straight</item> <!-- 8 -->
     </string-array>
 
     <string-array name="avatars">
