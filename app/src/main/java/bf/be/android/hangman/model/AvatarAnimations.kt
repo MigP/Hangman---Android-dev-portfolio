@@ -150,6 +150,10 @@ class AvatarAnimations {
 
     // Display happy avatar (eyes, eyebrows, mouth)
     suspend fun displayHappyFaceEyesForwardAvatar(context: Context, viewModel: MainViewModel) {
+        val activeEyesId = viewModel.activeAvatar!!.value!!.eyesId
+        val activeEyebrowsId = viewModel.activeAvatar!!.value!!.eyebrowsId
+        val activeMouthId = viewModel.activeAvatar!!.value!!.mouthId
+
         val tempAvatar = viewModel.activeAvatar!!.value
         viewModel.activeAvatar!!.value!!.eyesId = 9 // Eyes happy forward
         if (viewModel.activeAvatar!!.value?.complexion  == "light") {
@@ -161,9 +165,16 @@ class AvatarAnimations {
         }
 
         viewModel._activeAvatar?.value = tempAvatar
-        this.updateAvatarEyes(context, viewModel)
-        this.updateAvatarEyebrows(context, viewModel)
-        this.updateAvatarMouth(context, viewModel)
+
+        if (activeEyesId != 9) { // Prevents the refresh of the eyes if they don't change
+            this.updateAvatarEyes(context, viewModel)
+        }
+        if (activeEyebrowsId != 3 && activeEyebrowsId != 4) { // Prevents the refresh of the eyebrows if they don't change
+            this.updateAvatarEyebrows(context, viewModel)
+        }
+        if (activeMouthId != 3 && activeMouthId != 7) { // Prevents the refresh of the mouth if it doesn't change
+            this.updateAvatarMouth(context, viewModel)
+        }
     }
 
     // Display bored eyes up left avatar (eyes, eyebrows, mouth)

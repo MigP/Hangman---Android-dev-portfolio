@@ -391,8 +391,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<RandomFrenchWord>>, t: Throwable) {
-                getRandomWordFr()
-                println("----------------------------------- Error finding French word -----------------------------------") //TODO Handle this
+                _randomWord.value = ""
             }
         })
     }
@@ -414,8 +413,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                getRandomWordEn()
-                println("----------------------------------- Error finding English word -----------------------------------") //TODO Handle this
+                _randomWord.value = ""
             }
         })
     }
@@ -440,8 +438,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<French?>, t: Throwable) {
-                getFrenchDefinition(word)
-                println("----------------------------------- Error finding French definition -----------------------------------") //TODO Handle this
+                _definitions.value = ArrayList()
+                generateNewWord("French")
             }
         })
     }
@@ -483,8 +481,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<English>?>, t: Throwable) {
-                getEnglishDefinition(word)
-                println("----------------------------------- Error finding English definition -----------------------------------") //TODO Handle this
+                _definitions.value = ArrayList()
+                generateNewWord("English")
             }
         })
     }
