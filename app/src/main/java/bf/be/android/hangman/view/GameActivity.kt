@@ -1593,7 +1593,7 @@ class GameActivity : AppCompatActivity() {
             listOfHighscores = viewModel.findAllHighscores(this@GameActivity)
              if (listOfHighscores.size == 5) {
                  var lowestTopscore = listOfHighscores[0].score
-                 var lowestTopScoreId = 0L
+                 var lowestTopScoreId = listOfHighscores[0].id
 
                  // Gets the lowest top score
                  for (item in listOfHighscores) {
@@ -1607,7 +1607,6 @@ class GameActivity : AppCompatActivity() {
                  if (viewModel.activeUser?.value!!.score > lowestTopscore) {
                      val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
                      val currentDate = LocalDateTime.now().format(formatter).toString()
-
                      viewModel.updateHighscore(this@GameActivity, lowestTopScoreId, Highscore(
                          viewModel.activeUser?.value!!.score,
                          currentDate,
