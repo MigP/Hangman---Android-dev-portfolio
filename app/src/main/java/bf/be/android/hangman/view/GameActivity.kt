@@ -1380,7 +1380,13 @@ class GameActivity : AppCompatActivity() {
 
     // Check if the word found isn't too long. If it is, find another one. Otherwise start the round
     private fun validateRandomWord(it: Word) {
-        if (viewModel.word.value!!.hiddenWord.length <= 15) {
+        var wordWithHyphenations = false
+
+        for (item in it.hiddenWord) {
+            if (item.toString().equals("-")) wordWithHyphenations == true
+        }
+
+        if (viewModel.word.value!!.hiddenWord.length <= 15 && !wordWithHyphenations) {
             startNewRound()
         } else {
             val gameView: View = this@GameActivity.window.decorView.findViewById(android.R.id.content)
