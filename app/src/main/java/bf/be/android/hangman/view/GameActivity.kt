@@ -1585,6 +1585,7 @@ class GameActivity : AppCompatActivity() {
         lifecycleScope.launch {
             // Gets list of top scores
             listOfHighscores = viewModel.findAllHighscores(this@GameActivity)
+
              if (listOfHighscores.size == 5) {
                  var lowestTopscore = listOfHighscores[0].score
                  var lowestTopScoreId = 0L

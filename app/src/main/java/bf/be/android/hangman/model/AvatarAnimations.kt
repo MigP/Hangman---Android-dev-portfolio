@@ -12,8 +12,8 @@ import bf.be.android.hangman.view.GameActivity
 import bf.be.android.hangman.viewModel.MainViewModel
 
 class AvatarAnimations {
-    var blinkTimerEnd: CountDownTimer? = null
     var blinkTimerInit: CountDownTimer? = null
+    var blinkTimerEnd: CountDownTimer? = null
 
     // --- Functional methods ---
     // Returns the drawable id of a string (image src name)
