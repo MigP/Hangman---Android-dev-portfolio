@@ -50,7 +50,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     //Create a ViewModel
-    private val viewModel: MainViewModel by viewModels()
+    val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -199,7 +199,7 @@ class GameActivity : AppCompatActivity() {
             val soundFile = R.raw.click_button
             sounds?.playSound(soundFile)
 
-            initiateNewRound(it)
+            initiateNewRound()
         }
     }
 
@@ -1360,7 +1360,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // Initiates a new game round (prepares UI and fetches word and definitions)
-    private fun initiateNewRound(view: View) {
+    fun initiateNewRound() {
         resetGameRound()
         hideNewRoundBtn()
         hideAllAnimations()
@@ -1384,7 +1384,7 @@ class GameActivity : AppCompatActivity() {
             startNewRound()
         } else {
             val gameView: View = this@GameActivity.window.decorView.findViewById(android.R.id.content)
-            initiateNewRound(gameView)
+            initiateNewRound()
         }
     }
 

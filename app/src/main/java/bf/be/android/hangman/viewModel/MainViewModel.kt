@@ -14,6 +14,7 @@ import bf.be.android.hangman.model.Word
 import bf.be.android.hangman.model.apis.*
 import bf.be.android.hangman.model.dal.dao.*
 import bf.be.android.hangman.model.dal.entities.*
+import bf.be.android.hangman.view.GameActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -390,7 +391,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<RandomFrenchWord>>, t: Throwable) {
-                println("Error") //TODO Handle this
+                getRandomWordFr()
+                println("----------------------------------- Error finding French word -----------------------------------") //TODO Handle this
             }
         })
     }
@@ -412,7 +414,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                println("Error") //TODO Handle this
+                getRandomWordEn()
+                println("----------------------------------- Error finding English word -----------------------------------") //TODO Handle this
             }
         })
     }
@@ -437,7 +440,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<French?>, t: Throwable) {
-                println("Error") //TODO Handle this
+                getFrenchDefinition(word)
+                println("----------------------------------- Error finding French definition -----------------------------------") //TODO Handle this
             }
         })
     }
@@ -465,21 +469,22 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
                                     englishDefinitions.add(element?.getDefinition().toString()) // English definitions here
                                 }
                             } else {
-                                println("Error") //TODO Handle this
+                                // No definitions
                             }
                         }
                     } else {
-                        println("Error") //TODO Handle this
+                        // No definitions
                     }
                 } else {
-                    println("Error") //TODO Handle this
+                    // No definitions
                 }
                 _definitions.value = englishDefinitions
                 generateNewWord("English")
             }
 
             override fun onFailure(call: Call<List<English>?>, t: Throwable) {
-                println("Error") //TODO Handle this
+                getEnglishDefinition(word)
+                println("----------------------------------- Error finding English definition -----------------------------------") //TODO Handle this
             }
         })
     }
