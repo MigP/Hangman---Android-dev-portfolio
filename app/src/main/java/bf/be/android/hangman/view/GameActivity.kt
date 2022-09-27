@@ -49,7 +49,7 @@ class GameActivity : AppCompatActivity() {
         var gameRound: GameRound? = null
     }
 
-    //Create a ViewModel
+    //Creates a ViewModel
     val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,16 +88,23 @@ class GameActivity : AppCompatActivity() {
 
             // Creates viewModel user object
             viewModel.createUser(applicationContext, prefs.getString("userId", "")!!.toLong(), appBarMenu!!)
+            // Displays the user name on the app bar
             actionBar?.title = viewModel.activeUser?.value!!.username
             supportActionBar?.title = viewModel.activeUser?.value!!.username
 
-            // Check if user has chosen an avatar yet and if not, prompt for it (pass initial check parameter as true so that language check is also performed)
+            // Checks if user has chosen an avatar yet and if not, prompt for it (pass initial check parameter as true so that language check is also performed)
             if (viewModel.activeUser?.value!!.avatarId == 0) { // Open window to choose avatar
                 chooseAvatars(true)
             } else { // Starts with the avatar the user has in the database
                 // Update viewModel active avatar
                 val tempAvatar: Avatar = viewModel.avatarList.value!![viewModel.activeUser?.value?.avatarId!! - 1]
                 viewModel._activeAvatar = MutableLiveData(tempAvatar)
+
+                // Update viewModel avatar checkbox selection
+                viewModel.avatarLastSelectedCheckbox.value = viewModel.activeUser!!.value!!.avatarId - 1
+
+                // Update viewModel language checkbox selection
+                viewModel.languageLastSelectedCheckbox.value = viewModel.activeUser!!.value!!.languageId - 1
 
                 initViewModel()
             }
@@ -258,7 +265,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // --- Avatar moods ---
-    // Update avatar mood in the view model
+    // Updates avatar mood in the view model
     private fun updateAvatarMood(it: AvatarMoods) {
         when (it) {
             AvatarMoods.FACE_HAPPY_EYES_FORWARD -> {
@@ -305,7 +312,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     // --- Right side menus ---
-    // Show help menu
+    // Shows help menu
     private fun showHelpMenu() {
         val layoutInflater = LayoutInflater.from(this)
         val helpMenuView: View = layoutInflater.inflate(R.layout.help_menu_layout, null)
@@ -339,6 +346,7 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
+        // Determines whether this button is active according to certain conditions
         if (viewModel.activeUser?.value!!.coins < gameRound!!.helpValues_Letter_price || !gameRound?.activeRound!!) {
             buyLetterBtn.isEnabled = false
             buyLetterBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
@@ -346,6 +354,7 @@ class GameActivity : AppCompatActivity() {
             buyLetterBtn.isActivated = true
         }
 
+        // Determines whether this button is active according to certain conditions
         if (viewModel.activeUser?.value!!.banknotes < gameRound!!.helpValues_Definition_price || !gameRound?.activeRound!! || viewModel.word.value?.revealedDefinitions!!.isEmpty()) {
             buyDefinitionBtn.isEnabled = false
             buyDefinitionBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
@@ -353,6 +362,7 @@ class GameActivity : AppCompatActivity() {
             buyDefinitionBtn.isActivated = true
         }
 
+        // Determines whether this button is active according to certain conditions
         if (viewModel.activeUser?.value!!.diamonds < gameRound!!.helpValues_BodyPart_price || !gameRound?.activeRound!! || gameRound!!.letterMisses == 0) {
             buyBodyPartBtn.isEnabled = false
             buyBodyPartBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
@@ -461,7 +471,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    // Show exchange menu
+    // Shows exchange menu
     private fun showExchangeMenu() {
         val layoutInflater = LayoutInflater.from(this)
         val exchangeMenuView: View = layoutInflater.inflate(R.layout.exchange_menu_layout, null)
@@ -495,6 +505,7 @@ class GameActivity : AppCompatActivity() {
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
+        // Determines whether this button is active according to certain conditions
         if (viewModel.activeUser?.value!!.coins < gameRound!!.exchangeValues_Banknotes_price) {
             buyBanknote.isEnabled = false
             buyBanknote.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
@@ -502,6 +513,7 @@ class GameActivity : AppCompatActivity() {
             buyBanknote.isActivated = true
         }
 
+        // Determines whether this button is active according to certain conditions
         if (viewModel.activeUser?.value!!.banknotes < gameRound!!.exchangeValues_Diamonds_price) {
             buyDiamond.isEnabled = false
             buyDiamond.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
@@ -509,6 +521,7 @@ class GameActivity : AppCompatActivity() {
             buyDiamond.isActivated = true
         }
 
+        // Determines whether this button is active according to certain conditions
         if (viewModel.activeUser?.value!!.diamonds < gameRound!!.exchangeValues_Lives_price) {
             buyLife.isEnabled = false
             buyLife.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
@@ -598,14 +611,19 @@ class GameActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Abandon round
+    // Abandons game round
     private fun abandonGameRound() {
+        // Resets all the values in the gameRound object
         gameRound!!.letterMisses = 0
         gameRound!!.guessedLetters = 0
         gameRound!!.lettersGuessedConsecutively = 0
         gameRound!!.wordsGuessedConsecutively = 0
         gameRound?.activeRound = false
+
+        // Resets the keyboard
         resetKeyboard()
+
+        // Resets all the values in the activeUser object
         viewModel.activeUser?.value!!.diamonds = 0
         viewModel.activeUser?.value!!.banknotes = 0
         viewModel.activeUser?.value!!.coins = 0
@@ -683,7 +701,7 @@ class GameActivity : AppCompatActivity() {
             dialogbuider.setCustomTitle(textView)
             val adapter: ArrayAdapter<Language> =
                 object : ArrayAdapter<Language>(this, R.layout.language_list_item_layout, viewModel.languageList.value!!) {
-                    var selectedPosition = 0
+                    var selectedPosition = viewModel.languageLastSelectedCheckbox.value
                     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                         var v = convertView
                         if (v == null) {
@@ -762,7 +780,7 @@ class GameActivity : AppCompatActivity() {
                     R.layout.avatar_list_item_layout,
                     viewModel.avatarList.value!!
                 ) {
-                    var selectedPosition = 0
+                    var selectedPosition = viewModel.avatarLastSelectedCheckbox.value
                     override fun getView(
                         position: Int,
                         convertView: View?,
@@ -1139,7 +1157,7 @@ class GameActivity : AppCompatActivity() {
     // --- App bar ---
     // App bar menu and icons
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Create status bar menu with sound, highscores, and flag icons corresponding on the selected language
+        // Create app bar menu with sound, highscores, and flag icons corresponding on the selected language
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.appbar_options, menu)
 
@@ -1262,10 +1280,14 @@ class GameActivity : AppCompatActivity() {
     // --- Keyboard (game letterboard) ---
     // Handles the letters pressed on the keyboard
     private fun keyboardPressed(pressed: String, buttonPressed: Button) {
-        var prizeCoins = 1
+        // Default value for the number of points won by clicking this letter
+        var prizeCoins = 0
 
         if (viewModel.updateDisplayedWord(pressed, gameRound!!)) { // Guessed letter
             buttonPressed.backgroundTintList = this.resources.getColorStateList(R.color.guessed_letter)
+
+            // Default number of points won by simply guessing a letter correctly
+            prizeCoins = 1
 
             // Updates number of consecutive guessed letters
             gameRound!!.lettersGuessedConsecutively++
@@ -1425,6 +1447,7 @@ class GameActivity : AppCompatActivity() {
 
     // Guessed the word
     private fun wordGuessed() {
+        // Cancels the timer and hides its display
         (timer10 as CountDownTimer).cancel()
         binding.potentialPrize.alpha = 0F
 
@@ -1479,9 +1502,8 @@ class GameActivity : AppCompatActivity() {
         } else if (gameRound!!.wordsGuessedConsecutivelyNoFaults > 0) {
             viewModel.activeUser?.value!!.score += 100
         }
-        updateAssetBar()
 
-        gameRound?.activeRound = false
+        updateAssetBar()
         hideKeyboard()
         resetKeyboard()
         binding.newRoundBtn.setText(R.string.continue_)
@@ -1497,24 +1519,25 @@ class GameActivity : AppCompatActivity() {
 
     // Failed the word
     private fun wordFailed() {
-        viewModel.activeUser?.value!!.lives--
-        gameRound!!.wordsGuessedConsecutivelyNoFaults = 0
-
-        updateAssetBar()
-
         timer10?.cancel()
         binding.potentialPrize.alpha = 0F
 
+        gameRound!!.wordsGuessedConsecutivelyNoFaults = 0
+        viewModel.activeUser?.value!!.lives--
+
+        updateAssetBar()
+
+        // Reveals the hidden word
         val tempWord = viewModel.word.value
         tempWord!!.displayedWord = tempWord.hiddenWord
         viewModel._word.value = tempWord
 
-        binding.newRoundBtn.setText(R.string.continue_)
-        gameRound?.activeRound = false
-        showNewRoundBtn()
-        resetKeyboard()
         hideKeyboard()
+        resetKeyboard()
+        binding.newRoundBtn.setText(R.string.continue_)
+        showNewRoundBtn()
         pickEndAnimation("lose")
+
         showEndDefinitions()
 
         if (viewModel.activeUser?.value!!.lives == 0) {
@@ -1540,6 +1563,14 @@ class GameActivity : AppCompatActivity() {
         viewModel.activeUser?.value!!.banknotes = 0
         viewModel.activeUser?.value!!.coins = 0
         viewModel.activeUser?.value!!.lives = 5
+
+        // Cancels the timers if they already exist and are running
+        if (avatarAnimations?.blinkTimerInit != null) {
+            (avatarAnimations?.blinkTimerInit as CountDownTimer).cancel()
+        }
+        if (avatarAnimations?.blinkTimerEnd != null) {
+            (avatarAnimations?.blinkTimerEnd as CountDownTimer).cancel()
+        }
 
         (timer10 as CountDownTimer).cancel()
         binding.potentialPrize.alpha = 0F
