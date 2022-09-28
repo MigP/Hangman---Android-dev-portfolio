@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
         }
 
+        // Plays the initial animation
         introAnimations(introAnimationDelayTime)
 
         // Show log in fragment (default starting place)
@@ -113,12 +114,12 @@ class MainActivity : AppCompatActivity() {
         binding.fragmentContainerView.startAnimation(fragmentFadeIn)
     }
 
-    // Sound menu functions
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean { // Create status bar menu with sound icon
+    // App bar menu functions
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean { // Creates status bar menu with sound icon
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.appbar_options, menu)
 
-        // Change sound menu icon according to the settings in preferences
+        // Change app bar menu sound icon according to the settings in preferences (on or mute)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val editor = prefs.edit()
         if (prefs.getString("sound", "").equals("off")) {
@@ -130,12 +131,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Handles language icon click listener
-    fun onLanguageItemClick(item: MenuItem) {
+    fun onLanguageItemClick(item: MenuItem) { // Not active in this activity
 
     }
 
     // Handles highscores icon click listener
-    fun onHighscoresItemClick(item: MenuItem) {
+    fun onHighscoresItemClick(item: MenuItem) { // Not active in this activity
 
     }
 
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         val soundFile = R.raw.click_button
         sounds?.playSound(soundFile)
 
-        // Change sound preferences
+        // Changes sound preferences
         val editor = prefs.edit()
         if (item.title.equals("On")) {
             item.setIcon(R.drawable.sound_off)

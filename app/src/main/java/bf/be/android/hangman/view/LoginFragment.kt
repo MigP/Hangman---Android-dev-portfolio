@@ -25,7 +25,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    //Create a ViewModel
+    // Creates an instance of the ViewModel
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -77,17 +77,19 @@ class LoginFragment : Fragment() {
         val soundFile = R.raw.click_button
         sounds?.playSound(soundFile)
 
+        // Bindings
         val enteredUsername = binding.loginUsernameInput.text.toString()
         val enteredPassword = binding.loginPasswordInput.text.toString()
         val rememberMe = binding.registerRememberMe
 
+        // Validates the input fields
         if (enteredUsername == "" || enteredPassword == "") { // At least one field is empty
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
         } else {
             viewLifecycleOwner.lifecycleScope.launch {
                 val userId = viewModel.findUserId(requireContext(), enteredUsername, enteredPassword)
                 if (userId > 0) { // Log in successful
-                    // Adds userId and remember me option to preferences and start game
+                    // Adds userId and remember me option to preferences and start the game
                     val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
                     val editor = prefs.edit()
                     editor.putString("userId", userId.toString())

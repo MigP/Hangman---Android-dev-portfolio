@@ -20,12 +20,11 @@ import bf.be.android.hangman.viewModel.MainViewModel
 import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
-
     // View binding
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    //Create a ViewModel
+    // Creates an instance of the ViewModel
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -50,7 +49,7 @@ class RegisterFragment : Fragment() {
         val pwVisibility = binding.registerVisibleIcon
         val pwVisibility2 = binding.registerConfirmVisibleIcon
 
-        pwVisibility.setOnClickListener {
+        pwVisibility.setOnClickListener { // Changes visibility the icon when clicked
             if(pwVisibilityState) {
                 binding.registerPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
                 pwVisibility.setImageResource(R.drawable.invisible)
@@ -61,7 +60,7 @@ class RegisterFragment : Fragment() {
             pwVisibilityState = !pwVisibilityState
         }
 
-        pwVisibility2.setOnClickListener {
+        pwVisibility2.setOnClickListener { // Changes the visibility icon when clicked
             if(pw2VisibilityState) {
                 binding.registerConfirmPasswordInput.transformationMethod = PasswordTransformationMethod.getInstance()
                 pwVisibility2.setImageResource(R.drawable.invisible)
@@ -90,10 +89,12 @@ class RegisterFragment : Fragment() {
         val soundFile = R.raw.click_button
         sounds?.playSound(soundFile)
 
+        // Bindings
         val enteredUsername = binding.registerUsernameInput.text.toString()
         val enteredPassword = binding.registerPasswordInput.text.toString()
         val enteredConfirmation = binding.registerConfirmPasswordInput.text.toString()
 
+        // Validates the input fields
         if (enteredUsername == "" || enteredPassword == "" || enteredConfirmation == "") { // At least one field is empty
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_LONG).show()
         } else {
@@ -103,8 +104,10 @@ class RegisterFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (viewModel.usernameExists(requireContext(), enteredUsername)) { // Chosen user name already exists
                         Toast.makeText(requireContext(), R.string.username_exists, Toast.LENGTH_LONG).show()
-                    } else { // Registration successful. Go to Log in fragment
+                    } else { // Registration successful
+                        // User created in the database
                         viewModel.insertUser(requireContext(), User(requireContext(), enteredUsername, enteredPassword))
+                        // Replace registration fragment with log in fragment
                         setFragmentResult("requestKey", bundleOf("targetFragment" to "LogIn"))
                     }
                 }
