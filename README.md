@@ -5,5 +5,4 @@
 [In English](https://miguelpinto.dx.am/docs/hangman-doc-en.pdf)
 ## Preview...
 - Choose language / Choisis la langue
-C
-![Interface](helpImgs/choose_language.gif)
+- ![Interface](helpImgs/choose_language.gif)
