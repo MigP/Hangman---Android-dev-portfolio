@@ -347,7 +347,7 @@ class GameActivity : AppCompatActivity() {
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
         // Determines whether this button is active according to certain conditions
-        if (viewModel.activeUser?.value!!.coins < gameRound!!.helpValues_Letter_price || !gameRound?.activeRound!!) {
+        if (viewModel.activeUser?.value!!.coins < gameRound!!.helpValues_Letter_price || !gameRound?.activeRound!! || gameRound!!.letterMisses == 6) {
             buyLetterBtn.isEnabled = false
             buyLetterBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -355,7 +355,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // Determines whether this button is active according to certain conditions
-        if (viewModel.activeUser?.value!!.banknotes < gameRound!!.helpValues_Definition_price || !gameRound?.activeRound!! || viewModel.word.value?.revealedDefinitions!!.isEmpty()) {
+        if (viewModel.activeUser?.value!!.banknotes < gameRound!!.helpValues_Definition_price || !gameRound?.activeRound!! || viewModel.word.value?.revealedDefinitions!!.isEmpty() || gameRound!!.letterMisses == 6) {
             buyDefinitionBtn.isEnabled = false
             buyDefinitionBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
@@ -363,7 +363,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // Determines whether this button is active according to certain conditions
-        if (viewModel.activeUser?.value!!.diamonds < gameRound!!.helpValues_BodyPart_price || !gameRound?.activeRound!! || gameRound!!.letterMisses == 0) {
+        if (viewModel.activeUser?.value!!.diamonds < gameRound!!.helpValues_BodyPart_price || !gameRound?.activeRound!! || gameRound!!.letterMisses == 0 || gameRound!!.letterMisses == 6) {
             buyBodyPartBtn.isEnabled = false
             buyBodyPartBtn.backgroundTintList = this.resources.getColorStateList(R.color.inactive_state)
         } else {
