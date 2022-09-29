@@ -64,7 +64,7 @@ Ici se trouvent le nom de l'utilisateur et des boutons.
 Le joueur peut changer la langue du jeu en cliquant sur ce bouton.
 
 - **D.** Highscores.<br>
-Le joueur peut voir les 5 meilleurs scores parmi tous les joueurs en cliquant sur ce bouton.
+Le joueur peut voir les 5 meilleurs scores parmis tous les joueurs en cliquant sur ce bouton.
 
 - **E.** Highscores.<br>
 Le joueur peut activer ou désactiver le son du jeu en cliquant sur ce bouton.
@@ -80,5 +80,59 @@ Le joueur peut commencer une partie de jeu en cliquant sur ce bouton.
 * **Menu d'Options**<br>
 ![ ](helpImgs/help2.jpg)
 
-- **A.** L'App bar<br>
-Ici se trouvent le nom de l'utilisateur et des boutons.
+- **A.** Le joueur peut changer la langue de jeu.
+
+- **B.** Le joueur peut changer son avatar.
+
+- **C.** Le joueur peut changer son nom d'utilisateur.
+
+- **D.** Le joueur peut changer son mot de passe.
+
+- **E.** Le joueur peut voir les règles du jeu.
+
+- **F.** Le joueur peut supprimer son compte.
+
+- **G.** Le joueur peut se déconnecter.
+
+* **Les highscores**<br>
+![ ](helpImgs/help3.jpg)
+
+- Une liste des 5 meilleurs scores parmis tous les joueurs.
+
+* **Le jeu**<br>
+![ ](helpImgs/help4.jpg)
+
+- **A.** L'Asset bar.<br>
+Ici se trouvent les ressources du joueur.
+
+- **B.** Le score.
+
+- **C.** Les pièces.
+
+- **D.** Les billets.
+
+- **E.** Les diamants.
+
+- **F.** Les vies.
+
+- **G.** Acheter de l'aide.<br>
+Le joueur peut acheter différents types d'aide.
+
+- **H.** Échanhger des ressources.<br>
+Le joueur peut échanger ses ressources.
+
+- **I.** Abandonner la partie de jeu.
+
+- **J.** Le mot caché.
+
+- **K.** Une lettre bien devinée.
+
+- **L.** Une lettre ratée.
+
+- **M.** Chaque seconde qui passe diminue le prix potentiel d'une lettre devinée.
+
+* **Acheter de l'aide**<br>
+![ ](helpImgs/help5.jpg)
+
+* **Échanger des ressources**<br>
+![ ](helpImgs/help6.jpg)
