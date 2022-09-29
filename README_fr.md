@@ -21,7 +21,7 @@ Des vies sont disponibles pour acheter avec des diamants.
 * #### ![ ](helpImgs/score_small.png) Score
 Ceci est le score du jeu et est réinitialisé après que l'utilisateur a perdu toutes ses vies.
 
-Le joueur gagne 1 point pour chaque lettre devinée. 
+Le joueur gagne 1 point pour chaque lettre devinée.<br>
 Le joueur gagne 5 points pour 5 lettres devinées consécutivement.
 
 Le joueur gagne 10 points pour 10 lettres devinées consécutivement.
