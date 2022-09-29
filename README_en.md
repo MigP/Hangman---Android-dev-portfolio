@@ -13,6 +13,14 @@ The player starts with 5 lives. After each failed round you lose a life and the 
 * ### Resources
 The player can gain or exchange various resources.
 
-* #### Interface
+* #### ![ ](helpImgs/heart_small.png) Lives
+
+* #### ![ ](helpImgs/score_small.png) Score
+
+* #### ![ ](helpImgs/coin_small.png) Coins
+
+* #### ![ ](helpImgs/banknote_small.png) Banknotes
+
+* #### ![ ](helpImgs/diamond_small.png) Diamonds
 
 * ### Interface
