@@ -1,3 +1,3 @@
 # Hangman
-Documentation:
-[En Français](https://miguelpinto.dx.am/docs/Hangman-doc%20-Fr.pdf)
+- ![ ](helpImgs/french.png) [Documentation en Français](README_fr.md)
+- ![ ](helpImgs/english.png) [Documentation in English](README_fr.md)
