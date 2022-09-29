@@ -168,7 +168,16 @@ The player can exchange their resources.
 ![ ](helpImgs/fail_word.gif)
 
 <p float="left">
-  <img src="helpImgs/fail_word.gif" />
-  <img src="helpImgs/fail_word.gif" /> 
-  <img src="helpImgs/fail_word.gif" />
+  <div>
+   <span><strong>Preview - Miss a word</strong></div>
+   <img src="helpImgs/fail_word.gif" />
+  </div>
+  <div>
+   <span><strong>Preview - Miss a word</strong></div>
+   <img src="helpImgs/fail_word.gif" />
+  </div>
+  <div>
+   <span><strong>Preview - Miss a word</strong></div>
+   <img src="helpImgs/fail_word.gif" />
+  </div>
 </p>
