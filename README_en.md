@@ -139,7 +139,7 @@ The player can exchange their resources.
 
 * **Preview - Choose an avatar**<br>
 ![ ](helpImgs/choose_avatar.gif)
-
+  |  
 * **Preview - Choose a language**<br>
 ![ ](helpImgs/choose_language.gif)
 
