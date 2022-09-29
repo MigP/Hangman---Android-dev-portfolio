@@ -51,3 +51,4 @@ Le joueur gagne 10 billets pour 10 mots devinés consécutivement sans rater auc
 Le joueur gagne 1 diamant pour 10 mots devinés consécutivement sans rater aucune lettre.
 
 * ### Interface
+![ ](helpImgs/help1.jpg)
