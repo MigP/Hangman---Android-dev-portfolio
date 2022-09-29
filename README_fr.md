@@ -52,7 +52,7 @@ Le joueur gagne 1 diamant pour 10 mots devinés consécutivement sans rater aucu
 
 * ### Interface
 
-* **Écran de jeu**
+* **Écran de jeu**<br>
 ![ ](helpImgs/help1.jpg)
 
 - **A.** L'App bar<br>
@@ -77,6 +77,8 @@ Le joueur peut commencer une partie de jeu en cliquant sur ce bouton.
 
 - **H.** La potence.
 
+* **Menu d'Options**<br>
 ![ ](helpImgs/help2.jpg)
+
 - **A.** L'App bar<br>
 Ici se trouvent le nom de l'utilisateur et des boutons.
