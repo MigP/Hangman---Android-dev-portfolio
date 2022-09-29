@@ -64,7 +64,7 @@ Ici se trouvent le nom de l'utilisateur et des boutons.
 Le joueur peut changer la langue du jeu en cliquant sur ce bouton.
 
 - **D.** Highscores.<br>
-Le joueur peut voir les 5 meilleurs scores parmis tous les joueurs en cliquant sur ce bouton.
+Le joueur peut voir les 5 meilleurs scores parmi tous les joueurs en cliquant sur ce bouton.
 
 - **E.** Highscores.<br>
 Le joueur peut activer ou désactiver le son du jeu en cliquant sur ce bouton.
@@ -97,7 +97,7 @@ Le joueur peut commencer une partie de jeu en cliquant sur ce bouton.
 * **Les highscores**<br>
 ![ ](helpImgs/help3.jpg)
 
-- Une liste des 5 meilleurs scores parmis tous les joueurs.
+- Une liste des 5 meilleurs scores parmi tous les joueurs.
 
 * **Le jeu**<br>
 ![ ](helpImgs/help4.jpg)
