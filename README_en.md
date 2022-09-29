@@ -51,3 +51,118 @@ The player gains 10 banknotes for 10 words guessed consecutively without failing
 The player gains 1 diamond for 10 words guessed consecutively without failing any letter.
 
 * ### Interface
+
+* **Game screen**<br>
+![ ](helpImgs/help1.jpg)
+
+- **A.** The App bar<br>
+User name and a few buttons.
+
+- **B.** User name.
+
+- **C.** Game language.<br>
+The player can change the game language by clicking this button.
+
+- **D.** Highscores.<br>
+The player can see the top 5 scores amongst all players by clicking this button.
+
+- **E.** Highscores.<br>
+The player can mute or unmute the game sound by clicking this button.
+
+- **F.** Menu d'Options.<br>
+The player can open the Options menu hiding on the left by clicking this button.
+
+- **G.** Highscores.<br>
+The player can start a game round by clicking this button.
+
+- **H.** The gallows.
+
+* **Options menu**<br>
+![ ](helpImgs/help2.jpg)
+
+- **A.** The player can change the game language.
+
+- **B.** The player can change their avatar.
+
+- **C.** The player can change their user name.
+
+- **D.** The player can change their password.
+
+- **E.** The player can see the game rules.
+
+- **F.** The player can delete their account.
+
+- **G.** The player can log out.
+
+* **The highscores**<br>
+![ ](helpImgs/help3.jpg)
+
+- A list of the 5 top scores amongst all players.
+
+* **The game**<br>
+![ ](helpImgs/help4.jpg)
+
+- **A.** The Asset bar.<br>
+These are the player's resources.
+
+- **B.** The score.
+
+- **C.** The coins.
+
+- **D.** The banknotes.
+
+- **E.** The diamonds.
+
+- **F.** The lives.
+
+- **G.** Buying help.<br>
+The player can buy different types of help.
+
+- **H.** Exchange resources.<br>
+The player can exchange their resources.
+
+- **I.** Abandon a game round.
+
+- **J.** The hidden word.
+
+- **K.** A guessed letter.
+
+- **L.** A missed letter.
+
+- **M.** Every elapsed second reduces the potential prize of a guessed letter.
+
+* **Buying help**<br>
+![ ](helpImgs/help5.jpg)
+
+* **Exchange resources**<br>
+![ ](helpImgs/help6.jpg)
+
+* **Preview - Choose an avatar**<br>
+![ ](helpImgs/choose_avatar.gif)
+
+* **Preview - Choose a language**<br>
+![ ](helpImgs/choose_language.gif)
+
+* **Preview - Gameplay**<br>
+![ ](helpImgs/game_play.gif)
+
+* **Preview - Game rules**<br>
+![ ](helpImgs/game_help.gif)
+
+* **Preview - Abandon a game round**<br>
+![ ](helpImgs/abandon_round.gif)
+
+* **Preview - Buy help**<br>
+![ ](helpImgs/buy_help.gif)
+
+* **Preview - Exchange resources**<br>
+![ ](helpImgs/exchange_resources.gif)
+
+* **Preview - The highscores**<br>
+![ ](helpImgs/highscores.gif)
+
+* **Preview - Guess a word**<br>
+![ ](helpImgs/win_word.gif)
+
+* **Preview - Miss a word**<br>
+![ ](helpImgs/fail_word.gif)
