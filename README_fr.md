@@ -53,5 +53,5 @@ Le joueur gagne 1 diamant pour 10 mots devinés consécutivement sans rater aucu
 * ### Interface
 ![ ](helpImgs/help1.jpg)
 
-- A. L'App bar
+- A. L'App bar<br>
 Ici se trouvent le nom de l'utilisateur et des boutons.
