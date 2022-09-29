@@ -28,9 +28,26 @@ The player gains 50 points for 5 words guessed without failing any letter.<br>
 The player gains 100 points for 10 words guessed without failing any letter. 
 
 * #### ![ ](helpImgs/coin_small.png) Coins
+150 coins allow the player to have 1 letter revealed amongst the ones hidden on the displayed word.<br>
+25 coins can be exchanged for 1 banknote at the Exchange menu.
 
+The player can gain 0 to 10 coins when correctly guessing a letter – the game timer decreases 1 coin from the possible prize every second until the prize is 0.<br>
+The player gains 5 coins for 5 letters guessed consecutively.<br>
+The player gains 10 coins for 10 letters guessed consecutively.<br>
+The player gains 50 coins for 1 word guessed without failing any letter.
+ 
 * #### ![ ](helpImgs/banknote_small.png) Banknotes
+10 banknotes allow the player to have 1 of the definitions revealed if any exist.<br>
+10 banknotes can be exchanged for 1 diamond at the Exchange menu.
+
+The player gains 1 banknote for 1 word guessed without failing any letter.<br>
+The player gains 5 banknotes for 5 words guessed consecutively without failing any letter.<br>
+The player gains 10 banknotes for 10 words guessed consecutively without failing any letter.
 
 * #### ![ ](helpImgs/diamond_small.png) Diamonds
+2 diamonds allow the player to restore one of the hangman’s body parts effectively buying one extra failed guess.<br>
+3 diamonds can be exchanged for 1 life at the Exchange menu.
+
+The player gains 1 diamond for 10 words guessed consecutively without failing any letter.
 
 * ### Interface
