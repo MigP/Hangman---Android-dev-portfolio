@@ -131,6 +131,8 @@ Le joueur peut échanger ses ressources.
 
 - **M.** Chaque seconde qui passe diminue le prix potentiel d'une lettre devinée.
 
+- **N.** Le pendu.
+
 * **Acheter de l'aide**<br>
 ![ ](helpImgs/help5.jpg)
 
