@@ -166,9 +166,3 @@ The player can exchange their resources.
 
 * **Preview - Miss a word**<br>
 ![ ](helpImgs/fail_word.gif)
-
-<p float="left">
-  ![Preview - Miss a word](helpImgs/fail_word.gif)
-   ![Preview - Miss a word](helpImgs/fail_word.gif)
-   ![Preview - Miss a word](helpImgs/fail_word.gif)
-</p>
