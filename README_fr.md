@@ -139,3 +139,30 @@ Le joueur peut échanger ses ressources.
 
 * **Aperçu - Choisir un avatar**<br>
 ![ ](helpImgs/choose_avatar.gif)
+
+* **Aperçu - Choisir une langue**<br>
+![ ](helpImgs/choose_language.gif)
+
+* **Aperçu - Le jeu**<br>
+![ ](helpImgs/game_play.gif)
+
+* **Aperçu - Règles du jeu**<br>
+![ ](helpImgs/game_help.gif)
+
+* **Aperçu - Abandonner la partie**<br>
+![ ](helpImgs/abandon_round.gif)
+
+* **Aperçu - Acheter de l'aide**<br>
+![ ](helpImgs/buy_help.gif)
+
+* **Aperçu - Échanger des ressources**<br>
+![ ](helpImgs/exchange_resources.gif)
+
+* **Aperçu - Les highscores**<br>
+![ ](helpImgs/highscores.gif)
+
+* **Aperçu - Deviner un mot**<br>
+![ ](helpImgs/win_word.gif)
+
+* **Aperçu - Rater un mot**<br>
+![ ](helpImgs/fail_word.gif)
