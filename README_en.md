@@ -169,15 +169,15 @@ The player can exchange their resources.
 
 <p float="left">
   <div>
-   <span><strong>Preview - Miss a word</strong></div>
+   <span><strong>Preview - Miss a word</strong></span>
    <img src="helpImgs/fail_word.gif" />
   </div>
   <div>
-   <span><strong>Preview - Miss a word</strong></div>
+   <span><strong>Preview - Miss a word</strong></span>
    <img src="helpImgs/fail_word.gif" />
   </div>
   <div>
-   <span><strong>Preview - Miss a word</strong></div>
+   <span><strong>Preview - Miss a word</strong></span>
    <img src="helpImgs/fail_word.gif" />
   </div>
 </p>
