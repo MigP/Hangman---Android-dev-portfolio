@@ -3,7 +3,7 @@
 
 ## ![ ](helpImgs/game_rules.png) Règles du jeu
 
-* ### ![ ](app/src/main/res/drawable/hangman_icon_small.png) Le jeu
+* ### ![ ](helpImgs/hangman_icon_small.png) Le jeu
 Hangman est un jeu de mots classique dans lequel vous devez deviner le mot secret une lettre à la fois.
 Chaque essai incorrect ajoute une nouvelle partie du corps au pendu. Lorsque son corps est complet, vous échouez le tour.
 
