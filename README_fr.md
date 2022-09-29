@@ -51,6 +51,8 @@ Le joueur gagne 10 billets pour 10 mots devinés consécutivement sans rater auc
 Le joueur gagne 1 diamant pour 10 mots devinés consécutivement sans rater aucune lettre.
 
 * ### Interface
+
+* **Écran de jeu**
 ![ ](helpImgs/help1.jpg)
 
 - **A.** L'App bar<br>
@@ -74,3 +76,7 @@ Le joueur peut ouvrir le menu d'Options qui se cache à gauche en cliquant sur c
 Le joueur peut commencer une partie de jeu en cliquant sur ce bouton.
 
 - **H.** La potence.
+
+![ ](helpImgs/help2.jpg)
+- **A.** L'App bar<br>
+Ici se trouvent le nom de l'utilisateur et des boutons.
