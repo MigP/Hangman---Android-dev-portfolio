@@ -136,3 +136,6 @@ Le joueur peut échanger ses ressources.
 
 * **Échanger des ressources**<br>
 ![ ](helpImgs/help6.jpg)
+
+* **Aperçu - Choisir un avatar**<br>
+![ ](helpImgs/choose_avatar.gif)
