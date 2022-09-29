@@ -8,7 +8,19 @@ Hangman est un jeu de mots classique dans lequel vous devez deviner le mot secre
 Chaque essai incorrect ajoute une nouvelle partie du corps au pendu. Lorsque son corps est complet, vous échouez le tour.
 
 * ### Règles
+Le joueur commence avec 5 vies. Après chaque tour raté, vous perdez une vie et le tour de jeu. Lorsque vous n'avez plus de vies, le jeu se termine. Le score final peut ensuite être enregistré dans le meilleur score personnel du joueur ou dans le classement général du Top 5. Commencer une autre partie réinitialisera alors toutes les ressources, les vies et le score du joueur. Le joueur peut choisir la langue et l'avatar pour chaque jeu uniquement avant le début du jeu.
 
 * ### Ressources
+Le joueur peut gagner ou échanger diverses ressources.
 
+* #### ![ ](helpImgs/heart_small.png) Vies
+
+* #### ![ ](helpImgs/score_small.png) Score
+
+* #### ![ ](helpImgs/coin_small.png) Pièces
+
+* #### ![ ](helpImgs/banknote_small.png) Billets
+
+* #### ![ ](helpImgs/diamond_small.png) Diamants
+* 
 * ### Interface
