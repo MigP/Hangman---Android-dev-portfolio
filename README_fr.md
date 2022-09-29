@@ -55,3 +55,22 @@ Le joueur gagne 1 diamant pour 10 mots devinés consécutivement sans rater aucu
 
 - **A.** L'App bar<br>
 Ici se trouvent le nom de l'utilisateur et des boutons.
+
+- **B.** Nom de l'utilisateur.
+
+- **C.** Langue du jeu.<br>
+Le joueur peut changer la langue du jeu en cliquant sur ce bouton.
+
+- **D.** Highscores.<br>
+Le joueur peut voir les 5 meilleurs scores parmi tous les joueurs en cliquant sur ce bouton.
+
+- **E.** Highscores.<br>
+Le joueur peut activer ou désactiver le son du jeu en cliquant sur ce bouton.
+
+- **F.** Menu d'Options.<br>
+Le joueur peut ouvrir le menu d'Options qui se cache à gauche en cliquant sur ce bouton.
+
+- **G.** Highscores.<br>
+Le joueur peut commencer une partie de jeu en cliquant sur ce bouton.
+
+- **H.** La potence.
