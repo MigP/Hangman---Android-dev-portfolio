@@ -14,8 +14,18 @@ The player starts with 5 lives. After each failed round you lose a life and the 
 The player can gain or exchange various resources.
 
 * #### ![ ](helpImgs/heart_small.png) Lives
+The player starts each game with 5 lives and loses one for every word not guessed before the hangman has all its body parts.<br>
+Lives are available to buy for diamonds.
 
 * #### ![ ](helpImgs/score_small.png) Score
+This is the game score and is reset after the user loses all their lives.
+
+The player gains 1 point for every letter guessed.<br>
+The player gains 5 points for 5 letters guessed consecutively.<br>
+The player gains 10 points for 10 letters guessed consecutively.<br>
+The player gains 25 points for 1 word guessed without failing any letter.<br>
+The player gains 50 points for 5 words guessed without failing any letter.<br>
+The player gains 100 points for 10 words guessed without failing any letter. 
 
 * #### ![ ](helpImgs/coin_small.png) Coins
 
